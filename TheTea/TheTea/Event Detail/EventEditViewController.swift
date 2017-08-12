@@ -89,7 +89,11 @@ class EventEditViewController: UIViewController {
     }
     
     func saveEvent() {
-        print("SAVING BOOP-BOOP-BEEP")
+        if let name = nameTextField.text {
+            if name.characters.count > 0 {
+                EventManager.createEvent(name: name, startTime: Date(), endTime: nil)
+            }
+        }
     }
     
     //MARK: Actions

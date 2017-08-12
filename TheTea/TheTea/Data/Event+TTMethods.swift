@@ -11,6 +11,17 @@ import CoreData
 
 
 extension Event {
-
-
+    func updateWithData(data: [String: AnyObject]) {
+        if let newName = data["name"] as? String {
+            name = newName
+        }
+        
+        if let newStartTime = data["startTime"] as? Date {
+            startTime = newStartTime as NSDate
+        }
+        
+        if let newEndTime = data["endTime"] as? Date {
+            endTime = newEndTime as NSDate
+        }
+    }
 }

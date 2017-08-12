@@ -26,4 +26,33 @@ class EventManager: NSObject {
         
         return eventsFRC
     }
+    
+    class func createEvent(name: String, startTime: Date, endTime: Date?) {
+        if self.event(name: name) != nil {
+            return
+        }
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        let event = Event(context: context)
+        event.name = name
+        event.startTime = startTime as NSDate
+        event.endTime = endTime as NSDate?
+        CoreDataManager.sharedInstance.saveContext()
+    }
+    
+    class func event(name: String) -> Event? {
+        let request = NSFetchRequest<Event>(entityName:"Event")
+        request.predicate = NSPredicate(format: "name like %@", name)
+        
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        do {
+            let events = try context.fetch(request)
+            if events.count > 0 {
+                return events[0]
+            }
+        } catch {
+            return nil
+        }
+        
+        return nil
+    }
 }

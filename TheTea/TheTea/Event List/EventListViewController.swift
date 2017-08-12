@@ -13,6 +13,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let tableView = UITableView()
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
+            eventsFRC.delegate = self
             tableView.reloadData()
         }
     }
@@ -105,19 +106,15 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let updatedIndexPath = indexPath, let updatedNewIndexPath = newIndexPath else {
-            return
-        }
-        
         switch type {
         case .insert:
-            tableView.insertRows(at: [updatedNewIndexPath], with: .fade)
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-            tableView.deleteRows(at: [updatedIndexPath], with: .fade)
+            tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            tableView.reloadRows(at: [updatedIndexPath], with: .fade)
+            tableView.reloadRows(at: [indexPath!], with: .fade)
         case .move:
-            tableView.moveRow(at: updatedIndexPath, to: updatedNewIndexPath)
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
     }
     
