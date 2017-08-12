@@ -12,12 +12,13 @@ class EventEditViewController: UIViewController {
     var event: Event?
     private let nameTextField = UITextField()
     private let createButton = UIButton()
+    private let backgroundView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         edgesForExtendedLayout = UIRectEdge()
-        view.backgroundColor = UIColor(red: 0, green: 0.5, blue: 1, alpha: 1)
+        view.backgroundColor = .white
         updateTitle()
         updateNavButtons()
         
@@ -26,13 +27,14 @@ class EventEditViewController: UIViewController {
         if isCreatingNew() {
             nameTextField.translatesAutoresizingMaskIntoConstraints = false
             nameTextField.placeholder = "Event Name"
+            nameTextField.backgroundColor = .white
+            nameTextField.autocapitalizationType = .words
             view.addSubview(nameTextField)
             
             nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
             nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
             nameTextField.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
             nameTextField.heightAnchor.constraint(equalToConstant: 60).isActive = true
-            nameTextField.backgroundColor = .white
             
             createButton.translatesAutoresizingMaskIntoConstraints = false
             createButton.setTitle("Create", for: .normal)
@@ -45,6 +47,15 @@ class EventEditViewController: UIViewController {
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             createButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            
+            backgroundView.translatesAutoresizingMaskIntoConstraints = false
+            backgroundView.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            view.addSubview(backgroundView)
+            
+            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            backgroundView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+            backgroundView.bottomAnchor.constraint(equalTo: createButton.topAnchor).isActive = true
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
