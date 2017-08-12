@@ -12,6 +12,7 @@
 		938906741F3E86D400BBB88C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 938906731F3E86D400BBB88C /* Assets.xcassets */; };
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
+		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		938906761F3E86D400BBB88C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = "Event List/EventListViewController.swift"; sourceTree = "<group>"; };
+		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewCell.swift; path = "Event List/EventListTableViewCell.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				938906811F3E891900BBB88C /* EventListViewController.swift */,
+				938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */,
 			);
 			name = "Event List";
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,
 				9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */,
