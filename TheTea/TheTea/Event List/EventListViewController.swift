@@ -7,9 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
-class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
     private let tableView = UITableView()
+    var eventsFRC = NSFetchedResultsController<Event>() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +23,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         title = "The Tea"
         edgesForExtendedLayout = UIRectEdge()
         view.backgroundColor = .white
+        
+        //navigation buttons
+        let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
+        navigationItem.rightBarButtonItem = createButton
         
         //setup table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -34,21 +44,81 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
+    //MARK: Actions
+    
+    func addEventTapped() {
+        print("Super")
+    }
+    
     //MARK: Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        guard let sections = eventsFRC.sections else {
+            return 0
+        }
+        return sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        guard let sections = eventsFRC.sections else {
+            return 0
+        }
+        
+        guard section < sections.count else {
+            return 0
+        }
+    
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: EventListTableViewCell.self.description(), for: indexPath) as? EventListTableViewCell {
-            cell.textLabel?.text = "TEA CELL \(indexPath.row + 1)"
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: EventListTableViewCell.self.description(), for: indexPath) as? EventListTableViewCell else {
+            return EventListTableViewCell()
         }
-        return EventListTableViewCell()
+        
+        let event = eventsFRC.object(at: indexPath)
+        cell.textLabel?.text = event.name
+        return cell
+    }
+    
+    //MARK: FRC Delegate
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .move:
+            break
+        case .update:
+            break
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let updatedIndexPath = indexPath, let updatedNewIndexPath = newIndexPath else {
+            return
+        }
+        
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [updatedNewIndexPath], with: .fade)
+        case .delete:
+            tableView.deleteRows(at: [updatedIndexPath], with: .fade)
+        case .update:
+            tableView.reloadRows(at: [updatedIndexPath], with: .fade)
+        case .move:
+            tableView.moveRow(at: updatedIndexPath, to: updatedNewIndexPath)
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
     }
 }

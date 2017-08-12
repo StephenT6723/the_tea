@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */; };
+		935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65941F3EA7C700E979E9 /* CoreDataManager.swift */; };
+		935A65971F3EAC9400E979E9 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65961F3EAC9400E979E9 /* EventManager.swift */; };
 		9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906691F3E86D400BBB88C /* AppDelegate.swift */; };
 		938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 938906701F3E86D400BBB88C /* TheTea.xcdatamodeld */; };
 		938906741F3E86D400BBB88C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 938906731F3E86D400BBB88C /* Assets.xcassets */; };
@@ -16,6 +19,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+TTMethods.swift"; path = "Data/Event+TTMethods.swift"; sourceTree = "<group>"; };
+		935A65941F3EA7C700E979E9 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = "Data/Data Managers/CoreDataManager.swift"; sourceTree = "<group>"; };
+		935A65961F3EAC9400E979E9 /* EventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventManager.swift; path = "Data/Data Managers/EventManager.swift"; sourceTree = "<group>"; };
 		938906661F3E86D400BBB88C /* TheTea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheTea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		938906691F3E86D400BBB88C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		938906711F3E86D400BBB88C /* TheTea.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheTea.xcdatamodel; sourceTree = "<group>"; };
@@ -37,6 +43,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		935A65861F3EA4FE00E979E9 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				935A65931F3EA79400E979E9 /* Data Mangers */,
+				935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		935A65931F3EA79400E979E9 /* Data Mangers */ = {
+			isa = PBXGroup;
+			children = (
+				935A65941F3EA7C700E979E9 /* CoreDataManager.swift */,
+				935A65961F3EAC9400E979E9 /* EventManager.swift */,
+			);
+			name = "Data Mangers";
+			sourceTree = "<group>";
+		};
 		9389065D1F3E86D400BBB88C = {
 			isa = PBXGroup;
 			children = (
@@ -57,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				938906691F3E86D400BBB88C /* AppDelegate.swift */,
+				935A65861F3EA4FE00E979E9 /* Data */,
 				9389067E1F3E88D400BBB88C /* Event List */,
 				938906731F3E86D400BBB88C /* Assets.xcassets */,
 				938906751F3E86D400BBB88C /* LaunchScreen.storyboard */,
@@ -146,6 +171,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				935A65971F3EAC9400E979E9 /* EventManager.swift in Sources */,
+				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
+				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,
@@ -303,6 +331,7 @@
 				9389067D1F3E86D400BBB88C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
