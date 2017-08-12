@@ -47,7 +47,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     //MARK: Actions
     
     func addEventTapped() {
-        print("Super")
+        let addEventVC = EventEditViewController()
+        let addNav = UINavigationController(rootViewController: addEventVC)
+        addNav.navigationBar.isTranslucent = false
+        present(addNav, animated: true, completion: nil)
     }
     
     //MARK: Table View
