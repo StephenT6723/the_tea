@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93399AED1F40DB5900ED02E9 /* DateStringHelper.swift */; };
 		935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */; };
 		935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65941F3EA7C700E979E9 /* CoreDataManager.swift */; };
 		935A65971F3EAC9400E979E9 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65961F3EAC9400E979E9 /* EventManager.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		93399AED1F40DB5900ED02E9 /* DateStringHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateStringHelper.swift; path = Helpers/DateStringHelper.swift; sourceTree = "<group>"; };
 		935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+TTMethods.swift"; path = "Data/Event+TTMethods.swift"; sourceTree = "<group>"; };
 		935A65941F3EA7C700E979E9 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = "Data/Data Managers/CoreDataManager.swift"; sourceTree = "<group>"; };
 		935A65961F3EAC9400E979E9 /* EventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventManager.swift; path = "Data/Data Managers/EventManager.swift"; sourceTree = "<group>"; };
@@ -45,6 +47,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		93399AEC1F40DB2800ED02E9 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				93399AED1F40DB5900ED02E9 /* DateStringHelper.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		935A65861F3EA4FE00E979E9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -71,6 +81,13 @@
 			name = "Event Detail";
 			sourceTree = "<group>";
 		};
+		935A659B1F3ECA1100E979E9 /* UI Elements */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "UI Elements";
+			sourceTree = "<group>";
+		};
 		9389065D1F3E86D400BBB88C = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				938906691F3E86D400BBB88C /* AppDelegate.swift */,
+				93399AEC1F40DB2800ED02E9 /* Helpers */,
+				935A659B1F3ECA1100E979E9 /* UI Elements */,
 				935A65861F3EA4FE00E979E9 /* Data */,
 				9389067E1F3E88D400BBB88C /* Event List */,
 				935A65981F3EB2C700E979E9 /* Event Detail */,
@@ -186,6 +205,7 @@
 				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
+				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,
 				9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */,

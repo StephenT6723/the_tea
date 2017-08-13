@@ -83,6 +83,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let event = eventsFRC.object(at: indexPath)
         cell.textLabel?.text = event.name
+        if let startTime = event.startTime {
+            cell.detailTextLabel?.text = DateStringHelper.fullDescription(of: startTime as Date)
+        }
         return cell
     }
     
