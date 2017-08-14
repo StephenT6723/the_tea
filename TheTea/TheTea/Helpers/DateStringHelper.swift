@@ -18,11 +18,13 @@ class DateStringHelper {
             return "Today"
         } else if diff.day == -1 {
             return "Yesterday"
-        } else if diff.day! > -7 && diff.day! < 0 {
+        }  else if diff.day == 1 {
+            return "Tomorrow"
+        } /*else if diff.day! > -7 && diff.day! < 0 {
             return "Last \(weekDayFormatter.string(from: date))"
         } else if diff.day! < 7 && diff.day! > 0 {
             return "Next \(weekDayFormatter.string(from: date))"
-        }
+        } */
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d"
