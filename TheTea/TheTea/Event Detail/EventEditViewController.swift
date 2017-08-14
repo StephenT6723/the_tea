@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EventEditViewController: UIViewController, UITextFieldDelegate {
+class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var event: Event?
     private let nameTextField = UITextField()
     private let createButton = UIButton()
@@ -17,9 +17,14 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
     private let startTimeTextField = UITextField()
     private let startTimePicker = UIDatePicker()
     private let addEndTimeButton = UIButton()
+    private var endTimeTopConstraint = NSLayoutConstraint()
     private let endTimeTextField = UITextField()
     private let endTimePicker = UIDatePicker()
     private let hideEndTimeButton = UIButton()
+    private let aboutTextView = UITextView()
+    
+    private let aboutTextViewPlaceholder = "More info"
+    private let textFieldHeight: CGFloat = 40.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,17 +53,40 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
         startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         startTimeTextField.backgroundColor = .white
         startTimeTextField.tintColor = UIColor.white
+        startTimePicker.minimumDate = Date()
         startTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         startTimeTextField.inputView = startTimePicker
         view.addSubview(startTimeTextField)
         
+        addEndTimeButton.translatesAutoresizingMaskIntoConstraints = false
+        addEndTimeButton.setTitle("+ End Time", for: .normal)
+        addEndTimeButton.setTitleColor(UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), for: .normal)
+        addEndTimeButton.addTarget(self, action: #selector(addEndTimeTouched), for: .touchUpInside)
+        view.addSubview(addEndTimeButton)
+        
         endTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         endTimeTextField.backgroundColor = .white
         endTimeTextField.tintColor = UIColor.white
+        endTimeTextField.alpha = 0
         endTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         endTimePicker.minimumDate = Date()
         endTimeTextField.inputView = endTimePicker
         view.insertSubview(endTimeTextField, belowSubview: startTimeTextField)
+        
+        hideEndTimeButton.translatesAutoresizingMaskIntoConstraints = false
+        hideEndTimeButton.setTitle("X", for: .normal)
+        hideEndTimeButton.setTitleColor(UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), for: .normal)
+        hideEndTimeButton.addTarget(self, action: #selector(hideEndTimeTouched), for: .touchUpInside)
+        view.insertSubview(hideEndTimeButton, belowSubview: startTimeTextField)
+        
+        aboutTextView.translatesAutoresizingMaskIntoConstraints = false
+        aboutTextView.text = aboutTextViewPlaceholder
+        aboutTextView.textColor = .lightGray
+        aboutTextView.backgroundColor = .white
+        aboutTextView.isScrollEnabled = false
+        aboutTextView.delegate = self
+        aboutTextView.font = UIFont.systemFont(ofSize: 17)
+        view.addSubview(aboutTextView)
         
         nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
@@ -73,17 +101,33 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
         dateBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         dateBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         dateBackground.topAnchor.constraint(equalTo: startTimeTextField.topAnchor).isActive = true
-        dateBackground.bottomAnchor.constraint(equalTo: endTimeTextField.bottomAnchor).isActive = true
+        dateBackground.bottomAnchor.constraint(equalTo: aboutTextView.bottomAnchor).isActive = true
         
         startTimeTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
         startTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         startTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        startTimeTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        startTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        endTimeTextField.topAnchor.constraint(equalTo: startTimeTextField.bottomAnchor).isActive = true
+        addEndTimeButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
+        addEndTimeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        addEndTimeButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        addEndTimeButton.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        endTimeTopConstraint = endTimeTextField.topAnchor.constraint(equalTo: startTimeTextField.topAnchor)
+        endTimeTopConstraint.isActive = true
         endTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         endTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        endTimeTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        endTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        hideEndTimeButton.topAnchor.constraint(equalTo: endTimeTextField.topAnchor).isActive = true
+        hideEndTimeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        hideEndTimeButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        hideEndTimeButton.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        aboutTextView.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor).isActive = true
+        aboutTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        aboutTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
         
         if isCreatingNew() {
             createButton.translatesAutoresizingMaskIntoConstraints = false
@@ -106,8 +150,15 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
                     startTimePicker.date = startTime as Date
                     if let endTime = event.endTime {
                         endTimePicker.date = endTime as Date
+                        updateEndTime(visible: true, animated: false)
                     } else {
                         updateEndTime()
+                    }
+                }
+                if let about = event.about {
+                    if about.characters.count > 0 {
+                        aboutTextView.text = about
+                        aboutTextView.textColor = .black
                     }
                 }
             }
@@ -166,17 +217,21 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     func saveEvent() {
+        var aboutText = ""
+        if aboutTextView.text != aboutTextViewPlaceholder && aboutTextView.text.characters.count > 0 {
+            aboutText = aboutTextView.text
+        }
         if isCreatingNew() {
             if let name = nameTextField.text {
                 if name.characters.count > 0 {
-                    EventManager.createEvent(name: name, startTime: startTimePicker.date, endTime: isEndTimeVisible() ? endTimePicker.date : nil)
+                    EventManager.createEvent(name: name, startTime: startTimePicker.date, endTime: isEndTimeVisible() ? endTimePicker.date : nil, about: aboutText)
                 }
             }
         } else {
             if let event = self.event {
                 if let name = nameTextField.text {
                     if name.characters.count > 0 {
-                        EventManager.updateEvent(event: event, name: name, startTime: startTimePicker.date, endTime: isEndTimeVisible() ? endTimePicker.date : nil)
+                        EventManager.updateEvent(event: event, name: name, startTime: startTimePicker.date, endTime: isEndTimeVisible() ? endTimePicker.date : nil, about: aboutText)
                     }
                 }
             }
@@ -203,6 +258,33 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
         updateTimeTextFields()
     }
     
+    func addEndTimeTouched() {
+        updateEndTime(visible: true, animated: true)
+    }
+    
+    func hideEndTimeTouched() {
+        updateEndTime(visible: false, animated: true)
+    }
+    
+    func updateEndTime(visible: Bool, animated: Bool) {
+        if visible {
+            endTimeTopConstraint.constant = textFieldHeight
+            endTimeTextField.alpha = 1
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.addEndTimeButton.alpha = 0
+                self.view.layoutIfNeeded()
+            })
+        } else {
+            endTimeTopConstraint.constant = 0
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.addEndTimeButton.alpha = 1
+                self.view.layoutIfNeeded()
+            }) { (complete: Bool) in
+                self.endTimeTextField.alpha = 0
+            }
+        }
+    }
+    
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let screenHeight = UIScreen.main.bounds.height
@@ -213,5 +295,21 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
     func keyboardWillHide(notification: NSNotification) {
         let screenHeight = UIScreen.main.bounds.height
         view.frame = CGRect(x: 0, y: view.frame.origin.y, width: view.frame.width, height: screenHeight - view.frame.origin.y)
+    }
+    
+    //MARK Text View Delegate
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .lightGray {
+            textView.text = nil
+            textView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "More info"
+            textView.textColor = .lightGray
+        }
     }
 }

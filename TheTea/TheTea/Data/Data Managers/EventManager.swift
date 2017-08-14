@@ -27,7 +27,7 @@ class EventManager: NSObject {
         return eventsFRC
     }
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?) {
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?) {
         if self.event(name: name) != nil {
             return
         }
@@ -36,13 +36,15 @@ class EventManager: NSObject {
         event.name = name
         event.startTime = startTime as NSDate
         event.endTime = endTime as NSDate?
+        event.about = about
         CoreDataManager.sharedInstance.saveContext()
     }
     
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?) {
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?) {
         event.name = name
         event.startTime = startTime as NSDate
         event.endTime = endTime as NSDate?
+        event.about = about
         CoreDataManager.sharedInstance.saveContext()
     }
     

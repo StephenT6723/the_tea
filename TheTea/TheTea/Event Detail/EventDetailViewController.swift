@@ -94,7 +94,7 @@ class EventDetailViewController: UIViewController {
         if let date = event.startTime {
             detailLabel.text = DateStringHelper.fullDescription(of: date as Date)
         }
-        aboutLabel.text = "Pharah is a versatile and mobile Offense hero, capable of limited-duration flight. This gives her good escape capabilities, excellent vantage in open-air situations, and enables her to reach enemy snipers with ease. Her Ultimate ability Barrage allows her to rain heavy damage down on her enemies."
+        aboutLabel.text = event.about
         locationLabel.text = "20 Henry Street Apt. 2DN\nBrooklyn, NY 11201"
     }
     
