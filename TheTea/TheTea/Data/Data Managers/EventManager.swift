@@ -39,6 +39,13 @@ class EventManager: NSObject {
         CoreDataManager.sharedInstance.saveContext()
     }
     
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?) {
+        event.name = name
+        event.startTime = startTime as NSDate
+        event.endTime = endTime as NSDate?
+        CoreDataManager.sharedInstance.saveContext()
+    }
+    
     class func event(name: String) -> Event? {
         let request = NSFetchRequest<Event>(entityName:"Event")
         request.predicate = NSPredicate(format: "name like %@", name)

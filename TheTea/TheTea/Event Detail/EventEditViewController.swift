@@ -27,18 +27,49 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
         
         let margins = view.layoutMarginsGuide
         
+        nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        nameTextField.placeholder = "Event Name"
+        nameTextField.backgroundColor = .white
+        nameTextField.autocapitalizationType = .words
+        view.addSubview(nameTextField)
+        
+        nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        nameTextField.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        view.addSubview(backgroundView)
+        
+        backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        backgroundView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+        backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        dateBackground.translatesAutoresizingMaskIntoConstraints = false
+        dateBackground.backgroundColor = .white
+        view.addSubview(dateBackground)
+        
+        dateBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        dateBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        dateBackground.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
+        dateBackground.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
+        startTimeTextField.text = DateStringHelper.fullDescription(of: Date())
+        startTimeTextField.backgroundColor = .white
+        startTimeTextField.tintColor = UIColor.white
+        startTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
+        startTimeTextField.inputView = startTimePicker
+        view.addSubview(startTimeTextField)
+        
+        startTimeTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
+        startTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        startTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        startTimeTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
         if isCreatingNew() {
-            nameTextField.translatesAutoresizingMaskIntoConstraints = false
-            nameTextField.placeholder = "Event Name"
-            nameTextField.backgroundColor = .white
-            nameTextField.autocapitalizationType = .words
-            view.addSubview(nameTextField)
-            
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-            nameTextField.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
-            nameTextField.heightAnchor.constraint(equalToConstant: 60).isActive = true
-            
             createButton.translatesAutoresizingMaskIntoConstraints = false
             createButton.setTitle("Create", for: .normal)
             createButton.setTitleColor(UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), for: .normal)
@@ -50,37 +81,14 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             createButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            
-            backgroundView.translatesAutoresizingMaskIntoConstraints = false
-            backgroundView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-            view.addSubview(backgroundView)
-            
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            backgroundView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-            backgroundView.bottomAnchor.constraint(equalTo: createButton.topAnchor).isActive = true
-            
-            dateBackground.translatesAutoresizingMaskIntoConstraints = false
-            dateBackground.backgroundColor = .white
-            view.addSubview(dateBackground)
-            
-            dateBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-            dateBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            dateBackground.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
-            dateBackground.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            
-            startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
-            startTimeTextField.text = DateStringHelper.fullDescription(of: Date())
-            startTimeTextField.backgroundColor = .white
-            startTimeTextField.tintColor = UIColor.white
-            startTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
-            startTimeTextField.inputView = startTimePicker
-            view.addSubview(startTimeTextField)
-            
-            startTimeTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
-            startTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-            startTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-            startTimeTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        } else {
+            if let event = self.event {
+                nameTextField.text = event.name
+                if let startTime = event.startTime {
+                    startTimePicker.date = startTime as Date
+                    startTimeTextField.text = DateStringHelper.fullDescription(of: startTime as Date)
+                }
+            }
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -103,7 +111,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
         
         if !isCreatingNew() {
             let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTouched))
-            navigationItem.leftBarButtonItem = doneButton
+            navigationItem.rightBarButtonItem = doneButton
         }
     }
     
@@ -114,9 +122,19 @@ class EventEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     func saveEvent() {
-        if let name = nameTextField.text {
-            if name.characters.count > 0 {
-                EventManager.createEvent(name: name, startTime: startTimePicker.date, endTime: nil)
+        if isCreatingNew() {
+            if let name = nameTextField.text {
+                if name.characters.count > 0 {
+                    EventManager.createEvent(name: name, startTime: startTimePicker.date, endTime: nil)
+                }
+            }
+        } else {
+            if let event = self.event {
+                if let name = nameTextField.text {
+                    if name.characters.count > 0 {
+                        EventManager.updateEvent(event: event, name: name, startTime: startTimePicker.date, endTime: nil)
+                    }
+                }
             }
         }
     }

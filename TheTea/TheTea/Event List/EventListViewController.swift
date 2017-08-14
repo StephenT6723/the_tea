@@ -89,6 +89,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let event = eventsFRC.object(at: indexPath)
+        let detailVC = EventDetailViewController(event:event)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
     //MARK: FRC Delegate
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
