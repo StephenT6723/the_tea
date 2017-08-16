@@ -13,7 +13,7 @@ class MemberDataManager {
     private init() {}
     
     func isLoggedIn() -> Bool {
-        return true
+        return false
     }
     
     func canEditEvent(event: Event) -> Bool {

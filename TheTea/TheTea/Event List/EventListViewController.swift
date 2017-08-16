@@ -29,6 +29,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
         navigationItem.rightBarButtonItem = createButton
         
+        let accountButton = UIBarButtonItem(title: "My Account", style: .plain, target: self, action: #selector(myAccountTapped))
+        navigationItem.leftBarButtonItem = accountButton
+        
         //setup table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: EventListTableViewCell.self.description())
@@ -52,6 +55,20 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let addNav = UINavigationController(rootViewController: addEventVC)
         addNav.navigationBar.isTranslucent = false
         present(addNav, animated: true, completion: nil)
+    }
+    
+    func myAccountTapped() {
+        if MemberDataManager.sharedInstance.isLoggedIn() {
+            let profileVC = MyAccountViewController()
+            let profileNav = UINavigationController(rootViewController: profileVC)
+            profileNav.navigationBar.isTranslucent = false
+            present(profileNav, animated: true, completion: nil)
+        } else {
+            let signUpVC = SignUpViewController()
+            let signUpNav = UINavigationController(rootViewController: signUpVC)
+            signUpNav.navigationBar.isTranslucent = false
+            present(signUpNav, animated: true, completion: nil)
+        }
     }
     
     //MARK: Table View
