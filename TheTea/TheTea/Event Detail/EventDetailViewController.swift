@@ -95,7 +95,13 @@ class EventDetailViewController: UIViewController {
             detailLabel.text = DateStringHelper.fullDescription(of: date as Date)
         }
         aboutLabel.text = event.about
-        locationLabel.text = "20 Henry Street Apt. 2DN\nBrooklyn, NY 11201"
+        if let locationName = event.locationName {
+            var locationString = locationName
+            if let address = event.address {
+                locationString += "\n\(address)"
+            }
+            locationLabel.text = locationString
+        }
     }
     
     func editButtonTouched() {

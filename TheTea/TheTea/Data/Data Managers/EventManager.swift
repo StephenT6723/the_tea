@@ -27,7 +27,7 @@ class EventManager: NSObject {
         return eventsFRC
     }
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?) {
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
         if self.event(name: name) != nil {
             return
         }
@@ -37,14 +37,33 @@ class EventManager: NSObject {
         event.startTime = startTime as NSDate
         event.endTime = endTime as NSDate?
         event.about = about
+        event.locationName = location?.locationName
+        event.address = location?.address
+        if let latitude = location?.latitude, let longitude = location?.longitude {
+            event.latitude = latitude
+            event.longitude = longitude
+        } else {
+            event.latitude = 0
+            event.longitude = 0
+        }
+        
         CoreDataManager.sharedInstance.saveContext()
     }
     
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?) {
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
         event.name = name
         event.startTime = startTime as NSDate
         event.endTime = endTime as NSDate?
         event.about = about
+        event.locationName = location?.locationName
+        event.address = location?.address
+        if let latitude = location?.latitude, let longitude = location?.longitude {
+            event.latitude = latitude
+            event.longitude = longitude
+        } else {
+            event.latitude = 0
+            event.longitude = 0
+        }
         CoreDataManager.sharedInstance.saveContext()
     }
     

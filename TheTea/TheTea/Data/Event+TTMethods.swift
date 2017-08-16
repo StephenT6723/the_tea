@@ -24,4 +24,13 @@ extension Event {
             endTime = newEndTime as NSDate
         }
     }
+    
+    func eventLocation() -> EventLocation? {
+        if let locationName = self.locationName, let address = self.address {
+            if self.latitude != 0 && self.longitude != 0 {
+                return EventLocation(locationName: locationName, address: address, latitude: latitude, longitude: longitude)
+            }
+        }
+        return nil
+    }
 }

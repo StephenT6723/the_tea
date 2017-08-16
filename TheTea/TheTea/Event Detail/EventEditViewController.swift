@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MapKit
 
-class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, LocationPickerViewControllerDelegate {
     var event: Event?
     private let nameTextField = UITextField()
     private let createButton = UIButton()
@@ -22,9 +23,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let endTimePicker = UIDatePicker()
     private let hideEndTimeButton = UIButton()
     private let aboutTextView = UITextView()
+    private let locationButton = UIButton()
+    private let locationLabel = UILabel()
     
     private let aboutTextViewPlaceholder = "More info"
     private let textFieldHeight: CGFloat = 40.0
+    private var selectedLocation: EventLocation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,6 +92,15 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         aboutTextView.font = UIFont.systemFont(ofSize: 17)
         view.addSubview(aboutTextView)
         
+        locationButton.translatesAutoresizingMaskIntoConstraints = false
+        locationButton.addTarget(self, action: #selector(locationButtonTouched), for: .touchUpInside)
+        locationButton.backgroundColor = .white
+        view.addSubview(locationButton)
+        
+        locationLabel.translatesAutoresizingMaskIntoConstraints = false
+        locationLabel.font = UIFont.systemFont(ofSize: 17)
+        view.addSubview(locationLabel)
+        
         nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         nameTextField.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
@@ -129,6 +142,16 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         aboutTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
         aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
         
+        locationButton.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor).isActive = true
+        locationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        locationButton.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        locationLabel.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor).isActive = true
+        locationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        locationLabel.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
         if isCreatingNew() {
             createButton.translatesAutoresizingMaskIntoConstraints = false
             createButton.setTitle("Create", for: .normal)
@@ -161,9 +184,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                         aboutTextView.textColor = .black
                     }
                 }
+                if let eventLocation = event.eventLocation() {
+                    selectedLocation = eventLocation
+                }
             }
         }
         
+        updateLocationLabel()
         updateTimeTextFields()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -206,6 +233,19 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         }
     }
     
+    func updateLocationLabel() {
+        if let selectedLocation = self.selectedLocation {
+            if selectedLocation.locationName.characters.count > 0 {
+                locationLabel.text = selectedLocation.locationName
+                locationLabel.textColor = .black
+                return
+            }
+        }
+        
+        locationLabel.text = "Add Location"
+        locationLabel.textColor = .lightGray
+    }
+    
     //MARK: Helpers
     
     func isCreatingNew() -> Bool {
@@ -224,14 +264,23 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         if isCreatingNew() {
             if let name = nameTextField.text {
                 if name.characters.count > 0 {
-                    EventManager.createEvent(name: name, startTime: startTimePicker.date, endTime: isEndTimeVisible() ? endTimePicker.date : nil, about: aboutText)
+                    EventManager.createEvent(name: name,
+                                             startTime: startTimePicker.date,
+                                             endTime: isEndTimeVisible() ? endTimePicker.date : nil,
+                                             about: aboutText,
+                                             location: selectedLocation)
                 }
             }
         } else {
             if let event = self.event {
                 if let name = nameTextField.text {
                     if name.characters.count > 0 {
-                        EventManager.updateEvent(event: event, name: name, startTime: startTimePicker.date, endTime: isEndTimeVisible() ? endTimePicker.date : nil, about: aboutText)
+                        EventManager.updateEvent(event: event,
+                                                 name: name,
+                                                 startTime: startTimePicker.date,
+                                                 endTime: isEndTimeVisible() ? endTimePicker.date : nil,
+                                                 about: aboutText,
+                                                 location: selectedLocation)
                     }
                 }
             }
@@ -284,6 +333,23 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             }
         }
     }
+    
+    func locationButtonTouched() {
+        let locationVC = LocationPickerViewController()
+        locationVC.delegate = self
+        let locationNav = UINavigationController(rootViewController: locationVC)
+        locationNav.navigationBar.isTranslucent = false
+        present(locationNav, animated: true, completion: nil)
+    }
+    
+    //MARK: Location selection
+    
+    func locationPicker(sender: LocationPickerViewController, selected location:EventLocation) {
+        selectedLocation = location
+        updateLocationLabel()
+    }
+    
+    //MARK: Keyboard updates
     
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
