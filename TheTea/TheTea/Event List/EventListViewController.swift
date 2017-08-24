@@ -34,7 +34,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         //setup table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: EventListTableViewCell.self.description())
+        tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)
@@ -58,17 +58,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func myAccountTapped() {
-        if MemberDataManager.sharedInstance.isLoggedIn() {
-            let profileVC = MyAccountViewController()
-            let profileNav = UINavigationController(rootViewController: profileVC)
-            profileNav.navigationBar.isTranslucent = false
-            present(profileNav, animated: true, completion: nil)
-        } else {
-            let signUpVC = SignUpViewController()
-            let signUpNav = UINavigationController(rootViewController: signUpVC)
-            signUpNav.navigationBar.isTranslucent = false
-            present(signUpNav, animated: true, completion: nil)
-        }
+        let profileVC = MyAccountViewController()
+        let profileNav = UINavigationController(rootViewController: profileVC)
+        profileNav.navigationBar.isTranslucent = false
+        present(profileNav, animated: true, completion: nil)
     }
     
     //MARK: Table View
@@ -94,7 +87,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: EventListTableViewCell.self.description(), for: indexPath) as? EventListTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventListTableViewCell.self), for: indexPath) as? EventListTableViewCell else {
             return EventListTableViewCell()
         }
         
