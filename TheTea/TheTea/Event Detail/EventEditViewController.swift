@@ -201,9 +201,9 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func updateTitle() {
         if isCreatingNew() {
-            title = "Add Event"
+            title = "ADD EVENT"
         } else {
-            title = "Edit Event"
+            title = "EDIT EVENT"
         }
     }
     

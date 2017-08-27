@@ -25,7 +25,7 @@ class LocationPickerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Add Place"
+        title = "ADD PLACE"
         edgesForExtendedLayout = UIRectEdge()
         searchCompleter.delegate = self
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))

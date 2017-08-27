@@ -31,7 +31,7 @@ class EventDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Event Detail"
+        title = "EVENT DETAIL"
         view.backgroundColor = .white
         
         guard let event = self.event else {

@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7721F4F3BEA00230829 /* StyleManager.swift */; };
+		9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */; };
+		9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7761F4F3F1400230829 /* UIFont+TheTea.swift */; };
+		9337C7841F4F40EE00230829 /* SourceSansPro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C7781F4F40EE00230829 /* SourceSansPro-Black.otf */; };
+		9337C7851F4F40EE00230829 /* SourceSansPro-BlackIt.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C7791F4F40EE00230829 /* SourceSansPro-BlackIt.otf */; };
+		9337C7861F4F40EE00230829 /* SourceSansPro-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C77A1F4F40EE00230829 /* SourceSansPro-Bold.otf */; };
+		9337C7871F4F40EE00230829 /* SourceSansPro-BoldIt.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C77B1F4F40EE00230829 /* SourceSansPro-BoldIt.otf */; };
+		9337C7881F4F40EE00230829 /* SourceSansPro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C77C1F4F40EE00230829 /* SourceSansPro-ExtraLight.otf */; };
+		9337C7891F4F40EE00230829 /* SourceSansPro-ExtraLightIt.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C77D1F4F40EE00230829 /* SourceSansPro-ExtraLightIt.otf */; };
+		9337C78A1F4F40EE00230829 /* SourceSansPro-It.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C77E1F4F40EE00230829 /* SourceSansPro-It.otf */; };
+		9337C78B1F4F40EE00230829 /* SourceSansPro-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C77F1F4F40EE00230829 /* SourceSansPro-Light.otf */; };
+		9337C78C1F4F40EE00230829 /* SourceSansPro-LightIt.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C7801F4F40EE00230829 /* SourceSansPro-LightIt.otf */; };
+		9337C78D1F4F40EE00230829 /* SourceSansPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C7811F4F40EE00230829 /* SourceSansPro-Regular.otf */; };
+		9337C78E1F4F40EE00230829 /* SourceSansPro-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C7821F4F40EE00230829 /* SourceSansPro-Semibold.otf */; };
+		9337C78F1F4F40EE00230829 /* SourceSansPro-SemiboldIt.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9337C7831F4F40EE00230829 /* SourceSansPro-SemiboldIt.otf */; };
+		9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7911F4F459A00230829 /* EventListHeaderView.swift */; };
 		933956E11F43E55200F1AEE4 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956E01F43E55200F1AEE4 /* LocationPickerViewController.swift */; };
 		933956E31F4400EB00F1AEE4 /* EventLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956E21F4400EB00F1AEE4 /* EventLocation.swift */; };
 		933956E71F440EA600F1AEE4 /* MyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956E61F440EA600F1AEE4 /* MyAccountViewController.swift */; };
@@ -28,6 +44,22 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9337C7721F4F3BEA00230829 /* StyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleManager.swift; path = Helpers/StyleManager.swift; sourceTree = "<group>"; };
+		9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+TheTea.swift"; path = "Helpers/UIColor+TheTea.swift"; sourceTree = "<group>"; };
+		9337C7761F4F3F1400230829 /* UIFont+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIFont+TheTea.swift"; path = "Helpers/UIFont+TheTea.swift"; sourceTree = "<group>"; };
+		9337C7781F4F40EE00230829 /* SourceSansPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Black.otf"; path = "Misc/SourceSansPro/SourceSansPro-Black.otf"; sourceTree = "<group>"; };
+		9337C7791F4F40EE00230829 /* SourceSansPro-BlackIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-BlackIt.otf"; path = "Misc/SourceSansPro/SourceSansPro-BlackIt.otf"; sourceTree = "<group>"; };
+		9337C77A1F4F40EE00230829 /* SourceSansPro-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Bold.otf"; path = "Misc/SourceSansPro/SourceSansPro-Bold.otf"; sourceTree = "<group>"; };
+		9337C77B1F4F40EE00230829 /* SourceSansPro-BoldIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-BoldIt.otf"; path = "Misc/SourceSansPro/SourceSansPro-BoldIt.otf"; sourceTree = "<group>"; };
+		9337C77C1F4F40EE00230829 /* SourceSansPro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-ExtraLight.otf"; path = "Misc/SourceSansPro/SourceSansPro-ExtraLight.otf"; sourceTree = "<group>"; };
+		9337C77D1F4F40EE00230829 /* SourceSansPro-ExtraLightIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-ExtraLightIt.otf"; path = "Misc/SourceSansPro/SourceSansPro-ExtraLightIt.otf"; sourceTree = "<group>"; };
+		9337C77E1F4F40EE00230829 /* SourceSansPro-It.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-It.otf"; path = "Misc/SourceSansPro/SourceSansPro-It.otf"; sourceTree = "<group>"; };
+		9337C77F1F4F40EE00230829 /* SourceSansPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Light.otf"; path = "Misc/SourceSansPro/SourceSansPro-Light.otf"; sourceTree = "<group>"; };
+		9337C7801F4F40EE00230829 /* SourceSansPro-LightIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-LightIt.otf"; path = "Misc/SourceSansPro/SourceSansPro-LightIt.otf"; sourceTree = "<group>"; };
+		9337C7811F4F40EE00230829 /* SourceSansPro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Regular.otf"; path = "Misc/SourceSansPro/SourceSansPro-Regular.otf"; sourceTree = "<group>"; };
+		9337C7821F4F40EE00230829 /* SourceSansPro-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Semibold.otf"; path = "Misc/SourceSansPro/SourceSansPro-Semibold.otf"; sourceTree = "<group>"; };
+		9337C7831F4F40EE00230829 /* SourceSansPro-SemiboldIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-SemiboldIt.otf"; path = "Misc/SourceSansPro/SourceSansPro-SemiboldIt.otf"; sourceTree = "<group>"; };
+		9337C7911F4F459A00230829 /* EventListHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListHeaderView.swift; path = "Event List/EventListHeaderView.swift"; sourceTree = "<group>"; };
 		933956E01F43E55200F1AEE4 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationPickerViewController.swift; path = "Event Detail/LocationPickerViewController.swift"; sourceTree = "<group>"; };
 		933956E21F4400EB00F1AEE4 /* EventLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventLocation.swift; path = Data/EventLocation.swift; sourceTree = "<group>"; };
 		933956E61F440EA600F1AEE4 /* MyAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyAccountViewController.swift; path = Profile/MyAccountViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +93,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9337C76F1F4F3A0D00230829 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				9337C7901F4F40FC00230829 /* SourceSans */,
+				938906731F3E86D400BBB88C /* Assets.xcassets */,
+				938906751F3E86D400BBB88C /* LaunchScreen.storyboard */,
+				938906781F3E86D400BBB88C /* Info.plist */,
+				938906701F3E86D400BBB88C /* TheTea.xcdatamodeld */,
+			);
+			name = Misc;
+			sourceTree = "<group>";
+		};
+		9337C7901F4F40FC00230829 /* SourceSans */ = {
+			isa = PBXGroup;
+			children = (
+				9337C7781F4F40EE00230829 /* SourceSansPro-Black.otf */,
+				9337C7791F4F40EE00230829 /* SourceSansPro-BlackIt.otf */,
+				9337C77A1F4F40EE00230829 /* SourceSansPro-Bold.otf */,
+				9337C77B1F4F40EE00230829 /* SourceSansPro-BoldIt.otf */,
+				9337C77C1F4F40EE00230829 /* SourceSansPro-ExtraLight.otf */,
+				9337C77D1F4F40EE00230829 /* SourceSansPro-ExtraLightIt.otf */,
+				9337C77E1F4F40EE00230829 /* SourceSansPro-It.otf */,
+				9337C77F1F4F40EE00230829 /* SourceSansPro-Light.otf */,
+				9337C7801F4F40EE00230829 /* SourceSansPro-LightIt.otf */,
+				9337C7811F4F40EE00230829 /* SourceSansPro-Regular.otf */,
+				9337C7821F4F40EE00230829 /* SourceSansPro-Semibold.otf */,
+				9337C7831F4F40EE00230829 /* SourceSansPro-SemiboldIt.otf */,
+			);
+			name = SourceSans;
+			sourceTree = "<group>";
+		};
 		933956E41F440E3A00F1AEE4 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -82,6 +145,9 @@
 			isa = PBXGroup;
 			children = (
 				93399AED1F40DB5900ED02E9 /* DateStringHelper.swift */,
+				9337C7721F4F3BEA00230829 /* StyleManager.swift */,
+				9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */,
+				9337C7761F4F3F1400230829 /* UIFont+TheTea.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -150,10 +216,7 @@
 				933956E41F440E3A00F1AEE4 /* Login */,
 				9389067E1F3E88D400BBB88C /* Event List */,
 				935A65981F3EB2C700E979E9 /* Event Detail */,
-				938906731F3E86D400BBB88C /* Assets.xcassets */,
-				938906751F3E86D400BBB88C /* LaunchScreen.storyboard */,
-				938906781F3E86D400BBB88C /* Info.plist */,
-				938906701F3E86D400BBB88C /* TheTea.xcdatamodeld */,
+				9337C76F1F4F3A0D00230829 /* Misc */,
 			);
 			path = TheTea;
 			sourceTree = "<group>";
@@ -162,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				938906811F3E891900BBB88C /* EventListViewController.swift */,
+				9337C7911F4F459A00230829 /* EventListHeaderView.swift */,
 				938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */,
 			);
 			name = "Event List";
@@ -226,8 +290,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9337C78E1F4F40EE00230829 /* SourceSansPro-Semibold.otf in Resources */,
+				9337C78A1F4F40EE00230829 /* SourceSansPro-It.otf in Resources */,
 				938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */,
+				9337C78F1F4F40EE00230829 /* SourceSansPro-SemiboldIt.otf in Resources */,
+				9337C78D1F4F40EE00230829 /* SourceSansPro-Regular.otf in Resources */,
+				9337C7871F4F40EE00230829 /* SourceSansPro-BoldIt.otf in Resources */,
+				9337C7891F4F40EE00230829 /* SourceSansPro-ExtraLightIt.otf in Resources */,
+				9337C7881F4F40EE00230829 /* SourceSansPro-ExtraLight.otf in Resources */,
 				938906741F3E86D400BBB88C /* Assets.xcassets in Resources */,
+				9337C7841F4F40EE00230829 /* SourceSansPro-Black.otf in Resources */,
+				9337C78B1F4F40EE00230829 /* SourceSansPro-Light.otf in Resources */,
+				9337C78C1F4F40EE00230829 /* SourceSansPro-LightIt.otf in Resources */,
+				9337C7861F4F40EE00230829 /* SourceSansPro-Bold.otf in Resources */,
+				9337C7851F4F40EE00230829 /* SourceSansPro-BlackIt.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,11 +316,15 @@
 			files = (
 				935A65971F3EAC9400E979E9 /* EventManager.swift in Sources */,
 				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
+				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
+				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
+				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
 				93399AF01F40DC2300ED02E9 /* EventDetailViewController.swift in Sources */,
+				9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */,
 				933956E11F43E55200F1AEE4 /* LocationPickerViewController.swift in Sources */,
 				933956E31F4400EB00F1AEE4 /* EventLocation.swift in Sources */,
 				933956E91F440ECF00F1AEE4 /* SignUpViewController.swift in Sources */,
