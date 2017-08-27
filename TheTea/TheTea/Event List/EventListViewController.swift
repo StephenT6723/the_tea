@@ -10,7 +10,8 @@ import UIKit
 import CoreData
 
 class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
-    private let tableView = UITableView()
+    private let tableView = UITableView(frame: CGRect(), style: UITableViewStyle.grouped)
+    private let timeFormatter = DateFormatter()
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             eventsFRC.delegate = self
@@ -21,19 +22,26 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "THE TEA"
+        title = "The Gay Agenda"
         edgesForExtendedLayout = UIRectEdge()
         view.backgroundColor = .white
+
+        timeFormatter.dateStyle = .none
+        timeFormatter.timeStyle = .short
         
         //navigation buttons
         let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
         navigationItem.rightBarButtonItem = createButton
         
-        let accountButton = UIBarButtonItem(title: "MY ACCOUNT", style: .plain, target: self, action: #selector(myAccountTapped))
+        let accountButton = UIBarButtonItem(title: "ME", style: .plain, target: self, action: #selector(myAccountTapped))
         navigationItem.leftBarButtonItem = accountButton
         
         //setup table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = 50
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0.1))
+        tableView.backgroundColor = UIColor.primaryBrand()
         tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
         tableView.register(EventListHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventListHeaderView.self))
         tableView.delegate = self
@@ -87,6 +95,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         return sectionInfo.numberOfObjects
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
@@ -105,11 +117,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         let event = eventsFRC.object(at: indexPath)
-        cell.textLabel?.font = UIFont.headerOne()
-        cell.textLabel?.text = event.name
-        if let startTime = event.startTime {
-            cell.detailTextLabel?.text = DateStringHelper.fullDescription(of: startTime as Date)
-        }
+        cell.titleLabel.text = event.name
+        cell.subTitleLabel.text = subTitle(for: event)
         return cell
     }
     
@@ -117,6 +126,20 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let event = eventsFRC.object(at: indexPath)
         let detailVC = EventDetailViewController(event:event)
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    //MARK: Helpers
+    
+    func subTitle(for event: Event) -> String {
+        if let startTime = event.startTime {
+            var subtitle = timeFormatter.string(from: startTime as Date)
+            if let locationName = event.locationName {
+                subtitle += " | "
+                subtitle += locationName
+            }
+            return subtitle
+        }
+        return ""
     }
     
     //MARK: FRC Delegate
