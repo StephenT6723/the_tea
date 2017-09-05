@@ -11,146 +11,122 @@ import MapKit
 
 class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, LocationPickerViewControllerDelegate {
     var event: Event?
-    private let nameTextField = UITextField()
-    private let createButton = UIButton()
-    private let backgroundView = UIView()
-    private let dateBackground = UIView()
-    private let startTimeTextField = UITextField()
+    private let nameTextField = EventEditField()
+    private let hostTextField = EventEditField()
+    private let startTimeTextField = EventEditField()
     private let startTimePicker = UIDatePicker()
     private let addEndTimeButton = UIButton()
     private var endTimeTopConstraint = NSLayoutConstraint()
-    private let endTimeTextField = UITextField()
+    private let endTimeTextField = EventEditField()
     private let endTimePicker = UIDatePicker()
     private let hideEndTimeButton = UIButton()
-    private let aboutTextView = UITextView()
-    private let locationButton = UIButton()
-    private let locationLabel = UILabel()
+    private let locationLabel = EventEditField()
+    private let aboutTextView = EventEditField()
+    
+    private let createButton = UIButton()
     
     private let aboutTextViewPlaceholder = "More info"
-    private let textFieldHeight: CGFloat = 40.0
+    private let textFieldHeight: CGFloat = 48.0
     private var selectedLocation: EventLocation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         edgesForExtendedLayout = UIRectEdge()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.primaryBrand()
         updateTitle()
         updateNavButtons()
         
-        let margins = view.layoutMarginsGuide
-        
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
-        nameTextField.placeholder = "Event Name"
-        nameTextField.backgroundColor = .white
-        nameTextField.autocapitalizationType = .words
+        nameTextField.textField.placeholder = "Event Name"
+        nameTextField.textField.autocapitalizationType = .words
         view.addSubview(nameTextField)
         
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        view.addSubview(backgroundView)
-        
-        dateBackground.translatesAutoresizingMaskIntoConstraints = false
-        dateBackground.backgroundColor = .white
-        view.addSubview(dateBackground)
+        hostTextField.translatesAutoresizingMaskIntoConstraints = false
+        hostTextField.textField.text = "Hosted by: Stephen Thomas"
+        hostTextField.textField.autocapitalizationType = .words
+        hostTextField.showDivider = false
+        view.addSubview(hostTextField)
         
         startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
-        startTimeTextField.backgroundColor = .white
-        startTimeTextField.tintColor = UIColor.white
+        startTimeTextField.textField.tintColor = UIColor.white
         startTimePicker.minimumDate = Date()
         startTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
-        startTimeTextField.inputView = startTimePicker
+        startTimeTextField.textField.inputView = startTimePicker
         view.addSubview(startTimeTextField)
         
         addEndTimeButton.translatesAutoresizingMaskIntoConstraints = false
         addEndTimeButton.setTitle("+ End Time", for: .normal)
         addEndTimeButton.setTitleColor(UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), for: .normal)
         addEndTimeButton.addTarget(self, action: #selector(addEndTimeTouched), for: .touchUpInside)
-        view.addSubview(addEndTimeButton)
+        startTimeTextField.addSubview(addEndTimeButton)
         
         endTimeTextField.translatesAutoresizingMaskIntoConstraints = false
-        endTimeTextField.backgroundColor = .white
-        endTimeTextField.tintColor = UIColor.white
+        endTimeTextField.textField.tintColor = UIColor.white
         endTimeTextField.alpha = 0
         endTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         endTimePicker.minimumDate = Date()
-        endTimeTextField.inputView = endTimePicker
+        endTimeTextField.textField.inputView = endTimePicker
         view.insertSubview(endTimeTextField, belowSubview: startTimeTextField)
         
         hideEndTimeButton.translatesAutoresizingMaskIntoConstraints = false
         hideEndTimeButton.setTitle("X", for: .normal)
         hideEndTimeButton.setTitleColor(UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), for: .normal)
         hideEndTimeButton.addTarget(self, action: #selector(hideEndTimeTouched), for: .touchUpInside)
-        view.insertSubview(hideEndTimeButton, belowSubview: startTimeTextField)
-        
-        aboutTextView.translatesAutoresizingMaskIntoConstraints = false
-        aboutTextView.text = aboutTextViewPlaceholder
-        aboutTextView.textColor = .lightGray
-        aboutTextView.backgroundColor = .white
-        aboutTextView.isScrollEnabled = false
-        aboutTextView.delegate = self
-        aboutTextView.font = UIFont.systemFont(ofSize: 17)
-        view.addSubview(aboutTextView)
-        
-        locationButton.translatesAutoresizingMaskIntoConstraints = false
-        locationButton.addTarget(self, action: #selector(locationButtonTouched), for: .touchUpInside)
-        locationButton.backgroundColor = .white
-        view.addSubview(locationButton)
+        endTimeTextField.addSubview(hideEndTimeButton)
         
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        locationLabel.font = UIFont.systemFont(ofSize: 17)
+        locationLabel.type = .button
+        locationLabel.button.addTarget(self, action: #selector(locationButtonTouched), for: .touchUpInside)
         view.addSubview(locationLabel)
         
-        nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        nameTextField.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
-        nameTextField.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        aboutTextView.translatesAutoresizingMaskIntoConstraints = false
+        aboutTextView.textView.text = aboutTextViewPlaceholder
+        aboutTextView.textView.delegate = self
+        aboutTextView.textView.font = UIFont.systemFont(ofSize: 17)
+        aboutTextView.type = .textView
+        view.addSubview(aboutTextView)
         
-        backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        backgroundView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-        backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        nameTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        dateBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        dateBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        dateBackground.topAnchor.constraint(equalTo: startTimeTextField.topAnchor).isActive = true
-        dateBackground.bottomAnchor.constraint(equalTo: aboutTextView.bottomAnchor).isActive = true
+        hostTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        hostTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        hostTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+        hostTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        startTimeTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
-        startTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        startTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        startTimeTextField.topAnchor.constraint(equalTo: hostTextField.bottomAnchor, constant: 20).isActive = true
+        startTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        startTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         startTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        addEndTimeButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
-        addEndTimeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        addEndTimeButton.topAnchor.constraint(equalTo: startTimeTextField.topAnchor).isActive = true
+        addEndTimeButton.trailingAnchor.constraint(equalTo: startTimeTextField.trailingAnchor, constant: -20).isActive = true
         addEndTimeButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
         addEndTimeButton.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         endTimeTopConstraint = endTimeTextField.topAnchor.constraint(equalTo: startTimeTextField.topAnchor)
         endTimeTopConstraint.isActive = true
-        endTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        endTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        endTimeTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        endTimeTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         endTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         hideEndTimeButton.topAnchor.constraint(equalTo: endTimeTextField.topAnchor).isActive = true
-        hideEndTimeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        hideEndTimeButton.trailingAnchor.constraint(equalTo: endTimeTextField.trailingAnchor, constant: -20).isActive = true
         hideEndTimeButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         hideEndTimeButton.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        aboutTextView.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor).isActive = true
-        aboutTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
-        aboutTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-        aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
-        
-        locationButton.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor).isActive = true
-        locationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        locationButton.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        locationLabel.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor).isActive = true
-        locationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        locationLabel.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor).isActive = true
+        locationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         locationLabel.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        aboutTextView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor).isActive = true
+        aboutTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        aboutTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
         
         if isCreatingNew() {
             createButton.translatesAutoresizingMaskIntoConstraints = false
@@ -168,7 +144,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             updateEndTime()
         } else {
             if let event = self.event {
-                nameTextField.text = event.name
+                nameTextField.textField.text = event.name
                 if let startTime = event.startTime {
                     startTimePicker.date = startTime as Date
                     if let endTime = event.endTime {
@@ -180,8 +156,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 }
                 if let about = event.about {
                     if about.characters.count > 0 {
-                        aboutTextView.text = about
-                        aboutTextView.textColor = .black
+                        aboutTextView.textView.text = about
+                        aboutTextView.textView.textColor = .black
                     }
                 }
                 if let eventLocation = event.eventLocation() {
@@ -218,11 +194,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     func updateTimeTextFields() {
-        startTimeTextField.text = DateStringHelper.fullDescription(of: startTimePicker.date)
+        startTimeTextField.textField.text = DateStringHelper.fullDescription(of: startTimePicker.date)
         if endTimePicker.date < startTimePicker.date {
             updateEndTime()
         }
-        endTimeTextField.text = "Ends \(DateStringHelper.fullDescription(of: endTimePicker.date))"
+        endTimeTextField.textField.text = "Ends \(DateStringHelper.fullDescription(of: endTimePicker.date))"
         endTimePicker.minimumDate = startTimePicker.date
     }
     
@@ -236,14 +212,14 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     func updateLocationLabel() {
         if let selectedLocation = self.selectedLocation {
             if selectedLocation.locationName.characters.count > 0 {
-                locationLabel.text = selectedLocation.locationName
-                locationLabel.textColor = .black
+                locationLabel.label.text = selectedLocation.locationName
+                locationLabel.label.textColor = .black
                 return
             }
         }
         
-        locationLabel.text = "Add Location"
-        locationLabel.textColor = .lightGray
+        locationLabel.label.text = "Add Location"
+        locationLabel.label.textColor = .lightGray
     }
     
     //MARK: Helpers
@@ -258,11 +234,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func saveEvent() {
         var aboutText = ""
-        if aboutTextView.text != aboutTextViewPlaceholder && aboutTextView.text.characters.count > 0 {
-            aboutText = aboutTextView.text
+        if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.characters.count > 0 {
+            aboutText = aboutTextView.textView.text
         }
         if isCreatingNew() {
-            if let name = nameTextField.text {
+            if let name = nameTextField.textField.text {
                 if name.characters.count > 0 {
                     EventManager.createEvent(name: name,
                                              startTime: startTimePicker.date,
@@ -273,7 +249,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             }
         } else {
             if let event = self.event {
-                if let name = nameTextField.text {
+                if let name = nameTextField.textField.text {
                     if name.characters.count > 0 {
                         EventManager.updateEvent(event: event,
                                                  name: name,
@@ -377,5 +353,101 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             textView.text = "More info"
             textView.textColor = .lightGray
         }
+    }
+}
+
+enum EventEditFieldType {
+    case textField
+    case textView
+    case button
+}
+
+class EventEditField: UIView {
+    var type = EventEditFieldType.textField {
+        didSet {
+            switch type {
+            case .textField:
+                textField.alpha = 1
+                label.alpha = 0
+                button.alpha = 0
+                textView.alpha = 0
+            case .textView:
+                textField.alpha = 0
+                label.alpha = 0
+                button.alpha = 0
+                textView.alpha = 1
+            case .button:
+                textField.alpha = 0
+                label.alpha = 1
+                button.alpha = 1
+                textView.alpha = 0
+            }
+        }
+    }
+    let label = UILabel()
+    let button = UIButton()
+    let textField = UITextField()
+    let textView = UITextView()
+    private let divider = UIView()
+    var showDivider = true {
+        didSet {
+            divider.isHidden = !showDivider
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .white
+        
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(textField)
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17)
+        label.alpha = 0
+        addSubview(label)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.alpha = 0
+        addSubview(button)
+        
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.textColor = .lightGray
+        textView.isScrollEnabled = false
+        textView.alpha = 0
+        addSubview(textView)
+        
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        divider.backgroundColor = UIColor.dividers()
+        addSubview(divider)
+        
+        textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        textField.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        textField.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        label.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        button.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        button.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        button.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
+        textView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        textView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20).isActive = true
+        
+        divider.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        divider.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        divider.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 }
