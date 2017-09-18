@@ -7,16 +7,36 @@
 //
 
 import UIKit
+import CoreData
 
 class MemberDataManager {
     static let sharedInstance = MemberDataManager()
     private init() {}
     
     func isLoggedIn() -> Bool {
-        return false
+        let member = currentMember()
+        return member != nil
     }
     
     func canEditEvent(event: Event) -> Bool {
         return true
+    }
+    
+    func currentMember() -> Member? {
+        let request = NSFetchRequest<Member>(entityName:"Member")
+        
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        var results = [Member]()
+        
+        do {
+            try results = context.fetch(request)
+            if results.count > 0 {
+                return results[0]
+            }
+        } catch {
+            fatalError("Failed to fetch Member Object: \(error)")
+        }
+        
+        return nil
     }
 }

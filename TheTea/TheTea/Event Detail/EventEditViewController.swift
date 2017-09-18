@@ -14,6 +14,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let scrollView = UIScrollView()
     private let nameTextField = EventEditField()
     private let hostTextField = EventEditField()
+    private let loginView = EventEditLoginView(frame: CGRect())
     private let startTimeTextField = EventEditField()
     private let startTimePicker = UIDatePicker()
     private let addEndTimeButton = UIButton()
@@ -48,11 +49,30 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         nameTextField.textField.autocapitalizationType = .words
         scrollView.addSubview(nameTextField)
         
-        hostTextField.translatesAutoresizingMaskIntoConstraints = false
-        hostTextField.textField.text = "HOSTED BY: Stephen Thomas"
-        hostTextField.textField.autocapitalizationType = .words
-        hostTextField.showDivider = false
-        scrollView.addSubview(hostTextField)
+        if let member = MemberDataManager.sharedInstance.currentMember() {
+            guard let name = member.name else {
+                return
+            }
+            
+            hostTextField.translatesAutoresizingMaskIntoConstraints = false
+            hostTextField.textField.text = "HOSTED BY: \(name)"
+            hostTextField.textField.autocapitalizationType = .words
+            hostTextField.showDivider = false
+            scrollView.addSubview(hostTextField)
+            
+            hostTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+            hostTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+            hostTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+            hostTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        } else {
+            loginView.translatesAutoresizingMaskIntoConstraints = false
+            scrollView.addSubview(loginView)
+            
+            loginView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+            loginView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+            loginView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+            loginView.heightAnchor.constraint(equalToConstant: 74).isActive = true
+        }
         
         startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         startTimeTextField.textField.tintColor = UIColor.white
@@ -106,12 +126,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         nameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        hostTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        hostTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        hostTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-        hostTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        startTimeTextField.topAnchor.constraint(equalTo: hostTextField.bottomAnchor, constant: 20).isActive = true
+        if MemberDataManager.sharedInstance.isLoggedIn() {
+            startTimeTextField.topAnchor.constraint(equalTo: hostTextField.bottomAnchor, constant: 20).isActive = true
+        } else {
+            startTimeTextField.topAnchor.constraint(equalTo: loginView.bottomAnchor, constant: 20).isActive = true
+        }
         startTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         startTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         startTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
@@ -247,7 +266,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         }
         
         locationLabel.label.text = "LOCATION"
-        locationLabel.label.textColor = .lightGray
+        locationLabel.label.textColor = UIColor.lightCopy()
     }
     
     //MARK: Helpers
@@ -370,19 +389,60 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     //MARK Text View Delegate
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .lightGray {
+        if textView.textColor == UIColor.lightCopy() {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = UIColor.primaryCopy()
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = aboutTextViewPlaceholder
-            textView.textColor = .lightGray
+            textView.textColor = UIColor.lightCopy()
         }
     }
 }
+
+//MARK: Login View
+
+class EventEditLoginView : UIView {
+    let titleLabel = UILabel()
+    let button = UIButton()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        backgroundColor = .white
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.body()
+        titleLabel.text = "Log in to Create Events"
+        titleLabel.textColor = UIColor.primaryCopy()
+        addSubview(titleLabel)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("GET STARTED", for: .normal)
+        button.setTitleColor(UIColor.primaryCTA(), for: .normal)
+        button.titleLabel?.font = UIFont.cta()
+        addSubview(button)
+        
+        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
+        
+        button.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0).isActive = true
+        button.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+
+
+//MARK: Event Edit Fields
 
 enum EventEditFieldType {
     case textField
@@ -435,10 +495,12 @@ class EventEditField: UIView {
         
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.body()
+        textField.textColor = UIColor.primaryCopy()
         addSubview(textField)
         
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.body()
+        label.textColor = UIColor.primaryCopy()
         label.alpha = 0
         addSubview(label)
         
@@ -447,7 +509,7 @@ class EventEditField: UIView {
         addSubview(button)
         
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.textColor = .lightGray
+        textView.textColor = UIColor.lightCopy()
         textView.isScrollEnabled = false
         textView.alpha = 0
         textView.font = .body()

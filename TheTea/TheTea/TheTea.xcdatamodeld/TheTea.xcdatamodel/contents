@@ -13,7 +13,11 @@
         <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="ticketURL" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="Member" representedClassName="Member" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="210"/>
+        <element name="Member" positionX="-63" positionY="63" width="128" height="60"/>
     </elements>
 </model>
