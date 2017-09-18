@@ -24,6 +24,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let hideEndTimeButton = UIButton()
     private let locationLabel = EventEditField()
     private let aboutTextView = EventEditField()
+    private let deleteButton = UIButton()
     
     private let createContainer = UIView()
     private let createButton = PrimaryCTA(frame: CGRect())
@@ -154,7 +155,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         aboutTextView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         aboutTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
-        aboutTextView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
         
         if isCreatingNew() {
             createContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -166,8 +166,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             createContainer.layer.shouldRasterize = true
             createContainer.layer.rasterizationScale = UIScreen.main.scale
             view.addSubview(createContainer)
-            
-            
             
             createButton.translatesAutoresizingMaskIntoConstraints = false
             createButton.setTitle("CREATE", for: .normal)
@@ -184,6 +182,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             createButton.bottomAnchor.constraint(equalTo: createContainer.bottomAnchor, constant: -20).isActive = true
             createButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight())).isActive = true
             
+            aboutTextView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
             scrollView.bottomAnchor.constraint(equalTo: createContainer.topAnchor).isActive = true
             
             updateEndTime()
@@ -207,6 +206,25 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 }
                 if let eventLocation = event.eventLocation() {
                     selectedLocation = eventLocation
+                }
+                
+                if MemberDataManager.sharedInstance.canEditEvent(event: event) {
+                    deleteButton.translatesAutoresizingMaskIntoConstraints = false
+                    deleteButton.setTitleColor(.red, for: .normal)
+                    deleteButton.titleLabel?.font = UIFont.cta()
+                    deleteButton.setTitle("DELETE EVENT", for: .normal)
+                    deleteButton.layer.cornerRadius = 8
+                    deleteButton.backgroundColor = .white
+                    deleteButton.addTarget(self, action: #selector(deleteButtonTouched), for: .touchUpInside)
+                    scrollView.addSubview(deleteButton)
+                    
+                    deleteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+                    deleteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+                    deleteButton.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor, constant: 20).isActive = true
+                    deleteButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+                    deleteButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
+                } else {
+                    aboutTextView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
                 }
             }
             
@@ -363,6 +381,24 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         let locationNav = UINavigationController(rootViewController: locationVC)
         locationNav.navigationBar.isTranslucent = false
         present(locationNav, animated: true, completion: nil)
+    }
+    
+    func deleteButtonTouched() {
+        guard let eventName = self.event?.name else {
+            return
+        }
+        
+        let alert = UIAlertController(title: nil, message: "Are you sure you want to delete \(eventName)", preferredStyle: UIAlertControllerStyle.alert)
+        let deleteAction = UIAlertAction(title: "DELETE", style: UIAlertActionStyle.destructive)  { (action: UIAlertAction) in
+            if let event = self.event {
+                EventManager.delete(event: event)
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+        alert.addAction(deleteAction)
+        let cancelAction = UIAlertAction.init(title: "CANCEL", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
     }
     
     //MARK: Location selection

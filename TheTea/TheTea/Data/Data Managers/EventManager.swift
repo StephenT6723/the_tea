@@ -67,6 +67,11 @@ class EventManager: NSObject {
         CoreDataManager.sharedInstance.saveContext()
     }
     
+    class func delete(event:Event) {
+        CoreDataManager.sharedInstance.persistentContainer.viewContext.delete(event)
+        CoreDataManager.sharedInstance.saveContext()
+    }
+    
     class func event(name: String) -> Event? {
         let request = NSFetchRequest<Event>(entityName:"Event")
         request.predicate = NSPredicate(format: "name like %@", name)

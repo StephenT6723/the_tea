@@ -99,6 +99,9 @@ class EventDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if self.event?.managedObjectContext == nil {
+            self.navigationController?.popViewController(animated: false)
+        }
         updateContent()
     }
     

@@ -18,10 +18,6 @@ class MemberDataManager {
         return member != nil
     }
     
-    func canEditEvent(event: Event) -> Bool {
-        return true
-    }
-    
     func currentMember() -> Member? {
         let request = NSFetchRequest<Member>(entityName:"Member")
         
@@ -38,5 +34,14 @@ class MemberDataManager {
         }
         
         return nil
+    }
+    
+    func canEditEvent(event: Event) -> Bool {
+        return true
+        if let member = self.currentMember() {
+            return member.canEditEvent(event: event)
+        }
+        
+        return false
     }
 }
