@@ -41,6 +41,7 @@
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
 		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
+		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = "Event List/EventListViewController.swift"; sourceTree = "<group>"; };
 		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewCell.swift; path = "Event List/EventListTableViewCell.swift"; sourceTree = "<group>"; };
+		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +187,7 @@
 		935A659B1F3ECA1100E979E9 /* UI Elements */ = {
 			isa = PBXGroup;
 			children = (
+				D739CD271F704D8800E3779B /* PrimaryCTA.swift */,
 			);
 			name = "UI Elements";
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
+				D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */,
 				93399AF01F40DC2300ED02E9 /* EventDetailViewController.swift in Sources */,
 				9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */,
 				933956E11F43E55200F1AEE4 /* LocationPickerViewController.swift in Sources */,

@@ -39,6 +39,10 @@ extension UIColor {
         return UIColor(hexString:"#4A4A4A")
     }
     
+    class func primaryCTA() -> UIColor {
+        return UIColor(hexString:"#27AE3F")
+    }
+    
     class func lightCopy() -> UIColor {
         return UIColor(hexString:"#A4AAB3")
     }

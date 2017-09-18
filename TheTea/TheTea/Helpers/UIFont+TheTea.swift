@@ -28,4 +28,8 @@ extension UIFont {
     class func body() -> UIFont? {
         return UIFont(name: "SourceSansPro-Regular", size: 15)
     }
+    
+    class func cta() -> UIFont? {
+        return UIFont(name: "SourceSansPro-Semibold", size: 15)
+    }
 }
