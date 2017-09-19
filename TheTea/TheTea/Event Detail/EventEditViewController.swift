@@ -307,9 +307,10 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     func dataUpdated() -> Bool {
+        /*
         if !MemberDataManager.sharedInstance.isLoggedIn() {
             return false
-        }
+        }*/
         
         if let event = self.event {
             if let name = nameTextField.textField.text {

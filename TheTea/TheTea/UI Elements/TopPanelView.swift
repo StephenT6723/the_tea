@@ -14,6 +14,7 @@ class TopPanelView: UIView, UIScrollViewDelegate {
     private var scrollableView = UIView()
     private let scrollView = TopPanelScrollView()
     private var topPanelheightConstraint = NSLayoutConstraint()
+    private var shadowView = UIView()
     var topPanelHeight: CGFloat = 200.0 {
         didSet {
             scrollView.topPanelHeight = topPanelHeight
@@ -23,6 +24,7 @@ class TopPanelView: UIView, UIScrollViewDelegate {
     func updateContent(topPanel: UIView, scrollableView: UIView) {
         self.topPanel.removeFromSuperview()
         self.scrollableView.removeFromSuperview()
+        self.shadowView.removeFromSuperview()
         
         if topPanelMask.superview == nil {
             topPanelMask.translatesAutoresizingMaskIntoConstraints = false
@@ -56,14 +58,19 @@ class TopPanelView: UIView, UIScrollViewDelegate {
         topPanel.translatesAutoresizingMaskIntoConstraints = false
         insertSubview(topPanel, at:0)
         
+        shadowView = UIView()
+        shadowView.translatesAutoresizingMaskIntoConstraints = false
+        shadowView.layer.masksToBounds = false
+        shadowView.layer.shadowColor = UIColor.black.cgColor
+        shadowView.layer.shadowOpacity = 0.4
+        shadowView.layer.shadowOffset = CGSize(width: 1, height: -4)
+        shadowView.layer.shadowRadius = 4
+        shadowView.layer.shouldRasterize = true
+        shadowView.layer.rasterizationScale = UIScreen.main.scale
+        shadowView.backgroundColor = .white
+        scrollView.addSubview(shadowView)
+        
         scrollableView.translatesAutoresizingMaskIntoConstraints = false
-        scrollableView.layer.masksToBounds = false
-        scrollableView.layer.shadowColor = UIColor.black.cgColor
-        scrollableView.layer.shadowOpacity = 0.4
-        scrollableView.layer.shadowOffset = CGSize(width: 1, height: -4)
-        scrollableView.layer.shadowRadius = 4
-        scrollableView.layer.shouldRasterize = true
-        scrollableView.layer.rasterizationScale = UIScreen.main.scale
         scrollView.addSubview(scrollableView)
         
         topPanel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
@@ -82,8 +89,12 @@ class TopPanelView: UIView, UIScrollViewDelegate {
         scrollableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         scrollableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         scrollableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        scrollableView.heightAnchor.constraint(equalToConstant: 900).isActive = true
         scrollableView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        
+        shadowView.topAnchor.constraint(equalTo: scrollableView.topAnchor).isActive = true
+        shadowView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        shadowView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        shadowView.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

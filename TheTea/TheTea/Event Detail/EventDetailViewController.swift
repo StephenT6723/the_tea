@@ -95,6 +95,7 @@ class EventDetailViewController: UIViewController {
         aboutLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         aboutLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         aboutLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10).isActive = true
+        aboutLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         
         topPanelView.translatesAutoresizingMaskIntoConstraints = false
         topPanelView.updateContent(topPanel: topCarousel, scrollableView: contentView)
@@ -127,7 +128,8 @@ class EventDetailViewController: UIViewController {
         if let locationName = event.locationName {
             var locationString = locationName
             if let address = event.address {
-                locationString += " - \(address)"
+                //TODO: Find a way to do this that is smarter.
+                locationString += " - \(address.replacingOccurrences(of: ", United States", with: ""))"
             }
             locationLabel.text = locationString
         }
