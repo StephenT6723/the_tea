@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import MapKit
 
 class EventDetailViewController: UIViewController {
     var event : Event?
     
-    let topCarousel = UIView()
+    let topCarousel = EventDetailCarousel(frame: CGRect())
     let contentView = UIView()
     let topPanelView = TopPanelView()
     
@@ -52,7 +53,7 @@ class EventDetailViewController: UIViewController {
         }
         
         topCarousel.translatesAutoresizingMaskIntoConstraints = false
-        topCarousel.layer.borderWidth = 1
+        topCarousel.event = event
         
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.backgroundColor = .white
@@ -142,5 +143,45 @@ class EventDetailViewController: UIViewController {
     
     func reportButtonTouched() {
         
+    }
+}
+
+class EventDetailCarousel : UIView {
+    let mapView = MKMapView()
+    var event: Event? = nil {
+        didSet {
+            updateContent()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        mapView.isUserInteractionEnabled = false
+        addSubview(mapView)
+        
+        mapView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        mapView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        mapView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        mapView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    func updateContent() {
+        if let event = self.event {
+            let coordinate = CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude)
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = event.locationName
+            mapView.addAnnotation(annotation)
+            
+            let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001))
+            mapView.region = region
+        }
     }
 }
