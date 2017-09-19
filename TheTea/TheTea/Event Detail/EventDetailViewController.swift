@@ -10,15 +10,15 @@ import UIKit
 
 class EventDetailViewController: UIViewController {
     var event : Event?
+    
     let topCarousel = UIView()
-    let scrollView = UIScrollView()
-    let bottomBackground = UIView()
+    let contentView = UIView()
+    let topPanelView = TopPanelView()
+    
     let titleLabel = UILabel()
     let detailLabel = UILabel()
     let aboutLabel = UILabel()
     let locationLabel = UILabel()
-    
-    let topCarouselHeight: CGFloat = 210.0
     
     convenience init(event: Event) {
         self.init()
@@ -51,50 +51,58 @@ class EventDetailViewController: UIViewController {
             navigationItem.rightBarButtonItem = reportButton
         }
         
-        let margins = view.layoutMarginsGuide
-        
         topCarousel.translatesAutoresizingMaskIntoConstraints = false
-        topCarousel.layer.borderWidth = 3
-        view.addSubview(topCarousel)
+        topCarousel.layer.borderWidth = 1
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.backgroundColor = .white
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        view.addSubview(titleLabel)
+        titleLabel.font = UIFont.headerOne()
+        titleLabel.textColor = UIColor.primaryCopy()
+        contentView.addSubview(titleLabel)
         
-        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: margins.topAnchor, constant: 20).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
         
         detailLabel.translatesAutoresizingMaskIntoConstraints = false
-        detailLabel.font = UIFont.systemFont(ofSize: 16)
-        view.addSubview(detailLabel)
+        detailLabel.font = UIFont.body()
+        detailLabel.textColor = UIColor.lightCopy()
+        contentView.addSubview(detailLabel)
         
-        detailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        detailLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        detailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        
-        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
-        aboutLabel.numberOfLines = 0
-        aboutLabel.font = UIFont.systemFont(ofSize: 16)
-        view.addSubview(aboutLabel)
-        
-        aboutLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        aboutLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        aboutLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 10).isActive = true
+        detailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        detailLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        detailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
         
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.numberOfLines = 0
-        locationLabel.font = UIFont.systemFont(ofSize: 16)
-        view.addSubview(locationLabel)
+        locationLabel.font = UIFont.body()
+        locationLabel.textColor = UIColor.lightCopy()
+        contentView.addSubview(locationLabel)
         
-        locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        locationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        locationLabel.topAnchor.constraint(equalTo: aboutLabel.bottomAnchor, constant: 10).isActive = true
+        locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        locationLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor).isActive = true
         
-        topCarousel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        topCarousel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        topCarousel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        topCarousel.heightAnchor.constraint(equalToConstant: topCarouselHeight).isActive = true
+        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
+        aboutLabel.numberOfLines = 0
+        aboutLabel.font = UIFont.body()
+        aboutLabel.textColor = UIColor.primaryCopy()
+        contentView.addSubview(aboutLabel)
+        
+        aboutLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        aboutLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        aboutLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10).isActive = true
+        
+        topPanelView.translatesAutoresizingMaskIntoConstraints = false
+        topPanelView.updateContent(topPanel: topCarousel, scrollableView: contentView)
+        view.addSubview(topPanelView)
+        
+        topPanelView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        topPanelView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        topPanelView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        topPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,15 +118,15 @@ class EventDetailViewController: UIViewController {
             return
         }
         
-        titleLabel.text = event.name?.capitalized
+        titleLabel.text = event.name?.uppercased()
         if let date = event.startTime {
-            detailLabel.text = DateStringHelper.fullDescription(of: date as Date)
+            detailLabel.text = "\(DateStringHelper.fullDescription(of: date as Date))"
         }
         aboutLabel.text = event.about
         if let locationName = event.locationName {
             var locationString = locationName
             if let address = event.address {
-                locationString += "\n\(address)"
+                locationString += " - \(address)"
             }
             locationLabel.text = locationString
         }

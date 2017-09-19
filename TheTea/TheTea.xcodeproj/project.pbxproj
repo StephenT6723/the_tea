@@ -43,6 +43,7 @@
 		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
+		D739CD2C1F7171A400E3779B /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD2B1F7171A400E3779B /* TopPanelView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,7 @@
 		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewCell.swift; path = "Event List/EventListTableViewCell.swift"; sourceTree = "<group>"; };
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
+		D739CD2B1F7171A400E3779B /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopPanelView.swift; path = "UI Elements/TopPanelView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				D739CD271F704D8800E3779B /* PrimaryCTA.swift */,
+				D739CD2B1F7171A400E3779B /* TopPanelView.swift */,
 			);
 			name = "UI Elements";
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
 				D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */,
 				D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */,
+				D739CD2C1F7171A400E3779B /* TopPanelView.swift in Sources */,
 				93399AF01F40DC2300ED02E9 /* EventDetailViewController.swift in Sources */,
 				9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */,
 				933956E11F43E55200F1AEE4 /* LocationPickerViewController.swift in Sources */,
