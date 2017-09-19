@@ -22,7 +22,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "The Gay Agenda"
+        title = "TGA"
         edgesForExtendedLayout = UIRectEdge()
         view.backgroundColor = .white
 
@@ -100,7 +100,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 52
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

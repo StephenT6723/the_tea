@@ -30,10 +30,10 @@ class EventListHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(subTitleLabel)
         
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         
         subTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 10.0).isActive = true
-        subTitleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        subTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

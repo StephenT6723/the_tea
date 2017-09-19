@@ -133,6 +133,7 @@ class EventDetailViewController: UIViewController {
             }
             locationLabel.text = locationString
         }
+        topCarousel.updateContent()
     }
     
     func editButtonTouched() {
