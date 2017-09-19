@@ -23,3 +23,11 @@ class EventLocation {
         self.longitude = longitude
     }
 }
+
+func == (firstEvent: EventLocation, secondEvent: EventLocation) -> Bool {
+    return firstEvent.locationName == secondEvent.locationName && firstEvent.address == secondEvent.address && firstEvent.latitude == secondEvent.latitude && firstEvent.longitude == secondEvent.longitude
+}
+
+func != (firstEvent: EventLocation, secondEvent: EventLocation) -> Bool {
+    return !(firstEvent == secondEvent)
+}

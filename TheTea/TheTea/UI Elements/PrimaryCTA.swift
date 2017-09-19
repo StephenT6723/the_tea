@@ -9,6 +9,12 @@
 import UIKit
 
 class PrimaryCTA: UIButton {
+    override var isEnabled: Bool {
+        didSet {
+            backgroundColor = isEnabled ? UIColor.primaryCTA() : UIColor.lightCopy()
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

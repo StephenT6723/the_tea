@@ -48,6 +48,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textField.placeholder = "EVENT NAME"
         nameTextField.textField.autocapitalizationType = .words
+        nameTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(nameTextField)
         
         if let member = MemberDataManager.sharedInstance.currentMember() {
@@ -233,6 +234,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         updateLocationLabel()
         updateTimeTextFields()
+        updateSaveButtons()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -287,6 +289,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         locationLabel.label.textColor = UIColor.lightCopy()
     }
     
+    func updateSaveButtons() {
+        let enabled = dataUpdated()
+        
+        createButton.isEnabled = enabled
+        navigationItem.rightBarButtonItem?.isEnabled = enabled
+    }
+    
     //MARK: Helpers
     
     func isCreatingNew() -> Bool {
@@ -295,6 +304,57 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func isEndTimeVisible() -> Bool {
         return endTimeTextField.alpha > 0
+    }
+    
+    func dataUpdated() -> Bool {
+        if !MemberDataManager.sharedInstance.isLoggedIn() {
+            return false
+        }
+        
+        if let event = self.event {
+            if let name = nameTextField.textField.text {
+                if name.characters.count > 0 && name != event.name {
+                    return true
+                }
+            }
+            if let startTime = event.startTime as Date? {
+                if startTimePicker.date != startTime {
+                    return true
+                }
+            }
+            if let endTime = event.endTime as Date? {
+                if endTimePicker.date != endTime {
+                    return true
+                }
+            }
+            var aboutText = ""
+            if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.characters.count > 0 {
+                aboutText = aboutTextView.textView.text
+                if aboutText != event.about {
+                    return true
+                }
+            }
+            
+            if let selectedLocation = self.selectedLocation {
+                if let location = event.eventLocation() {
+                    if selectedLocation != location {
+                        return true
+                    }
+                } else {
+                    return true
+                }
+            } else if event.eventLocation() != nil {
+                return true
+            }
+        } else  {
+            if let name = nameTextField.textField.text {
+                if name.characters.count > 0 {
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
     
     func saveEvent() {
@@ -346,6 +406,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func datePickerChanged(picker: UIDatePicker) {
         updateTimeTextFields()
+        updateSaveButtons()
     }
     
     func addEndTimeTouched() {
@@ -406,6 +467,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     func locationPicker(sender: LocationPickerViewController, selected location:EventLocation) {
         selectedLocation = location
         updateLocationLabel()
+        updateSaveButtons()
     }
     
     //MARK: Keyboard updates
@@ -423,6 +485,10 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     //MARK Text View Delegate
+    
+    func textViewDidChange(_ textView: UITextView) {
+        updateSaveButtons()
+    }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightCopy() {
@@ -475,8 +541,6 @@ class EventEditLoginView : UIView {
         super.init(coder: aDecoder)
     }
 }
-
-
 
 //MARK: Event Edit Fields
 
