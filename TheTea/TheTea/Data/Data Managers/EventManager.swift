@@ -10,13 +10,16 @@ import UIKit
 import CoreData
 
 class EventManager: NSObject {
-    class func allEvents() -> NSFetchedResultsController<Event> {
+    class func allFutureEvents() -> NSFetchedResultsController<Event> {
         let request = NSFetchRequest<Event>(entityName:"Event")
-        let nameSort = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [nameSort]
+        let todayString = DateStringHelper.dataString(from: Date())
+        let predicate = NSPredicate(format: "daySectionIdentifier >= %@", todayString)
+        request.predicate = predicate
+        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
+        request.sortDescriptors = [startTimeSort]
         
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
-        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
         
         do {
             try eventsFRC.performFetch()
@@ -33,37 +36,12 @@ class EventManager: NSObject {
         }
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let event = Event(context: context)
-        event.name = name
-        event.startTime = startTime as NSDate
-        event.endTime = endTime as NSDate?
-        event.about = about
-        event.locationName = location?.locationName
-        event.address = location?.address
-        if let latitude = location?.latitude, let longitude = location?.longitude {
-            event.latitude = latitude
-            event.longitude = longitude
-        } else {
-            event.latitude = 0
-            event.longitude = 0
-        }
-        
+        event.update(name: name, startTime: startTime, endTime: endTime, about: about, location: location)
         CoreDataManager.sharedInstance.saveContext()
     }
     
     class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
-        event.name = name
-        event.startTime = startTime as NSDate
-        event.endTime = endTime as NSDate?
-        event.about = about
-        event.locationName = location?.locationName
-        event.address = location?.address
-        if let latitude = location?.latitude, let longitude = location?.longitude {
-            event.latitude = latitude
-            event.longitude = longitude
-        } else {
-            event.latitude = 0
-            event.longitude = 0
-        }
+        event.update(name: name, startTime: startTime, endTime: endTime, about: about, location: location)
         CoreDataManager.sharedInstance.saveContext()
     }
     

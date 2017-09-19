@@ -12,6 +12,7 @@ import CoreData
 class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
     private let tableView = UITableView(frame: CGRect(), style: UITableViewStyle.grouped)
     private let timeFormatter = DateFormatter()
+    private let dateFormatter = DateFormatter()
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             eventsFRC.delegate = self
@@ -28,6 +29,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
+        
+        dateFormatter.dateFormat = "EEEE, MMM d"
         
         //navigation buttons
         let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
@@ -107,6 +110,20 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: EventListHeaderView.self)) as? EventListHeaderView else {
             return EventListHeaderView()
         }
+        guard let sectionInfo = eventsFRC.sections?[section] else { return header }
+        
+        let todayString = DateStringHelper.dataString(from: Date())
+        
+        let dataString = sectionInfo.name
+        guard let sectionDate = DateStringHelper.date(from: dataString) else { return header }
+        
+        if todayString == dataString {
+            header.titleLabel.text = "TODAY"
+            header.subTitleLabel.text = dateFormatter.string(from: sectionDate)
+        } else {
+            header.titleLabel.text = dateFormatter.string(from: sectionDate)
+            header.subTitleLabel.text = ""
+        }
         
         return header
     }
@@ -170,7 +187,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         case .update:
             tableView.reloadRows(at: [indexPath!], with: .fade)
         case .move:
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+            tableView.reloadData()
         }
     }
     

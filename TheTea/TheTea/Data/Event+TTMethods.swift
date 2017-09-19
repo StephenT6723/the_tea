@@ -25,6 +25,23 @@ extension Event {
         }
     }
     
+    func update(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
+        self.name = name
+        self.startTime = startTime as NSDate
+        self.endTime = endTime as NSDate?
+        self.about = about
+        self.locationName = location?.locationName
+        self.address = location?.address
+        if let latitude = location?.latitude, let longitude = location?.longitude {
+            self.latitude = latitude
+            self.longitude = longitude
+        } else {
+            self.latitude = 0
+            self.longitude = 0
+        }
+        self.daySectionIdentifier = DateStringHelper.dataString(from: startTime)
+    }
+    
     func eventLocation() -> EventLocation? {
         if let locationName = self.locationName, let address = self.address {
             if self.latitude != 0 && self.longitude != 0 {
