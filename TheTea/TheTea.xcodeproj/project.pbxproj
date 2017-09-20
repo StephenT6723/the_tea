@@ -41,6 +41,10 @@
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
 		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
+		D72964DE1F72B9D800B83AF4 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72964DA1F72B9D800B83AF4 /* Bolts.framework */; };
+		D72964DF1F72B9D800B83AF4 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72964DB1F72B9D800B83AF4 /* FBSDKCoreKit.framework */; };
+		D72964E01F72B9D800B83AF4 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72964DC1F72B9D800B83AF4 /* FBSDKLoginKit.framework */; };
+		D72964E11F72B9D800B83AF4 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72964DD1F72B9D800B83AF4 /* FBSDKShareKit.framework */; };
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
 		D739CD2C1F7171A400E3779B /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD2B1F7171A400E3779B /* TopPanelView.swift */; };
@@ -83,6 +87,10 @@
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = "Event List/EventListViewController.swift"; sourceTree = "<group>"; };
 		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewCell.swift; path = "Event List/EventListTableViewCell.swift"; sourceTree = "<group>"; };
+		D72964DA1F72B9D800B83AF4 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Frameworks/Facebook/Bolts.framework; sourceTree = "<group>"; };
+		D72964DB1F72B9D800B83AF4 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Frameworks/Facebook/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		D72964DC1F72B9D800B83AF4 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/Facebook/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		D72964DD1F72B9D800B83AF4 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = Frameworks/Facebook/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
 		D739CD2B1F7171A400E3779B /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopPanelView.swift; path = "UI Elements/TopPanelView.swift"; sourceTree = "<group>"; };
@@ -93,6 +101,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D72964E11F72B9D800B83AF4 /* FBSDKShareKit.framework in Frameworks */,
+				D72964DE1F72B9D800B83AF4 /* Bolts.framework in Frameworks */,
+				D72964DF1F72B9D800B83AF4 /* FBSDKCoreKit.framework in Frameworks */,
+				D72964E01F72B9D800B83AF4 /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +238,7 @@
 				9389067E1F3E88D400BBB88C /* Event List */,
 				935A65981F3EB2C700E979E9 /* Event Detail */,
 				9337C76F1F4F3A0D00230829 /* Misc */,
+				D72964D81F72B9B400B83AF4 /* Frameworks */,
 			);
 			path = TheTea;
 			sourceTree = "<group>";
@@ -238,6 +251,25 @@
 				938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */,
 			);
 			name = "Event List";
+			sourceTree = "<group>";
+		};
+		D72964D81F72B9B400B83AF4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D72964D91F72B9C600B83AF4 /* Facebook */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D72964D91F72B9C600B83AF4 /* Facebook */ = {
+			isa = PBXGroup;
+			children = (
+				D72964DA1F72B9D800B83AF4 /* Bolts.framework */,
+				D72964DB1F72B9D800B83AF4 /* FBSDKCoreKit.framework */,
+				D72964DC1F72B9D800B83AF4 /* FBSDKLoginKit.framework */,
+				D72964DD1F72B9D800B83AF4 /* FBSDKShareKit.framework */,
+			);
+			name = Facebook;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -460,6 +492,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TheTea/Frameworks/Facebook",
+				);
 				INFOPLIST_FILE = TheTea/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "The-Tea-LLC.TheTea";
@@ -472,6 +508,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TheTea/Frameworks/Facebook",
+				);
 				INFOPLIST_FILE = TheTea/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "The-Tea-LLC.TheTea";

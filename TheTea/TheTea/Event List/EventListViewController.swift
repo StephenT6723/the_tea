@@ -70,10 +70,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func myAccountTapped() {
-        let profileVC = MyAccountViewController()
-        let profileNav = UINavigationController(rootViewController: profileVC)
-        profileNav.navigationBar.isTranslucent = false
-        present(profileNav, animated: true, completion: nil)
+        let loginVC = LoginViewController()
+        let loginNav = UINavigationController(rootViewController: loginVC)
+        loginNav.navigationBar.isTranslucent = false
+        present(loginNav, animated: true, completion: nil)
     }
     
     //MARK: Table View
