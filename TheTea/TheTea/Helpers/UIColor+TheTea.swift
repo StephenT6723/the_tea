@@ -9,6 +9,30 @@
 import UIKit
 
 extension UIColor {
+    class func primaryBrand() -> UIColor {
+        return UIColor(hexString:"#907EE9")
+    }
+    
+    class func lightBrandCopy() -> UIColor {
+        return UIColor(hexString:"#B0A4EF")
+    }
+    
+    class func primaryCopy() -> UIColor {
+        return UIColor(hexString:"#4A4A4A")
+    }
+    
+    class func primaryCTA() -> UIColor {
+        return UIColor(hexString:"#54C7FC")
+    }
+    
+    class func lightCopy() -> UIColor {
+        return UIColor(hexString:"#A4AAB3")
+    }
+    
+    class func dividers() -> UIColor {
+        return UIColor(hexString:"#E2E2E2")
+    }
+    
     convenience init(hexString: String) {
         let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int = UInt32()
@@ -25,29 +49,5 @@ extension UIColor {
             (a, r, g, b) = (255, 0, 0, 0)
         }
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
-    }
-    
-    class func primaryBrand() -> UIColor {
-        return UIColor(hexString:"#907EE9")
-    }
-    
-    class func lightBrandCopy() -> UIColor {
-        return UIColor(hexString:"#B0A4EF")
-    }
-    
-    class func primaryCopy() -> UIColor {
-        return UIColor(hexString:"#4A4A4A")
-    }
-    
-    class func primaryCTA() -> UIColor {
-        return UIColor(hexString:"#27AE3F")
-    }
-    
-    class func lightCopy() -> UIColor {
-        return UIColor(hexString:"#A4AAB3")
-    }
-    
-    class func dividers() -> UIColor {
-        return UIColor(hexString:"#E2E2E2")
     }
 }
