@@ -48,6 +48,7 @@
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
 		D739CD2C1F7171A400E3779B /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD2B1F7171A400E3779B /* TopPanelView.swift */; };
+		D758CE441F82C93700ABB0ED /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D758CE431F82C93700ABB0ED /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +95,7 @@
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
 		D739CD2B1F7171A400E3779B /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopPanelView.swift; path = "UI Elements/TopPanelView.swift"; sourceTree = "<group>"; };
+		D758CE431F82C93700ABB0ED /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +208,7 @@
 			children = (
 				D739CD271F704D8800E3779B /* PrimaryCTA.swift */,
 				D739CD2B1F7171A400E3779B /* TopPanelView.swift */,
+				D758CE431F82C93700ABB0ED /* LoadingView.swift */,
 			);
 			name = "UI Elements";
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
+				D758CE441F82C93700ABB0ED /* LoadingView.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,

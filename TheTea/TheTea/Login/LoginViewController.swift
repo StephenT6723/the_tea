@@ -97,7 +97,7 @@ class LoginViewController: UIViewController {
     }
     
     func errorView(errorText: String) -> UIView {
-        let recruitView = UIView()
+        let errorView = UIView()
         
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -105,7 +105,7 @@ class LoginViewController: UIViewController {
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
         titleLabel.text = "OOPSE"
-        recruitView.addSubview(titleLabel)
+        errorView.addSubview(titleLabel)
         
         let subTitleLabel = UILabel()
         subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -114,37 +114,66 @@ class LoginViewController: UIViewController {
         subTitleLabel.textAlignment = .center
         subTitleLabel.text = errorText
         subTitleLabel.numberOfLines = 0
-        recruitView.addSubview(subTitleLabel)
+        errorView.addSubview(subTitleLabel)
         
-        let facebookButton = PrimaryCTA()
-        facebookButton.translatesAutoresizingMaskIntoConstraints = false
-        facebookButton.setTitle("TRY AGAIN", for: .normal)
-        facebookButton.addTarget(self, action: #selector(connectWithFacebookTouched), for: .touchUpInside)
-        recruitView.addSubview(facebookButton)
+        let tryAgainButton = PrimaryCTA()
+        tryAgainButton.translatesAutoresizingMaskIntoConstraints = false
+        tryAgainButton.setTitle("TRY AGAIN", for: .normal)
+        tryAgainButton.addTarget(self, action: #selector(connectWithFacebookTouched), for: .touchUpInside)
+        errorView.addSubview(tryAgainButton)
         
-        titleLabel.leadingAnchor.constraint(equalTo: recruitView.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: recruitView.trailingAnchor).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: recruitView.topAnchor, constant: 22).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: errorView.leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: errorView.trailingAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: errorView.topAnchor, constant: 22).isActive = true
         
-        subTitleLabel.leadingAnchor.constraint(equalTo: recruitView.leadingAnchor).isActive = true
-        subTitleLabel.trailingAnchor.constraint(equalTo: recruitView.trailingAnchor).isActive = true
+        subTitleLabel.leadingAnchor.constraint(equalTo: errorView.leadingAnchor).isActive = true
+        subTitleLabel.trailingAnchor.constraint(equalTo: errorView.trailingAnchor).isActive = true
         subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
         
-        facebookButton.leadingAnchor.constraint(equalTo: recruitView.leadingAnchor, constant: 20).isActive = true
-        facebookButton.trailingAnchor.constraint(equalTo: recruitView.trailingAnchor, constant: -20).isActive = true
-        facebookButton.bottomAnchor.constraint(equalTo: recruitView.bottomAnchor, constant: -20).isActive = true
-        facebookButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight())).isActive = true
+        tryAgainButton.leadingAnchor.constraint(equalTo: errorView.leadingAnchor, constant: 20).isActive = true
+        tryAgainButton.trailingAnchor.constraint(equalTo: errorView.trailingAnchor, constant: -20).isActive = true
+        tryAgainButton.bottomAnchor.constraint(equalTo: errorView.bottomAnchor, constant: -20).isActive = true
+        tryAgainButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight())).isActive = true
         
-        return recruitView
+        return errorView
+    }
+    
+    func creatingAccountView() -> UIView {
+        let creatingView = UIView()
+        
+        let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = UIFont.headerOne()
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .center
+        titleLabel.text = "CREATING YOUR ACCOUNT"
+        creatingView.addSubview(titleLabel)
+        
+        let loadingView = LoadingView()
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        creatingView.addSubview(loadingView)
+        
+        titleLabel.leadingAnchor.constraint(equalTo: creatingView.leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: creatingView.trailingAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: creatingView.topAnchor, constant: 22).isActive = true
+        
+        loadingView.leadingAnchor.constraint(equalTo: creatingView.leadingAnchor).isActive = true
+        loadingView.trailingAnchor.constraint(equalTo: creatingView.trailingAnchor).isActive = true
+        loadingView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
+        loadingView.bottomAnchor.constraint(equalTo: creatingView.bottomAnchor).isActive = true
+        
+        return creatingView
     }
     
     //MARK: Actions
     
     func connectWithFacebookTouched() {
-        let error = true
+        let error = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             if error {
                 self.topPanel.pushView(view: self.errorView(errorText: "We were unable to create your account"))
+            } else {
+                self.topPanel.pushView(view: self.creatingAccountView())
             }
         }
     }
@@ -152,6 +181,7 @@ class LoginViewController: UIViewController {
 
 class LoginTopPanelView: UIView {
     var view: UIView?
+    var viewXConstraint = NSLayoutConstraint()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -165,15 +195,23 @@ class LoginTopPanelView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(view)
         
-        if self.view == nil {
-            view.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-            view.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-            view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-            view.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-            
+        view.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        view.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+
+        let newXConstraint = view.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: self.bounds.width)
+        newXConstraint.isActive = true
+        layoutIfNeeded()
+        
+        viewXConstraint.constant = -1 * self.bounds.width
+        viewXConstraint = newXConstraint
+        viewXConstraint.constant = 0
+        
+        UIView.animate(withDuration: self.view == nil ? 0 : 1, animations: {
+            self.layoutIfNeeded()
+        }, completion: { (complete: Bool) in
+            self.view?.removeFromSuperview()
             self.view = view
-        } else {
-            
-        }
+        })
     }
 }
