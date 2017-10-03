@@ -26,7 +26,6 @@
 		933956E11F43E55200F1AEE4 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956E01F43E55200F1AEE4 /* LocationPickerViewController.swift */; };
 		933956E31F4400EB00F1AEE4 /* EventLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956E21F4400EB00F1AEE4 /* EventLocation.swift */; };
 		933956E71F440EA600F1AEE4 /* MyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956E61F440EA600F1AEE4 /* MyAccountViewController.swift */; };
-		933956E91F440ECF00F1AEE4 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956E81F440ECF00F1AEE4 /* SignUpViewController.swift */; };
 		933956EB1F440EF600F1AEE4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933956EA1F440EF600F1AEE4 /* LoginViewController.swift */; };
 		93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93399AED1F40DB5900ED02E9 /* DateStringHelper.swift */; };
 		93399AF01F40DC2300ED02E9 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93399AEF1F40DC2300ED02E9 /* EventDetailViewController.swift */; };
@@ -71,7 +70,6 @@
 		933956E01F43E55200F1AEE4 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationPickerViewController.swift; path = "Event Detail/LocationPickerViewController.swift"; sourceTree = "<group>"; };
 		933956E21F4400EB00F1AEE4 /* EventLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventLocation.swift; path = Data/EventLocation.swift; sourceTree = "<group>"; };
 		933956E61F440EA600F1AEE4 /* MyAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyAccountViewController.swift; path = Profile/MyAccountViewController.swift; sourceTree = "<group>"; };
-		933956E81F440ECF00F1AEE4 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpViewController.swift; path = Login/SignUpViewController.swift; sourceTree = "<group>"; };
 		933956EA1F440EF600F1AEE4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = Login/LoginViewController.swift; sourceTree = "<group>"; };
 		93399AED1F40DB5900ED02E9 /* DateStringHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateStringHelper.swift; path = Helpers/DateStringHelper.swift; sourceTree = "<group>"; };
 		93399AEF1F40DC2300ED02E9 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = "Event Detail/EventDetailViewController.swift"; sourceTree = "<group>"; };
@@ -147,7 +145,6 @@
 		933956E41F440E3A00F1AEE4 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				933956E81F440ECF00F1AEE4 /* SignUpViewController.swift */,
 				933956EA1F440EF600F1AEE4 /* LoginViewController.swift */,
 			);
 			name = Login;
@@ -375,7 +372,6 @@
 				9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */,
 				933956E11F43E55200F1AEE4 /* LocationPickerViewController.swift in Sources */,
 				933956E31F4400EB00F1AEE4 /* EventLocation.swift in Sources */,
-				933956E91F440ECF00F1AEE4 /* SignUpViewController.swift in Sources */,
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,
 				933956E71F440EA600F1AEE4 /* MyAccountViewController.swift in Sources */,
 				933956EB1F440EF600F1AEE4 /* LoginViewController.swift in Sources */,
