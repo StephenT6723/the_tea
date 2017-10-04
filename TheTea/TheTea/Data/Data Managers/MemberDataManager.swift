@@ -38,6 +38,15 @@ class MemberDataManager {
         return nil
     }
     
+    func updateCurrentMember(name: String, linkToFacebook: Bool, instagram: String?, twitter: String?) {
+        let member = currentMember()
+        member?.name = name
+        member?.linkToFacebook = linkToFacebook
+        member?.instagram = instagram
+        member?.twitter = twitter
+        CoreDataManager.sharedInstance.saveContext()
+    }
+    
     func canEditEvent(event: Event) -> Bool {
         if let member = self.currentMember() {
             return member.canEditEvent(event: event)
@@ -58,5 +67,9 @@ class MemberDataManager {
         member.instagram = ""
         CoreDataManager.sharedInstance.saveContext()
         return member
+    }
+    
+    func logoutCurrentMember() {
+        print("Logging out ;)")
     }
 }

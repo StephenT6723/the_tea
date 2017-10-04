@@ -17,9 +17,11 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "My Profile"
+        title = "MY PROFILE"
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTouched))
         navigationItem.leftBarButtonItem = doneButton
+        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
+        navigationItem.rightBarButtonItem = editButton
         
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
@@ -50,8 +52,22 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
+    //MARK: Actions
+    
     func doneButtonTouched() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func editButtonTouched() {
+        let editVC = EditMyAccountViewController()
+        let editNav = UINavigationController(rootViewController: editVC)
+        editNav.navigationBar.isTranslucent = false
+        present(editNav, animated: true, completion: nil)
     }
     
     //MARK: Table View
