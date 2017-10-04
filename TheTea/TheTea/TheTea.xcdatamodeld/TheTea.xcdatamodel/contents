@@ -15,10 +15,16 @@
         <attribute name="ticketURL" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Member" representedClassName="Member" syncable="YES" codeGenerationType="class">
+        <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="instagram" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="linkToFacebook" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tgaID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitter" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="225"/>
-        <element name="Member" positionX="-63" positionY="63" width="128" height="60"/>
+        <element name="Member" positionX="-63" positionY="63" width="128" height="150"/>
     </elements>
 </model>

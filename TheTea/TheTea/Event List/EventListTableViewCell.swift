@@ -55,4 +55,16 @@ class EventListTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
+    class func subTitle(for event: Event, timeFormatter: DateFormatter) -> String {
+        if let startTime = event.startTime {
+            var subtitle = timeFormatter.string(from: startTime as Date)
+            if let locationName = event.locationName {
+                subtitle += " | "
+                subtitle += locationName
+            }
+            return subtitle
+        }
+        return ""
+    }
 }

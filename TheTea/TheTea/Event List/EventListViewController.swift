@@ -106,6 +106,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         return 52
     }
     
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.01
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: EventListHeaderView.self)) as? EventListHeaderView else {
             return EventListHeaderView()
@@ -135,7 +139,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let event = eventsFRC.object(at: indexPath)
         cell.titleLabel.text = event.name
-        cell.subTitleLabel.text = subTitle(for: event)
+        cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: event, timeFormatter: timeFormatter)
         return cell
     }
     
@@ -143,20 +147,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let event = eventsFRC.object(at: indexPath)
         let detailVC = EventDetailViewController(event:event)
         navigationController?.pushViewController(detailVC, animated: true)
-    }
-    
-    //MARK: Helpers
-    
-    func subTitle(for event: Event) -> String {
-        if let startTime = event.startTime {
-            var subtitle = timeFormatter.string(from: startTime as Date)
-            if let locationName = event.locationName {
-                subtitle += " | "
-                subtitle += locationName
-            }
-            return subtitle
-        }
-        return ""
     }
     
     //MARK: FRC Delegate

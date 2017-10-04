@@ -40,6 +40,9 @@
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
 		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
+		D7103DB81F85277D00399263 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB71F85277D00399263 /* LoadingView.swift */; };
+		D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB91F85278400399263 /* SegmentedControl.swift */; };
+		D7103DBC1F85313C00399263 /* EventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DBB1F85313C00399263 /* EventList.swift */; };
 		D72964DE1F72B9D800B83AF4 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72964DA1F72B9D800B83AF4 /* Bolts.framework */; };
 		D72964DF1F72B9D800B83AF4 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72964DB1F72B9D800B83AF4 /* FBSDKCoreKit.framework */; };
 		D72964E01F72B9D800B83AF4 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72964DC1F72B9D800B83AF4 /* FBSDKLoginKit.framework */; };
@@ -47,7 +50,6 @@
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
 		D739CD2C1F7171A400E3779B /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD2B1F7171A400E3779B /* TopPanelView.swift */; };
-		D758CE441F82C93700ABB0ED /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D758CE431F82C93700ABB0ED /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +88,9 @@
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = "Event List/EventListViewController.swift"; sourceTree = "<group>"; };
 		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewCell.swift; path = "Event List/EventListTableViewCell.swift"; sourceTree = "<group>"; };
+		D7103DB71F85277D00399263 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingView.swift; path = "UI Elements/LoadingView.swift"; sourceTree = "<group>"; };
+		D7103DB91F85278400399263 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedControl.swift; path = "UI Elements/SegmentedControl.swift"; sourceTree = "<group>"; };
+		D7103DBB1F85313C00399263 /* EventList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventList.swift; path = Data/EventList.swift; sourceTree = "<group>"; };
 		D72964DA1F72B9D800B83AF4 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Frameworks/Facebook/Bolts.framework; sourceTree = "<group>"; };
 		D72964DB1F72B9D800B83AF4 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Frameworks/Facebook/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		D72964DC1F72B9D800B83AF4 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/Facebook/FBSDKLoginKit.framework; sourceTree = "<group>"; };
@@ -93,7 +98,6 @@
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
 		D739CD2B1F7171A400E3779B /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopPanelView.swift; path = "UI Elements/TopPanelView.swift"; sourceTree = "<group>"; };
-		D758CE431F82C93700ABB0ED /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +180,7 @@
 				935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */,
 				D739CD291F706D6F00E3779B /* Member+TTMethods.swift */,
 				933956E21F4400EB00F1AEE4 /* EventLocation.swift */,
+				D7103DBB1F85313C00399263 /* EventList.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -205,7 +210,8 @@
 			children = (
 				D739CD271F704D8800E3779B /* PrimaryCTA.swift */,
 				D739CD2B1F7171A400E3779B /* TopPanelView.swift */,
-				D758CE431F82C93700ABB0ED /* LoadingView.swift */,
+				D7103DB71F85277D00399263 /* LoadingView.swift */,
+				D7103DB91F85278400399263 /* SegmentedControl.swift */,
 			);
 			name = "UI Elements";
 			sourceTree = "<group>";
@@ -360,7 +366,6 @@
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
-				D758CE441F82C93700ABB0ED /* LoadingView.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
@@ -378,6 +383,9 @@
 				9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */,
 				935A659A1F3EB30E00E979E9 /* EventEditViewController.swift in Sources */,
 				93399AF21F40E0A100ED02E9 /* MemberDataManager.swift in Sources */,
+				D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */,
+				D7103DBC1F85313C00399263 /* EventList.swift in Sources */,
+				D7103DB81F85277D00399263 /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

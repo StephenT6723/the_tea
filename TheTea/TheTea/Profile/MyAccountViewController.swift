@@ -8,26 +8,40 @@
 
 import UIKit
 
-class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    let tableView = UITableView()
-    var aboutText = "Soaring through the air in her combat armor, and armed with a launcher that lays down high-explosive rockets, Pharah is a force to be reckoned with."
-    var events = [Event]()
+class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EventListDelegate {
+    let tableView = UITableView(frame: CGRect(), style: .grouped)
+    var upcomingEvents = EventList()
+    var currentMember = MemberDataManager.sharedInstance.currentMember()
+    private let timeFormatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "My Profile"
-        view.backgroundColor = .white
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
-        navigationItem.leftBarButtonItem = cancelButton
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTouched))
+        navigationItem.leftBarButtonItem = doneButton
+        
+        timeFormatter.dateStyle = .none
+        timeFormatter.timeStyle = .short
+        
+        if let member = currentMember {
+            upcomingEvents = member.upcomingHostedEvents()
+            upcomingEvents.delegate = self
+            upcomingEvents.update()
+        }
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(ProfileUserInfoCell.self, forCellReuseIdentifier: String(describing: ProfileUserInfoCell.self))
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 0.01))
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = UIColor.primaryBrand()
+        tableView.register(ProfileAboutCell.self, forCellReuseIdentifier: String(describing: ProfileAboutCell.self))
         tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
         tableView.register(ProfileHeader.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileHeader.self))
+        tableView.register(ProfileMyEventsHeader.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileMyEventsHeader.self))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44
+        tableView.estimatedSectionHeaderHeight = 130
         view.addSubview(tableView)
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -36,46 +50,69 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    func cancelButtonTouched() {
+    func doneButtonTouched() {
         dismiss(animated: true, completion: nil)
     }
     
     //MARK: Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 && aboutText.characters.count > 0 {
-            return 1
+        if let aboutText = currentMember?.about {
+            if section == 0 && aboutText.characters.count > 0 {
+                return 1
+            }
         }
-        return events.count
+        
+        if section == 1 {
+            return upcomingEvents.events.count
+        }
+        
+        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? UITableViewAutomaticDimension : 44
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 130
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.01
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ProfileHeader.self)) as? ProfileHeader else {
-            return ProfileHeader()
+        if section == 0 {
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ProfileHeader.self)) as? ProfileHeader else {
+                return ProfileHeader()
+            }
+            
+            header.nameLabel.text = currentMember?.name?.capitalized
+            
+            return header
+        } else {
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ProfileMyEventsHeader.self)) as? ProfileMyEventsHeader else {
+                return ProfileMyEventsHeader()
+            }
+            
+            header.titleLabel.text = "MY EVENTS"
+            
+            return header
         }
-        
-        return header
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ProfileUserInfoCell.self), for: indexPath) as? ProfileUserInfoCell else {
-                return ProfileUserInfoCell()
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ProfileAboutCell.self), for: indexPath) as? ProfileAboutCell else {
+                return ProfileAboutCell()
             }
             
-            cell.aboutLabel.text = aboutText
+            cell.aboutLabel.text = currentMember?.about
             
             return cell
         }
@@ -84,35 +121,31 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             return EventListTableViewCell()
         }
         
-        cell.textLabel?.text = "Drag Show"
-        cell.detailTextLabel?.text = "Pieces Bar"
+        if indexPath.row < upcomingEvents.events.count {
+            let event = upcomingEvents.events[indexPath.row]
+            cell.titleLabel.text = event.name
+            cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: event, timeFormatter: timeFormatter)
+        }
+        
         return cell
     }
-}
-
-class ProfileUserInfoCell: UITableViewCell {
-    let aboutLabel = UILabel()
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = UIColor.primaryBrand()
-        clipsToBounds = false
-        
-        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
-        aboutLabel.font = UIFont.body()
-        aboutLabel.textColor = .white
-        aboutLabel.numberOfLines = 0
-        addSubview(aboutLabel)
-        
-        aboutLabel.topAnchor.constraint(equalTo: topAnchor, constant: -4).isActive = true
-        aboutLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20).isActive = true
-        aboutLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        aboutLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            if indexPath.row < upcomingEvents.events.count {
+                let event = upcomingEvents.events[indexPath.row]
+                let detailVC = EventDetailViewController(event:event)
+                navigationController?.pushViewController(detailVC, animated: true)
+            }
+        }
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    //MARK: Event List Delegate
+    
+    func eventListStatusChanged(sender: EventList) {
+        if sender.status == .ready {
+            tableView.reloadData()
+        }
     }
 }
 
@@ -145,7 +178,6 @@ class ProfileHeader: UITableViewHeaderFooterView {
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.headerOne()
-        nameLabel.text = "ALEXANDER UNICK"
         nameLabel.textColor = UIColor.primaryCopy()
         contentView.addSubview(nameLabel)
         
@@ -172,10 +204,11 @@ class ProfileHeader: UITableViewHeaderFooterView {
         backgroundStripe.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         backgroundStripe.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         
-        profileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
         profileImageView.heightAnchor.constraint(equalToConstant: 90).isActive = true
         profileImageView.widthAnchor.constraint(equalToConstant: 90).isActive = true
         profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        profileImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         
         nameLabel.topAnchor.constraint(equalTo: backgroundStripe.topAnchor, constant: 7).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 20).isActive = true
@@ -195,6 +228,66 @@ class ProfileHeader: UITableViewHeaderFooterView {
         twitterButton.leadingAnchor.constraint(equalTo: instagramButton.trailingAnchor, constant: 20).isActive = true
         twitterButton.heightAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         twitterButton.widthAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+class ProfileAboutCell: UITableViewCell {
+    let aboutLabel = UILabel()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        
+        backgroundColor = UIColor.primaryBrand()
+        selectionStyle = .none
+        clipsToBounds = false
+        
+        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
+        aboutLabel.font = UIFont.body()
+        aboutLabel.textColor = .white
+        aboutLabel.numberOfLines = 0
+        addSubview(aboutLabel)
+        
+        aboutLabel.topAnchor.constraint(equalTo: topAnchor, constant: -4).isActive = true
+        aboutLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14).isActive = true
+        aboutLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        aboutLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+class ProfileMyEventsHeader: UITableViewHeaderFooterView {
+    let titleLabel = UILabel()
+    let segmentedControl = SegmentedControl()
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        
+        contentView.backgroundColor = UIColor.primaryBrand()
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = UIFont.headerOne()
+        titleLabel.textColor = .white
+        contentView.addSubview(titleLabel)
+        
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.items = ["UPCOMING", "PAST"]
+        contentView.addSubview(segmentedControl)
+        
+        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        
+        segmentedControl.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14).isActive = true
+        segmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        segmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        segmentedControl.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        segmentedControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
