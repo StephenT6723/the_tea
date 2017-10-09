@@ -70,6 +70,16 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         present(editNav, animated: true, completion: nil)
     }
     
+    func myEventsOptionChanged(sender: SegmentedControl) {
+        let isUpcoming = sender.selectedIndex == 0
+        
+        if let member = currentMember {
+            upcomingEvents = isUpcoming ? member.upcomingHostedEvents() : member.pastHostedEvents()
+            upcomingEvents.delegate = self
+            upcomingEvents.update()
+        }
+    }
+    
     //MARK: Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -117,6 +127,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             header.titleLabel.text = "MY EVENTS"
+            header.segmentedControl.addTarget(self, action: #selector(myEventsOptionChanged(sender:)), for: .valueChanged)
             
             return header
         }
