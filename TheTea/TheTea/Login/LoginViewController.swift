@@ -168,12 +168,31 @@ class LoginViewController: UIViewController {
     //MARK: Actions
     
     func connectWithFacebookTouched() {
-        let error = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            if error {
-                self.topPanel.pushView(view: self.errorView(errorText: "We were unable to create your account"))
-            } else {
-                self.topPanel.pushView(view: self.creatingAccountView())
+        let loginManager = FBSDKLoginManager()
+        loginManager.logIn(withReadPermissions: ["public_profile"], from: self) { (result: FBSDKLoginManagerLoginResult?, error: Error?) in
+            if let error = error {
+                print("ERROR LOGGIN IN TO FACEBOOK: \(String(describing: error.localizedDescription))")
+                self.topPanel.pushView(view: self.errorView(errorText: "There was a problem logging in to Facebook"))
+                return
+            }
+            
+            guard let result = result else {
+                return
+            }
+            
+            if result.isCancelled {
+                return
+            }
+            
+            self.topPanel.pushView(view: self.creatingAccountView())
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                let success = MemberDataManager.sharedInstance.loginMemberWithFacebook()
+                if success {
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    self.topPanel.pushView(view: self.errorView(errorText: "There was a problem creating your The Gay Agenda account"))
+                }
             }
         }
     }
@@ -207,7 +226,7 @@ class LoginTopPanelView: UIView {
         viewXConstraint = newXConstraint
         viewXConstraint.constant = 0
         
-        UIView.animate(withDuration: self.view == nil ? 0 : 1, animations: {
+        UIView.animate(withDuration: self.view == nil ? 0 : 0.1, animations: {
             self.layoutIfNeeded()
         }, completion: { (complete: Bool) in
             self.view?.removeFromSuperview()

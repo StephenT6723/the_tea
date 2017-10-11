@@ -117,10 +117,9 @@ class EditMyAccountViewController: UIViewController {
     }
     
     func dataUpdated() -> Bool {
-        /*
-         if !MemberDataManager.sharedInstance.isLoggedIn() {
-         return false
-         }*/
+        if !MemberDataManager.sharedInstance.isLoggedIn() {
+            return false
+        }
         
         guard let member = MemberDataManager.sharedInstance.currentMember() else {
             return false
@@ -162,5 +161,6 @@ class EditMyAccountViewController: UIViewController {
     
     func logoutButtonTouched() {
         MemberDataManager.sharedInstance.logoutCurrentMember()
+        dismiss(animated: true, completion: nil)
     }
 }

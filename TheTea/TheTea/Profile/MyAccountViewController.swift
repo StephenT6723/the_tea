@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FBSDKLoginKit
 
 class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EventListDelegate {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
@@ -54,7 +55,14 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        currentMember = MemberDataManager.sharedInstance.currentMember()
         tableView.reloadData()
+        if !MemberDataManager.sharedInstance.isLoggedIn() { //user is not facebook logged in
+            let loginVC = LoginViewController()
+            let loginNav = UINavigationController(rootViewController: loginVC)
+            loginNav.navigationBar.isTranslucent = false
+            present(loginNav, animated: false, completion: nil)
+        }
     }
     
     //MARK: Actions
@@ -118,7 +126,36 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 return ProfileHeader()
             }
             
-            header.nameLabel.text = currentMember?.name?.capitalized
+            guard let currentMember = self.currentMember else {
+                return header
+            }
+            
+            header.nameLabel.text = currentMember.name?.capitalized
+            header.facebookButton.alpha = 1
+            header.facebookButton.isEnabled = true
+            
+            if !currentMember.linkToFacebook {
+                header.facebookButton.alpha = 0.3
+                header.facebookButton.isEnabled = false
+            }
+            
+            header.instagramButton.alpha = 1
+            header.instagramButton.isEnabled = true
+            
+            if currentMember.instagram?.characters.count == 0 {
+                header.instagramButton.alpha = 0.3
+                header.instagramButton.isEnabled = false
+            }
+            
+            header.twitterButton.alpha = 1
+            header.twitterButton.isEnabled = true
+            
+            if currentMember.twitter?.characters.count == 0 {
+                header.twitterButton.alpha = 0.3
+                header.twitterButton.isEnabled = false
+            }
+            
+            header.profileImageView.profileID = currentMember.facebookID
             
             return header
         } else {
@@ -178,7 +215,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
 
 class ProfileHeader: UITableViewHeaderFooterView {
     let nameLabel = UILabel()
-    let profileImageView = UIImageView(image: UIImage(named: "placeholder_profile_image"))
+    let profileImageView = FBSDKProfilePictureView()
     let backgroundStripe = UIView()
     let facebookButton = UIButton()
     let instagramButton = UIButton()

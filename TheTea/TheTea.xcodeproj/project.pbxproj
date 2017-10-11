@@ -53,6 +53,7 @@
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
 		D739CD2C1F7171A400E3779B /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD2B1F7171A400E3779B /* TopPanelView.swift */; };
+		D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DFB9D01F8BDAEA0053B2C9 /* TGAServer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
 		D739CD2B1F7171A400E3779B /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopPanelView.swift; path = "UI Elements/TopPanelView.swift"; sourceTree = "<group>"; };
+		D7DFB9D01F8BDAEA0053B2C9 /* TGAServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TGAServer.swift; path = "Data/Data Managers/TGAServer.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +200,7 @@
 				935A65941F3EA7C700E979E9 /* CoreDataManager.swift */,
 				935A65961F3EAC9400E979E9 /* EventManager.swift */,
 				93399AF11F40E0A100ED02E9 /* MemberDataManager.swift */,
+				D7DFB9D01F8BDAEA0053B2C9 /* TGAServer.swift */,
 			);
 			name = "Data Mangers";
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 				D7103DC01F85543200399263 /* InputField.swift in Sources */,
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
+				D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */,
 				D7103DC21F85599300399263 /* AlertCTA.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,

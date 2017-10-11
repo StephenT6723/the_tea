@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import FBSDKLoginKit
 
 class MemberDataManager {
     static let sharedInstance = MemberDataManager()
@@ -16,6 +17,30 @@ class MemberDataManager {
     func isLoggedIn() -> Bool {
         let member = currentMember()
         return member != nil
+    }
+    
+    func loginMemberWithFacebook() -> Bool {
+        guard let profile = FBSDKProfile.current(), !isLoggedIn() else {
+            print("Tried to create TGA Account but facebook is not logged in")
+            return false
+        }
+        
+        //make server call to auth with FB data
+        let memberData = TGAServer.authenticateMember(facebookUserID: profile.userID, name: profile.name)
+        
+        //auth successfull: got a bunch of data from the server with a tb member
+        guard let tgaID = memberData[Member.tgaIDKey] as? String else {
+            return false
+        }
+        
+        if let member = addNewMember(tgaID: tgaID) {
+            member.updateWithData(data: memberData)
+            CoreDataManager.sharedInstance.saveContext()
+            
+            return true
+        }
+        
+        return false
     }
     
     func currentMember() -> Member? {
@@ -28,8 +53,6 @@ class MemberDataManager {
             try results = context.fetch(request)
             if results.count > 0 {
                 return results[0]
-            } else {
-                return self.createPlaceholderMember()
             }
         } catch {
             fatalError("Failed to fetch Member Object: \(error)")
@@ -40,10 +63,12 @@ class MemberDataManager {
     
     func updateCurrentMember(name: String, linkToFacebook: Bool, instagram: String?, twitter: String?) {
         let member = currentMember()
-        member?.name = name
-        member?.linkToFacebook = linkToFacebook
-        member?.instagram = instagram
-        member?.twitter = twitter
+        var memberData = [String: AnyObject]()
+        memberData[Member.nameKey] = name as AnyObject
+        memberData[Member.likeToFBKey] = linkToFacebook as AnyObject
+        memberData[Member.instagramKey] = instagram as AnyObject
+        memberData[Member.twitterKey] = twitter as AnyObject
+        member?.updateWithData(data: memberData)
         CoreDataManager.sharedInstance.saveContext()
     }
     
@@ -55,21 +80,26 @@ class MemberDataManager {
         return false
     }
     
-    func createPlaceholderMember() -> Member {
+    func addNewMember(tgaID: String) -> Member? {
+        if isLoggedIn() {
+            return nil
+        }
+        
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let member = Member(context: context)
-        member.name = "Alexander Unick"
-        member.about = "Under the call sign 'Pharah,' she works to safeguard the AI installation. Though she mourns Overwatch's passing, she still dreams of fighting the good fight and making a difference on a global scale."
-        member.facebookID = "placeholder"
-        member.tgaID = "placeholder"
-        member.linkToFacebook = false
-        member.twitter = ""
-        member.instagram = ""
+        member.tgaID = tgaID
         CoreDataManager.sharedInstance.saveContext()
         return member
     }
     
     func logoutCurrentMember() {
-        print("Logging out ;)")
+        if let currentMember = self.currentMember() {
+            let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+            context.delete(currentMember)
+            CoreDataManager.sharedInstance.saveContext()
+        }
+        
+        let loginManager = FBSDKLoginManager()
+        loginManager.logOut()
     }
 }
