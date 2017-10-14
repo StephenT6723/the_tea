@@ -13,6 +13,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     let tableView = UITableView(frame: CGRect(), style: .grouped)
     var upcomingEvents = EventList()
     var currentMember = MemberDataManager.sharedInstance.currentMember()
+    var hasShownLogin = false
     private let timeFormatter = DateFormatter()
     
     override func viewDidLoad() {
@@ -23,6 +24,8 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationItem.leftBarButtonItem = doneButton
         let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
         navigationItem.rightBarButtonItem = editButton
+        
+        view.backgroundColor = UIColor.primaryBrand()
         
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
@@ -45,6 +48,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 130
+        tableView.alpha = 1
         view.addSubview(tableView)
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -56,12 +60,22 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         currentMember = MemberDataManager.sharedInstance.currentMember()
-        tableView.reloadData()
-        if !MemberDataManager.sharedInstance.isLoggedIn() { //user is not facebook logged in
+        
+        if !MemberDataManager.sharedInstance.isLoggedIn() {
+            if hasShownLogin {
+                dismiss(animated: true, completion: nil)
+                return
+            }
+            tableView.alpha = 0
             let loginVC = LoginViewController()
             let loginNav = UINavigationController(rootViewController: loginVC)
             loginNav.navigationBar.isTranslucent = false
-            present(loginNav, animated: false, completion: nil)
+            present(loginNav, animated: true, completion: nil)
+            hasShownLogin = true
+        } else {
+            hasShownLogin = false
+            tableView.alpha = 1
+            tableView.reloadData()
         }
     }
     

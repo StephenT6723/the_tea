@@ -21,13 +21,13 @@ protocol EventListDelegate {
 class EventList {
     var title = ""
     var subtitle = ""
-    var predicate = NSPredicate()
+    var predicate: NSPredicate?
     var sortDescriptors = [NSSortDescriptor]()
     var delegate: EventListDelegate?
     var status = EventListStatus.ready
     var events = [Event]()
     
-    convenience init (title: String, subtitle: String, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]?, delegate: EventListDelegate?) {
+    convenience init (title: String, subtitle: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?, delegate: EventListDelegate?) {
         self.init()
         self.title = title
         self.subtitle = subtitle

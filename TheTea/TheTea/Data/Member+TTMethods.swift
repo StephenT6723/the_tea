@@ -32,7 +32,10 @@ extension Member {
             self.linkToFacebook = false
         }
         
-        self.facebookID = data[Member.facebookIDKey] as? String
+        if let fbID = data[Member.facebookIDKey] as? String {
+            self.facebookID = fbID
+        }
+        
         self.instagram = data[Member.instagramKey] as? String
         self.twitter = data[Member.twitterKey] as? String
         self.about = data[Member.aboutKey] as? String
@@ -42,8 +45,11 @@ extension Member {
         return true
     }
     
-    func hostedEvents() -> [Event] {
-        return [Event]()
+    func hostedEvents() -> EventList {
+        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
+        
+        let eventList = EventList(title: "\(String(describing: self.name)) Hosted Events", subtitle: "", predicate: nil, sortDescriptors: [startTimeSort], delegate: nil)
+        return eventList
     }
     
     func upcomingHostedEvents() -> EventList {
