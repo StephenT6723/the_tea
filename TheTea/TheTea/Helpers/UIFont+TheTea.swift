@@ -17,6 +17,10 @@ extension UIFont {
         return UIFont(name: "SourceSansPro-Semibold", size: 17)
     }
     
+    class func headerThree() -> UIFont? {
+        return UIFont(name: "SourceSansPro-Bold", size: 16)
+    }
+    
     class func barButtonTitle() -> UIFont? {
         return UIFont(name: "SourceSansPro-Regular", size: 17)
     }

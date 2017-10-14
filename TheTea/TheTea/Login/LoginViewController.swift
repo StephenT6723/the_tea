@@ -10,8 +10,9 @@ import UIKit
 import FBSDKLoginKit
 
 class LoginViewController: UIViewController {
-    let facebookButton = FBSDKLoginButton()
     let topPanel = LoginTopPanelView(frame: CGRect())
+    let titleLabel = UILabel()
+    let bodyLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,13 +40,25 @@ class LoginViewController: UIViewController {
         topPanel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         topPanel.heightAnchor.constraint(equalToConstant: 184).isActive = true
         
-        /*
-        facebookButton.translatesAutoresizingMaskIntoConstraints = false
-        facebookButton.readPermissions = ["public_profile", "email", "user_friends"]
-        view.addSubview( facebookButton)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.text = "WHY FACEBOOK?"
+        titleLabel.font = UIFont.headerThree()
+        titleLabel.textColor = UIColor.lightCopy()
+        view.addSubview(titleLabel)
         
-        facebookButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        facebookButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true */
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: topPanel.bottomAnchor, constant: 20).isActive = true
+        
+        bodyLabel.translatesAutoresizingMaskIntoConstraints = false
+        bodyLabel.text = "First of all, we will NEVER post anything on your wall! We use Facebook to make the login process as seamless as possible for our Family. Not to invade your privacy or spam your friends.\n\nWe don’t ask for any crazy permissions. Just what we need to improve your experience here at The Gay Agenda.\n\nIf you don’t feel comfortable connecting with Facebook, that’s fine! You only need to connect if you would like to create your own events here in the app."
+        bodyLabel.font = UIFont.body()
+        bodyLabel.textColor = UIColor.lightCopy()
+        bodyLabel.numberOfLines = 0
+        view.addSubview(bodyLabel)
+        
+        bodyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        bodyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        bodyLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12).isActive = true
     }
     
     @objc func cancelButtonTouched() {
@@ -168,10 +181,20 @@ class LoginViewController: UIViewController {
     //MARK: Actions
     
     @objc func connectWithFacebookTouched() {
+        if FBSDKProfile.current() == nil {
+            connectWithFacebook()
+        } else if !MemberDataManager.sharedInstance.isLoggedIn(){
+            connectWithTGA()
+        } else {
+            print("Login tapped for already logged in member.")
+        }
+    }
+    
+    func connectWithFacebook() {
         let loginManager = FBSDKLoginManager()
         loginManager.logIn(withReadPermissions: ["public_profile"], from: self) { (result: FBSDKLoginManagerLoginResult?, error: Error?) in
             if let error = error {
-                print("ERROR LOGGIN IN TO FACEBOOK: \(String(describing: error.localizedDescription))")
+                print("ERROR LOGGING IN TO FACEBOOK: \(String(describing: error.localizedDescription))")
                 self.topPanel.pushView(view: self.errorView(errorText: "There was a problem logging in to Facebook"))
                 return
             }
@@ -184,15 +207,23 @@ class LoginViewController: UIViewController {
                 return
             }
             
+            UIView.animate(withDuration: 0.1, animations: {
+                self.titleLabel.alpha = 0
+                self.bodyLabel.alpha = 0
+            })
             self.topPanel.pushView(view: self.creatingAccountView())
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                let success = MemberDataManager.sharedInstance.loginMemberWithFacebook()
-                if success {
-                    self.dismiss(animated: true, completion: nil)
-                } else {
-                    self.topPanel.pushView(view: self.errorView(errorText: "There was a problem creating your The Gay Agenda account"))
-                }
+            self.connectWithTGA()
+        }
+    }
+    
+    func connectWithTGA() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let success = MemberDataManager.sharedInstance.loginMemberWithFacebook()
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                self.topPanel.pushView(view: self.errorView(errorText: "There was a problem creating your The Gay Agenda account"))
             }
         }
     }
