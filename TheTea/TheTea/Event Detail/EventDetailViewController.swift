@@ -151,6 +151,7 @@ class EventDetailViewController: UIViewController {
 
 class EventDetailCarousel : UIView {
     let mapView = MKMapView()
+    let noLocationView = UIView()
     var event: Event? = nil {
         didSet {
             updateContent()
@@ -168,6 +169,27 @@ class EventDetailCarousel : UIView {
         mapView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         mapView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         mapView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        noLocationView.translatesAutoresizingMaskIntoConstraints = false
+        noLocationView.isUserInteractionEnabled = false
+        noLocationView.backgroundColor = UIColor.primaryBrand()
+        addSubview(noLocationView)
+        
+        noLocationView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        noLocationView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        noLocationView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        noLocationView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        let logoImageView = UIImageView(image: UIImage(named: "logo"))
+        logoImageView.contentMode = .scaleAspectFit
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        logoImageView.isUserInteractionEnabled = false
+        noLocationView.addSubview(logoImageView)
+        
+        logoImageView.topAnchor.constraint(equalTo: noLocationView.topAnchor).isActive = true
+        logoImageView.bottomAnchor.constraint(equalTo: noLocationView.bottomAnchor).isActive = true
+        logoImageView.leadingAnchor.constraint(equalTo: noLocationView.leadingAnchor).isActive = true
+        logoImageView.trailingAnchor.constraint(equalTo: noLocationView.trailingAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -176,15 +198,21 @@ class EventDetailCarousel : UIView {
     
     func updateContent() {
         if let event = self.event {
-            let coordinate = CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude)
-            
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            annotation.title = event.locationName
-            mapView.addAnnotation(annotation)
-            
-            let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001))
-            mapView.region = region
+            if event.latitude == 0 && event.longitude == 0 {
+                noLocationView.alpha = 1
+            } else {
+                noLocationView.alpha = 0
+                
+                let coordinate = CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude)
+                
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                annotation.title = event.locationName
+                mapView.addAnnotation(annotation)
+                
+                let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001))
+                mapView.region = region
+            }
         }
     }
 }
