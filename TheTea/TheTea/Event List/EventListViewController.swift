@@ -107,7 +107,11 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.01
+        return 0.1
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -140,6 +144,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let event = eventsFRC.object(at: indexPath)
         cell.titleLabel.text = event.name
         cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: event, timeFormatter: timeFormatter)
+        
         return cell
     }
     
