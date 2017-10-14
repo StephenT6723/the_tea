@@ -110,7 +110,7 @@ class EditMyAccountViewController: UIViewController {
         updateSaveButtons()
     }
     
-    func updateSaveButtons() {
+    @objc func updateSaveButtons() {
         let enabled = dataUpdated()
         
         navigationItem.rightBarButtonItem?.isEnabled = enabled
@@ -147,11 +147,11 @@ class EditMyAccountViewController: UIViewController {
     
     //MARK: ACTIONS
     
-    func cancelButtonTouched() {
+    @objc func cancelButtonTouched() {
         dismiss(animated: true, completion: nil)
     }
     
-    func saveButtonTouched() {
+    @objc func saveButtonTouched() {
         guard let name = nameTextField.textField.text else {
             return
         }
@@ -159,7 +159,7 @@ class EditMyAccountViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func logoutButtonTouched() {
+    @objc func logoutButtonTouched() {
         MemberDataManager.sharedInstance.logoutCurrentMember()
         dismiss(animated: true, completion: nil)
     }

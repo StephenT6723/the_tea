@@ -136,7 +136,7 @@ class EventDetailViewController: UIViewController {
         topCarousel.updateContent()
     }
     
-    func editButtonTouched() {
+    @objc func editButtonTouched() {
         let editVC = EventEditViewController()
         editVC.event = event
         let editNav = UINavigationController(rootViewController: editVC)
@@ -144,7 +144,7 @@ class EventDetailViewController: UIViewController {
         present(editNav, animated: true, completion: nil)
     }
     
-    func reportButtonTouched() {
+    @objc func reportButtonTouched() {
         
     }
 }

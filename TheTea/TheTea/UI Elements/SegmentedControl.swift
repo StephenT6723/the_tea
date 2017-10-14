@@ -88,7 +88,7 @@ class SegmentedControl: UIControl {
         }
     }
     
-    func buttonTapped(sender: UIButton) {
+    @objc func buttonTapped(sender: UIButton) {
         for button in buttons {
             button.setTitleColor(deselectedColor, for: .normal)
         }

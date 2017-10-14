@@ -67,18 +67,18 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     //MARK: Actions
     
-    func doneButtonTouched() {
+    @objc func doneButtonTouched() {
         dismiss(animated: true, completion: nil)
     }
     
-    func editButtonTouched() {
+    @objc func editButtonTouched() {
         let editVC = EditMyAccountViewController()
         let editNav = UINavigationController(rootViewController: editVC)
         editNav.navigationBar.isTranslucent = false
         present(editNav, animated: true, completion: nil)
     }
     
-    func myEventsOptionChanged(sender: SegmentedControl) {
+    @objc func myEventsOptionChanged(sender: SegmentedControl) {
         let isUpcoming = sender.selectedIndex == 0
         
         if let member = currentMember {

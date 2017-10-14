@@ -15,12 +15,12 @@ class StyleManager {
         let navigationBarAppearace = UINavigationBar.appearance()
         navigationBarAppearace.tintColor = UIColor.white
         navigationBarAppearace.barTintColor = UIColor.primaryBrand()
-        navigationBarAppearace.titleTextAttributes = [NSFontAttributeName:UIFont.headerTwo() as Any,
-                                                      NSForegroundColorAttributeName:UIColor.white]
+        navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.font:UIFont.headerTwo() as Any,
+                                                      NSAttributedStringKey.foregroundColor:UIColor.white]
         
         let barButtonAppearace = UIBarButtonItem.appearance()
         barButtonAppearace.tintColor = UIColor.white
-        barButtonAppearace.setTitleTextAttributes([NSFontAttributeName:UIFont.barButtonTitle() as Any,
-                                                   NSForegroundColorAttributeName:UIColor.white], for: .normal)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.barButtonTitle() as Any,
+                                                   NSAttributedStringKey.foregroundColor:UIColor.white], for: .normal)
     }
 }

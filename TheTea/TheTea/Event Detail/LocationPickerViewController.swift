@@ -56,7 +56,7 @@ class LocationPickerViewController: UIViewController {
         searchBar.becomeFirstResponder()
     }
     
-    func cancelButtonTouched() {
+    @objc func cancelButtonTouched() {
         dismiss(animated: true, completion: nil)
     }
 }

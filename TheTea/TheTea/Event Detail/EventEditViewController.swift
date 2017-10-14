@@ -285,7 +285,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         locationLabel.label.textColor = UIColor.lightCopy()
     }
     
-    func updateSaveButtons() {
+    @objc func updateSaveButtons() {
         let enabled = dataUpdated()
         
         createButton.isEnabled = enabled
@@ -387,30 +387,30 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     //MARK: Actions
     
-    func cancelButtonTouched() {
+    @objc func cancelButtonTouched() {
         dismiss(animated: true, completion: nil)
     }
     
-    func doneButtonTouched() {
+    @objc func doneButtonTouched() {
         saveEvent()
         dismiss(animated: true, completion: nil)
     }
     
-    func createButtonTouched() {
+    @objc func createButtonTouched() {
         saveEvent()
         dismiss(animated: true, completion: nil)
     }
     
-    func datePickerChanged(picker: UIDatePicker) {
+    @objc func datePickerChanged(picker: UIDatePicker) {
         updateTimeTextFields()
         updateSaveButtons()
     }
     
-    func addEndTimeTouched() {
+    @objc func addEndTimeTouched() {
         updateEndTime(visible: true, animated: true)
     }
     
-    func hideEndTimeTouched() {
+    @objc func hideEndTimeTouched() {
         updateEndTime(visible: false, animated: true)
     }
     
@@ -433,7 +433,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         }
     }
     
-    func locationButtonTouched() {
+    @objc func locationButtonTouched() {
         let locationVC = LocationPickerViewController()
         locationVC.delegate = self
         let locationNav = UINavigationController(rootViewController: locationVC)
@@ -441,7 +441,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         present(locationNav, animated: true, completion: nil)
     }
     
-    func deleteButtonTouched() {
+    @objc func deleteButtonTouched() {
         guard let eventName = self.event?.name else {
             return
         }
@@ -469,14 +469,14 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     //MARK: Keyboard updates
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let screenHeight = UIScreen.main.bounds.height
             view.frame = CGRect(x: 0, y: view.frame.origin.y, width: view.frame.width, height: screenHeight - (keyboardSize.height + view.frame.origin.y))
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         let screenHeight = UIScreen.main.bounds.height
         view.frame = CGRect(x: 0, y: view.frame.origin.y, width: view.frame.width, height: screenHeight - view.frame.origin.y)
     }

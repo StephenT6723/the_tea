@@ -62,14 +62,14 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     //MARK: Actions
     
-    func addEventTapped() {
+    @objc func addEventTapped() {
         let addEventVC = EventEditViewController()
         let addNav = UINavigationController(rootViewController: addEventVC)
         addNav.navigationBar.isTranslucent = false
         present(addNav, animated: true, completion: nil)
     }
     
-    func myAccountTapped() {
+    @objc func myAccountTapped() {
         let loginVC = MyAccountViewController()
         let loginNav = UINavigationController(rootViewController: loginVC)
         loginNav.navigationBar.isTranslucent = false

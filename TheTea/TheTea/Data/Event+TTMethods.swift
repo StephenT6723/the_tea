@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Event {
     func updateWithData(data: [String: AnyObject]) {
         if let newName = data["name"] as? String {
@@ -17,18 +16,18 @@ extension Event {
         }
         
         if let newStartTime = data["startTime"] as? Date {
-            startTime = newStartTime as NSDate
+            startTime = newStartTime
         }
         
         if let newEndTime = data["endTime"] as? Date {
-            endTime = newEndTime as NSDate
+            endTime = newEndTime
         }
     }
     
     func update(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
         self.name = name
-        self.startTime = startTime as NSDate
-        self.endTime = endTime as NSDate?
+        self.startTime = startTime
+        self.endTime = endTime
         self.about = about
         self.locationName = location?.locationName
         self.address = location?.address

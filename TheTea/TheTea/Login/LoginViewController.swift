@@ -48,7 +48,7 @@ class LoginViewController: UIViewController {
         facebookButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true */
     }
     
-    func cancelButtonTouched() {
+    @objc func cancelButtonTouched() {
         dismiss(animated: true, completion: nil)
     }
     
@@ -167,7 +167,7 @@ class LoginViewController: UIViewController {
     
     //MARK: Actions
     
-    func connectWithFacebookTouched() {
+    @objc func connectWithFacebookTouched() {
         let loginManager = FBSDKLoginManager()
         loginManager.logIn(withReadPermissions: ["public_profile"], from: self) { (result: FBSDKLoginManagerLoginResult?, error: Error?) in
             if let error = error {
