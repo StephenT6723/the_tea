@@ -14,6 +14,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let scrollView = UIScrollView()
     private let nameTextField = InputField()
     private let hostTextField = InputField()
+    private var hostHeightConstraint = NSLayoutConstraint()
     private let loginView = EventEditLoginView(frame: CGRect())
     private let startTimeTextField = InputField()
     private let startTimePicker = UIDatePicker()
@@ -51,30 +52,25 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         nameTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(nameTextField)
         
-        if let member = MemberDataManager.sharedInstance.currentMember() {
-            guard let name = member.name else {
-                return
-            }
-            
-            hostTextField.translatesAutoresizingMaskIntoConstraints = false
-            hostTextField.textField.text = "HOSTED BY: \(name)"
-            hostTextField.textField.autocapitalizationType = .words
-            hostTextField.showDivider = false
-            scrollView.addSubview(hostTextField)
-            
-            hostTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-            hostTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-            hostTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-            hostTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        } else {
-            loginView.translatesAutoresizingMaskIntoConstraints = false
-            scrollView.addSubview(loginView)
-            
-            loginView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-            loginView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-            loginView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-            loginView.heightAnchor.constraint(equalToConstant: 74).isActive = true
-        }
+        hostTextField.translatesAutoresizingMaskIntoConstraints = false
+        hostTextField.textField.autocapitalizationType = .words
+        hostTextField.showDivider = false
+        scrollView.addSubview(hostTextField)
+        
+        hostTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        hostTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        hostTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+        hostHeightConstraint = hostTextField.heightAnchor.constraint(equalToConstant: textFieldHeight)
+        hostHeightConstraint.isActive = true
+        
+        loginView.translatesAutoresizingMaskIntoConstraints = false
+        loginView.button.addTarget(self, action: #selector(loginButtonTouched), for: .touchUpInside)
+        scrollView.addSubview(loginView)
+        
+        loginView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        loginView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        loginView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+        loginView.bottomAnchor.constraint(equalTo: hostTextField.bottomAnchor).isActive = true
         
         startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         startTimeTextField.textField.tintColor = UIColor.white
@@ -128,11 +124,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         nameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        if MemberDataManager.sharedInstance.isLoggedIn() {
-            startTimeTextField.topAnchor.constraint(equalTo: hostTextField.bottomAnchor, constant: 20).isActive = true
-        } else {
-            startTimeTextField.topAnchor.constraint(equalTo: loginView.bottomAnchor, constant: 20).isActive = true
-        }
+        startTimeTextField.topAnchor.constraint(equalTo: hostTextField.bottomAnchor, constant: 20).isActive = true
+
         startTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         startTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         startTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
@@ -236,6 +229,25 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if !MemberDataManager.sharedInstance.isLoggedIn() {
+            loginView.alpha = 1
+            hostHeightConstraint.constant = 74
+        } else {
+            loginView.alpha = 0
+            hostHeightConstraint.constant = textFieldHeight
+            if let member = MemberDataManager.sharedInstance.currentMember() {
+                guard let name = member.name else {
+                    return
+                }
+                
+                hostTextField.textField.text = "HOSTED BY: \(name)"
+            }
+        }
+    }
+    
     //MARK: Display Update
     
     func updateTitle() {
@@ -303,10 +315,9 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     func dataUpdated() -> Bool {
-        /*
         if !MemberDataManager.sharedInstance.isLoggedIn() {
             return false
-        }*/
+        }
         
         if let event = self.event {
             if let name = nameTextField.textField.text {
@@ -412,6 +423,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     @objc func hideEndTimeTouched() {
         updateEndTime(visible: false, animated: true)
+    }
+    
+    @objc func loginButtonTouched() {
+        let loginVC = LoginViewController()
+        let loginNav = UINavigationController(rootViewController: loginVC)
+        loginNav.navigationBar.isTranslucent = false
+        present(loginNav, animated: true, completion: nil)
     }
     
     func updateEndTime(visible: Bool, animated: Bool) {
