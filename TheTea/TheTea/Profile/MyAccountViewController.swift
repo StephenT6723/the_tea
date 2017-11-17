@@ -110,7 +110,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let aboutText = currentMember?.about {
-            if section == 0 && aboutText.characters.count > 0 {
+            if section == 0 && aboutText.count > 0 {
                 return 1
             }
         }
@@ -156,7 +156,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             header.instagramButton.alpha = 1
             header.instagramButton.isEnabled = true
             
-            if currentMember.instagram?.characters.count == 0 {
+            if currentMember.instagram?.count == 0 {
                 header.instagramButton.alpha = 0.3
                 header.instagramButton.isEnabled = false
             }
@@ -164,7 +164,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             header.twitterButton.alpha = 1
             header.twitterButton.isEnabled = true
             
-            if currentMember.twitter?.characters.count == 0 {
+            if currentMember.twitter?.count == 0 {
                 header.twitterButton.alpha = 0.3
                 header.twitterButton.isEnabled = false
             }

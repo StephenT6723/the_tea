@@ -126,7 +126,7 @@ class EditMyAccountViewController: UIViewController {
         }
         
         if let name = nameTextField.textField.text {
-            if name.characters.count > 0 && name != member.name {
+            if name.count > 0 && name != member.name {
                 return true
             }
         }

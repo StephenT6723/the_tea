@@ -10,19 +10,14 @@ import Foundation
 import CoreData
 
 extension Event {
-    func updateWithData(data: [String: AnyObject]) {
-        if let newName = data["name"] as? String {
-            name = newName
-        }
-        
-        if let newStartTime = data["startTime"] as? Date {
-            startTime = newStartTime
-        }
-        
-        if let newEndTime = data["endTime"] as? Date {
-            endTime = newEndTime
-        }
-    }
+    static let nameKey = "name"
+    static let startTimeKey = "startTime"
+    static let endTimeKey = "endTime"
+    static let aboutKey = "about"
+    static let locationNameKey = "locationName"
+    static let addressKey = "address"
+    static let latitudeKey = "latitude"
+    static let longitudeKey = "longitude"
     
     func update(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
         self.name = name

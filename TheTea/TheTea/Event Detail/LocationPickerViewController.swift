@@ -110,7 +110,7 @@ extension LocationPickerViewController: UITableViewDelegate {
             let locationName = searchResult.title
             let address = searchResult.subtitle
             
-            if address.characters.count > 0 {
+            if address.count > 0 {
                 let search = MKLocalSearch(request: searchRequest)
                 search.start { (response, error) in
                     if let coordinate = response?.mapItems[0].placemark.coordinate {

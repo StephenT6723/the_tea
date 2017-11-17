@@ -66,4 +66,45 @@ class EventManager: NSObject {
         
         return nil
     }
+    
+    //MARK: Debug
+    
+    class func updateDebugEvents() {
+        let futureEventsFRC = allFutureEvents()
+        if futureEventsFRC.fetchedObjects?.count == 0 {
+            let eventData = TGAServer.fetchEvents()
+            for eventDict in eventData {
+                createEventFromData(data: eventDict)
+            }
+        }
+    }
+    
+    class func createEventFromData(data: [String: String]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy h:mm a"
+        
+        guard let name = data[Event.nameKey], let startTimeString = data[Event.startTimeKey]  else {
+            print("TRIED TO CREATE EVENT WITHOUT NAME AND START TIME")
+            return
+        }
+        
+        guard let startTime = dateFormatter.date(from: startTimeString) else {
+            print("UNABLE TO PARSE START TIME")
+            return
+        }
+        
+        var location: EventLocation?
+        
+        if let locationName = data[Event.locationNameKey], let address = data[Event.addressKey], let latitudeString = data[Event.latitudeKey], let longitudeString = data[Event.longitudeKey] {
+            if let latitude = Double(latitudeString), let longitude = Double(longitudeString) {
+                if latitude != 0 && longitude != 0 {
+                    location = EventLocation(locationName: locationName, address: address, latitude: latitude, longitude: longitude)
+                }
+            }
+        }
+        
+        let endTimeString = data[Event.endTimeKey] ?? ""
+        
+        createEvent(name: name, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location)
+    }
 }

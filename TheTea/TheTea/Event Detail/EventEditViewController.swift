@@ -193,7 +193,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                     }
                 }
                 if let about = event.about {
-                    if about.characters.count > 0 {
+                    if about.count > 0 {
                         aboutTextView.textView.text = about
                         aboutTextView.textView.textColor = .black
                     }
@@ -286,7 +286,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func updateLocationLabel() {
         if let selectedLocation = self.selectedLocation {
-            if selectedLocation.locationName.characters.count > 0 {
+            if selectedLocation.locationName.count > 0 {
                 locationLabel.label.text = selectedLocation.locationName
                 locationLabel.label.textColor = .black
                 return
@@ -321,7 +321,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         if let event = self.event {
             if let name = nameTextField.textField.text {
-                if name.characters.count > 0 && name != event.name {
+                if name.count > 0 && name != event.name {
                     return true
                 }
             }
@@ -336,7 +336,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 }
             }
             var aboutText = ""
-            if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.characters.count > 0 {
+            if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.count > 0 {
                 aboutText = aboutTextView.textView.text
                 if aboutText != event.about {
                     return true
@@ -356,7 +356,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             }
         } else  {
             if let name = nameTextField.textField.text {
-                if name.characters.count > 0 {
+                if name.count > 0 {
                     return true
                 }
             }
@@ -367,12 +367,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func saveEvent() {
         var aboutText = ""
-        if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.characters.count > 0 {
+        if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.count > 0 {
             aboutText = aboutTextView.textView.text
         }
         if isCreatingNew() {
             if let name = nameTextField.textField.text {
-                if name.characters.count > 0 {
+                if name.count > 0 {
                     EventManager.createEvent(name: name,
                                              startTime: startTimePicker.date,
                                              endTime: isEndTimeVisible() ? endTimePicker.date : nil,
@@ -383,7 +383,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         } else {
             if let event = self.event {
                 if let name = nameTextField.textField.text {
-                    if name.characters.count > 0 {
+                    if name.count > 0 {
                         EventManager.updateEvent(event: event,
                                                  name: name,
                                                  startTime: startTimePicker.date,

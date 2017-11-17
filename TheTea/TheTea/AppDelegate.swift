@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FBSDKProfile.enableUpdates(onAccessTokenChange: true)
         
+        EventManager.updateDebugEvents()
+        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
