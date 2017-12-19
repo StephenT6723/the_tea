@@ -34,7 +34,7 @@ class CoreDataManager {
         return container
     }()
     
-    func saveContext () {
+    func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
@@ -46,5 +46,9 @@ class CoreDataManager {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    func viewContext() -> NSManagedObjectContext {
+        return persistentContainer.viewContext
     }
 }

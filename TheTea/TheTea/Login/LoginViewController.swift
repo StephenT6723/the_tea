@@ -104,7 +104,7 @@ class LoginViewController: UIViewController {
         facebookButton.leadingAnchor.constraint(equalTo: recruitView.leadingAnchor, constant: 20).isActive = true
         facebookButton.trailingAnchor.constraint(equalTo: recruitView.trailingAnchor, constant: -20).isActive = true
         facebookButton.bottomAnchor.constraint(equalTo: recruitView.bottomAnchor, constant: -20).isActive = true
-        facebookButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight())).isActive = true
+        facebookButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight)).isActive = true
         
         return recruitView
     }
@@ -146,7 +146,7 @@ class LoginViewController: UIViewController {
         tryAgainButton.leadingAnchor.constraint(equalTo: errorView.leadingAnchor, constant: 20).isActive = true
         tryAgainButton.trailingAnchor.constraint(equalTo: errorView.trailingAnchor, constant: -20).isActive = true
         tryAgainButton.bottomAnchor.constraint(equalTo: errorView.bottomAnchor, constant: -20).isActive = true
-        tryAgainButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight())).isActive = true
+        tryAgainButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight)).isActive = true
         
         return errorView
     }

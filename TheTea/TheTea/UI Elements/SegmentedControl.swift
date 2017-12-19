@@ -20,24 +20,16 @@ class SegmentedControl: UIControl {
         }
     }
     
-    var buttons = [UIButton]()
+    private var buttons = [UIButton]()
     var selectedIndex = 0 {
         didSet {
-            if selectedIndex < buttons.count{
+            if selectedIndex < buttons.count {
                 buttonTapped(sender: buttons[selectedIndex])
             }
         }
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    func updateContent() {
+    private func updateContent() {
         for view in subviews {
             view.removeFromSuperview()
         }

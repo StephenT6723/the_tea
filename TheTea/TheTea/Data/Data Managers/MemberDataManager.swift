@@ -70,6 +70,7 @@ class MemberDataManager {
         memberData[Member.twitterKey] = twitter as AnyObject
         member?.updateWithData(data: memberData)
         CoreDataManager.sharedInstance.saveContext()
+        //TODO: Sent this to TGAServer
     }
     
     func canEditEvent(event: Event) -> Bool {

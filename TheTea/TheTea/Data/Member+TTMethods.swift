@@ -32,10 +32,7 @@ extension Member {
             self.linkToFacebook = false
         }
         
-        if let fbID = data[Member.facebookIDKey] as? String {
-            self.facebookID = fbID
-        }
-        
+        self.facebookID = data[Member.facebookIDKey] as? String
         self.instagram = data[Member.instagramKey] as? String
         self.twitter = data[Member.twitterKey] as? String
         self.about = data[Member.aboutKey] as? String

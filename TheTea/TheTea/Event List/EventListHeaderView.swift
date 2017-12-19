@@ -18,13 +18,11 @@ class EventListHeaderView: UITableViewHeaderFooterView {
         contentView.backgroundColor = UIColor.primaryBrand()
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = "TODAY"
         titleLabel.font = UIFont.headerOne()
         titleLabel.textColor = .white
         contentView.addSubview(titleLabel)
         
         subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subTitleLabel.text = "Thursday Aug, 24th"
         subTitleLabel.font = UIFont.listSubTitle()
         subTitleLabel.textColor = UIColor.lightBrandCopy()
         contentView.addSubview(subTitleLabel)

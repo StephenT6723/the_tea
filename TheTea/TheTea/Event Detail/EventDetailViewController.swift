@@ -145,7 +145,7 @@ class EventDetailViewController: UIViewController {
     }
     
     @objc func reportButtonTouched() {
-        
+        print("REPORT")
     }
 }
 

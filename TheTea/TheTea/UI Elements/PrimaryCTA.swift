@@ -9,6 +9,8 @@
 import UIKit
 
 class PrimaryCTA: UIButton {
+    static let preferedHeight: CGFloat = 40.0
+    
     override var isEnabled: Bool {
         didSet {
             backgroundColor = isEnabled ? UIColor.primaryCTA() : UIColor.lightCopy()
@@ -26,9 +28,5 @@ class PrimaryCTA: UIButton {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    class func preferedHeight() -> Double {
-        return 40.0
     }
 }

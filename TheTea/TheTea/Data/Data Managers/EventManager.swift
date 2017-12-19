@@ -10,25 +10,9 @@ import UIKit
 import CoreData
 
 class EventManager: NSObject {
-    class func allFutureEvents() -> NSFetchedResultsController<Event> {
-        let request = NSFetchRequest<Event>(entityName:"Event")
-        let todayString = DateStringHelper.dataString(from: Date())
-        let predicate = NSPredicate(format: "daySectionIdentifier >= %@", todayString)
-        request.predicate = predicate
-        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
-        request.sortDescriptors = [startTimeSort]
-        
-        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
-        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
-        
-        do {
-            try eventsFRC.performFetch()
-        } catch {
-            fatalError("Failed to initialize FetchedResultsController: \(error)")
-        }
-        
-        return eventsFRC
-    }
+    //MARK: CRUD
+    
+    //TODO: Connect this to TGAServer
     
     class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
         if self.event(name: name) != nil {
@@ -48,6 +32,28 @@ class EventManager: NSObject {
     class func delete(event:Event) {
         CoreDataManager.sharedInstance.persistentContainer.viewContext.delete(event)
         CoreDataManager.sharedInstance.saveContext()
+    }
+    
+    //MARK: Fetches
+    
+    class func allFutureEvents() -> NSFetchedResultsController<Event> {
+        let request = NSFetchRequest<Event>(entityName:"Event")
+        let todayString = DateStringHelper.dataString(from: Date())
+        let predicate = NSPredicate(format: "daySectionIdentifier >= %@", todayString)
+        request.predicate = predicate
+        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
+        request.sortDescriptors = [startTimeSort]
+        
+        let context = CoreDataManager.sharedInstance.viewContext()
+        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
+        
+        do {
+            try eventsFRC.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+        
+        return eventsFRC
     }
     
     class func event(name: String) -> Event? {
