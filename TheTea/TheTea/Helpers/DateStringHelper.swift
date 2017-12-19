@@ -13,7 +13,12 @@ class DateStringHelper {
         let weekDayFormatter = DateFormatter()
         weekDayFormatter.dateFormat = "EEEE"
         
-        let diff = Calendar.current.dateComponents([Calendar.Component.day], from: Date(), to: date)
+        let todayData = dataString(from: Date())
+        guard let todaysDate = self.date(from: todayData) else {
+            return ""
+        }
+        
+        let diff = Calendar.current.dateComponents([Calendar.Component.day], from: todaysDate, to: date)
         if diff.day == 0 {
             return "Today"
         } else if diff.day == -1 {
