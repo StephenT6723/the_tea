@@ -18,10 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         StyleManager.updateNavBarStyling()
         
-        let eventListVC = EventListViewController()
-        let eventsFRC = EventManager.allFutureEvents()
-        eventListVC.eventsFRC = eventsFRC
-        let rootNav = UINavigationController(rootViewController: eventListVC)
+        let rootVC = RootViewController()
+        //let eventsFRC = EventManager.allFutureEvents()
+        //eventListVC.eventsFRC = eventsFRC
+        let rootNav = UINavigationController(rootViewController: rootVC)
         rootNav.navigationBar.isTranslucent = false
         
         window = UIWindow(frame: UIScreen.main.bounds)
