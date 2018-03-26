@@ -18,14 +18,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         StyleManager.updateNavBarStyling()
         
-        let rootVC = RootViewController()
-        //let eventsFRC = EventManager.allFutureEvents()
-        //eventListVC.eventsFRC = eventsFRC
-        let rootNav = UINavigationController(rootViewController: rootVC)
+        let eventListVC = EventListViewController()
+        let eventsFRC = EventManager.allFutureEvents()
+        eventListVC.eventsFRC = eventsFRC
+        let rootNav = UINavigationController(rootViewController: eventListVC)
         rootNav.navigationBar.isTranslucent = false
         
+        let myAccountVC = UIViewController()
+        myAccountVC.title = "My Account"
+        let myAccountNav = UINavigationController(rootViewController: myAccountVC)
+        myAccountVC.view.backgroundColor = .white
+        myAccountNav.navigationBar.isTranslucent = false
+        
+        let tabBarController = UITabBarController()
+        tabBarController.tabBar.isTranslucent = false
+        tabBarController.viewControllers = [rootNav, myAccountNav]
+        
         window = UIWindow(frame: UIScreen.main.bounds)
-        window!.rootViewController = rootNav
+        window!.rootViewController = tabBarController
         window!.makeKeyAndVisible()
         
         FBSDKProfile.enableUpdates(onAccessTokenChange: true)

@@ -39,6 +39,38 @@
 			<key>longitude</key>
 			<string>-74.000082000000006</string>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>Thirsty Thursdays Rise</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>Thirsty Thursdays at Rise Bar is Your Top Place for Top Music Videos Every Thursday enjoy Top music videos from all decades at Rise gay bar in Hell’s Kitchen. Start the weekend early with surprise performances and giveaways throughout the evening. Read more at</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>The Best of Queerball</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>Queerball is going PRIMETIME, mama! UCBT East Village’s *premiere* LGBTQ+ Comedy Variety Show is back for a very special BEST OF show! Come see some of the best queer performers (and our friends and allies!) take the stage and bring the heat like only these queerballs can! Standup! Characters! Music! Dance! Other weird and funny stuff! The sky’s the limit! Hosted by your fun uncle who used to let you drive the pontoon boat when you were too young, Timothy Dunn!</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
 	</array>
 	<key>Wednesday</key>
 	<array>
@@ -49,6 +81,38 @@
 			<string>22:00</string>
 			<key>about</key>
 			<string>Hosted by Bootsie Lefaris with a special guest every week.</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Jasmine LIVE</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>Hosted by Jasmine Rice LaBeija with Holly Box-Springs &amp; Terra Hyman</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Trading Spaces</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>Hosted by Yuhua Hamasaki from RuPaul&apos;s Drag Race</string>
 			<key>locationName</key>
 			<string>Pieces</string>
 			<key>address</key>
@@ -77,6 +141,38 @@
 			<key>longitude</key>
 			<string>-74.000082000000006</string>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>Ruffhouse</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>Monthly themed underwear party... check out</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Queen4Queen</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>Momo Shade and Kandy Muse</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
 	</array>
 	<key>Friday</key>
 	<array>
@@ -87,6 +183,38 @@
 			<string>22:00</string>
 			<key>about</key>
 			<string>Hosted by Bootsie Lefaris with a special guest every week.</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>RuPaul’s Drag Race All Stars S3 Viewing Party at Mr Biggs</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>The Olympics of Drag Returns!!!! Starting January 25th</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>All Stars RDR S3 Premiere w/ Alotta, Heidi, Megababe, Debbie Cupcakes</string>
+			<key>startTime</key>
+			<string>22:00</string>
+			<key>about</key>
+			<string>Rupaul&apos;s Drag Race ALL STARS LIVE AT Macri Park!!! with ACID BETTY, Alotta McGriddles, Miz Jade, Heidi Glum</string>
 			<key>locationName</key>
 			<string>Pieces</string>
 			<key>address</key>
@@ -149,6 +277,42 @@
 			<key>longitude</key>
 			<string>-74.009220400000004</string>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>Super Size Queen</string>
+			<key>startTime</key>
+			<string>20:00</string>
+			<key>endTime</key>
+			<string>23:00</string>
+			<key>about</key>
+			<string>Come cruise the guys at Hardware Bar with Bootsie Lefaris &amp; DJ Mike Borowki. Produced by Paul Mazur and Matthew Gagnon with Victor Borbolla, Willito Rivera, Joe Buffa, Hans Then and JJ Mack</string>
+			<key>locationName</key>
+			<string>Bowlmor Chelsea Piers</string>
+			<key>address</key>
+			<string>Chelsea Piers - Pier 60, New York, NY 10011, United States</string>
+			<key>latitude</key>
+			<string>40.7459737</string>
+			<key>longitude</key>
+			<string>-74.009220400000004</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>TORQ – 2018 Cherry Kickoff Party</string>
+			<key>startTime</key>
+			<string>20:00</string>
+			<key>endTime</key>
+			<string>23:00</string>
+			<key>about</key>
+			<string>Life is more than just black and white, so get ready to #DanceInColor; TORQ returns this March, but it’s time to take it to the next level! EPC Productions has partnered with LaFantasy Productions to bring you NYC’s official Cherry Kick-Off Party for Cherry 2018: Kaleidoscope. Returning home to RetroClub NYC, the event will be held on Sunday, March 25th at a NEW time of 7PM-1AM. TORQ will be powered by the sounds of DJ Serving Ovahness, so get ready for an electrifying Sunday!</string>
+			<key>locationName</key>
+			<string>Bowlmor Chelsea Piers</string>
+			<key>address</key>
+			<string>Chelsea Piers - Pier 60, New York, NY 10011, United States</string>
+			<key>latitude</key>
+			<string>40.7459737</string>
+			<key>longitude</key>
+			<string>-74.009220400000004</string>
+		</dict>
 	</array>
 	<key>Sunday</key>
 	<array>
@@ -159,6 +323,38 @@
 			<string>22:00</string>
 			<key>about</key>
 			<string>Hosted by Bootsie Lefaris with a special guest every week.</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Tall Gay Agenda: NYC&apos;s Monthly Tall Party (all heights welcome!)</string>
+			<key>startTime</key>
+			<string>20:00</string>
+			<key>about</key>
+			<string>Join NYC&apos;s network of tall gays &amp; the people who love them. We have regular social gatherings for guys to make new friends and find husbands. The vibe is friendly &amp; the guys are great!</string>
+			<key>locationName</key>
+			<string>Pieces</string>
+			<key>address</key>
+			<string>8 Christopher St, New York, NY  10014, United States</string>
+			<key>latitude</key>
+			<string>40.733837999999999</string>
+			<key>longitude</key>
+			<string>-74.000082000000006</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Boy Bordello:VIP Exhibition Preview and Sale</string>
+			<key>startTime</key>
+			<string>20:00</string>
+			<key>about</key>
+			<string>One Night Only - 15% off all art purchases</string>
 			<key>locationName</key>
 			<string>Pieces</string>
 			<key>address</key>
