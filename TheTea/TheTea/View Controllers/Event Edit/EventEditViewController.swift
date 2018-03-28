@@ -38,7 +38,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         super.viewDidLoad()
 
         edgesForExtendedLayout = UIRectEdge()
-        view.backgroundColor = UIColor.primaryBrand()
+        view.backgroundColor = UIColor.lightBackground()
         updateTitle()
         updateNavButtons()
         

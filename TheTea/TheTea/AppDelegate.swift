@@ -22,10 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let eventsFRC = EventManager.allFutureEvents()
         eventListVC.eventsFRC = eventsFRC
         let rootNav = UINavigationController(rootViewController: eventListVC)
-        rootNav.navigationBar.isTranslucent = false
+        rootNav.navigationBar.prefersLargeTitles = true
         
         let myAccountVC = UIViewController()
-        myAccountVC.title = "My Account"
+        myAccountVC.title = "MY ACCOUNT"
         let myAccountNav = UINavigationController(rootViewController: myAccountVC)
         myAccountVC.view.backgroundColor = .white
         myAccountNav.navigationBar.isTranslucent = false

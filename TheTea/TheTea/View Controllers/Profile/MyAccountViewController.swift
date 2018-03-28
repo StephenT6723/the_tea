@@ -9,9 +9,9 @@
 import UIKit
 import FBSDKLoginKit
 
-class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EventListDelegate {
+class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EventCollectionDelegate {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
-    var upcomingEvents = EventList()
+    var upcomingEvents = EventCollection()
     var currentMember = MemberDataManager.sharedInstance.currentMember()
     var hasShownLogin = false
     private let timeFormatter = DateFormatter()
@@ -220,7 +220,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     //MARK: Event List Delegate
     
-    func eventListStatusChanged(sender: EventList) {
+    func eventListStatusChanged(sender: EventCollection) {
         if sender.status == .ready {
             tableView.reloadData()
         }

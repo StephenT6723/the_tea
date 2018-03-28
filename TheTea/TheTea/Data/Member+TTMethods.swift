@@ -42,28 +42,28 @@ extension Member {
         return true
     }
     
-    func hostedEvents() -> EventList {
+    func hostedEvents() -> EventCollection {
         let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
         
-        let eventList = EventList(title: "\(String(describing: self.name)) Hosted Events", subtitle: "", predicate: nil, sortDescriptors: [startTimeSort], delegate: nil)
-        return eventList
+        let eventCollection = EventCollection(title: "\(String(describing: self.name)) Hosted Events", subtitle: "", predicate: nil, sortDescriptors: [startTimeSort], delegate: nil)
+        return eventCollection
     }
     
-    func upcomingHostedEvents() -> EventList {
+    func upcomingHostedEvents() -> EventCollection {
         let todayString = DateStringHelper.dataString(from: Date())
         let predicate = NSPredicate(format: "daySectionIdentifier >= %@", todayString)
         let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
         
-        let eventList = EventList(title: "\(String(describing: self.name)) Upcoming Hosted Events", subtitle: "", predicate: predicate, sortDescriptors: [startTimeSort], delegate: nil)
-        return eventList
+        let eventCollection = EventCollection(title: "\(String(describing: self.name)) Upcoming Hosted Events", subtitle: "", predicate: predicate, sortDescriptors: [startTimeSort], delegate: nil)
+        return eventCollection
     }
     
-    func pastHostedEvents() -> EventList {
+    func pastHostedEvents() -> EventCollection {
         let todayString = DateStringHelper.dataString(from: Date())
         let predicate = NSPredicate(format: "daySectionIdentifier < %@", todayString)
         let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
         
-        let eventList = EventList(title: "\(String(describing: self.name)) Past Hosted Events", subtitle: "", predicate: predicate, sortDescriptors: [startTimeSort], delegate: nil)
-        return eventList
+        let eventCollection = EventCollection(title: "\(String(describing: self.name)) Past Hosted Events", subtitle: "", predicate: predicate, sortDescriptors: [startTimeSort], delegate: nil)
+        return eventCollection
     }
 }

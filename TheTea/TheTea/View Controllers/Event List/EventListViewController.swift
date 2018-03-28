@@ -12,7 +12,9 @@ import CoreData
 class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
     private let tableView = UITableView(frame: CGRect(), style: UITableViewStyle.grouped)
     private let timeFormatter = DateFormatter()
+    private let weekdayFormatter = DateFormatter()
     private let dateFormatter = DateFormatter()
+    private let maxEventsPerDay = 3
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             eventsFRC.delegate = self
@@ -23,32 +25,32 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "TGA"
-        edgesForExtendedLayout = UIRectEdge()
+        title = "The Gay Agenda".uppercased()
+        //edgesForExtendedLayout = UIRectEdge()
         view.backgroundColor = .white
 
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
         
-        dateFormatter.dateFormat = "EEEE, MMM d"
+        weekdayFormatter.dateFormat = "EEEE"
+        dateFormatter.dateFormat = "MMM d"
         
         //navigation buttons
         let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
         navigationItem.rightBarButtonItem = createButton
-        
-        let accountButton = UIBarButtonItem(title: "ME", style: .plain, target: self, action: #selector(myAccountTapped))
-        navigationItem.leftBarButtonItem = accountButton
         
         //setup table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 50
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0.1))
-        tableView.backgroundColor = UIColor.primaryBrand()
+        tableView.backgroundColor = UIColor.lightBackground()
         tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
         tableView.register(EventListHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventListHeaderView.self))
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.showsVerticalScrollIndicator = false
+        tableView.clipsToBounds = false
         view.addSubview(tableView)
         
         //layout
@@ -95,7 +97,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     
         let sectionInfo = sections[section]
-        return sectionInfo.numberOfObjects
+        let rowCount = sectionInfo.numberOfObjects > maxEventsPerDay ? maxEventsPerDay : sectionInfo.numberOfObjects
+        return rowCount
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -127,11 +130,11 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if todayString == dataString {
             header.titleLabel.text = "TODAY"
-            header.subTitleLabel.text = dateFormatter.string(from: sectionDate)
         } else {
-            header.titleLabel.text = dateFormatter.string(from: sectionDate)
-            header.subTitleLabel.text = ""
+            header.titleLabel.text = weekdayFormatter.string(from: sectionDate).uppercased()
         }
+        
+        header.subTitleLabel.text = dateFormatter.string(from: sectionDate)
         
         return header
     }

@@ -10,17 +10,15 @@ import UIKit
 
 class StyleManager {
     class func updateNavBarStyling() {
-        UIApplication.shared.statusBarStyle = .lightContent
-        
         let navigationBarAppearace = UINavigationBar.appearance()
-        navigationBarAppearace.tintColor = UIColor.white
-        navigationBarAppearace.barTintColor = UIColor.primaryBrand()
         navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.font:UIFont.headerTwo() as Any,
-                                                      NSAttributedStringKey.foregroundColor:UIColor.white]
+                                                      NSAttributedStringKey.foregroundColor:UIColor.primaryCopy()]
+        navigationBarAppearace.largeTitleTextAttributes = [NSAttributedStringKey.font:UIFont(name: "SourceSansPro-Bold", size: 30) as Any,
+                                                           NSAttributedStringKey.foregroundColor:UIColor.primaryCopy()]
         
         let barButtonAppearace = UIBarButtonItem.appearance()
-        barButtonAppearace.tintColor = UIColor.white
+        barButtonAppearace.tintColor = UIColor.primaryCTA()
         barButtonAppearace.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.barButtonTitle() as Any,
-                                                   NSAttributedStringKey.foregroundColor:UIColor.white], for: .normal)
+                                                   NSAttributedStringKey.foregroundColor:UIColor.primaryCTA()], for: .normal)
     }
 }

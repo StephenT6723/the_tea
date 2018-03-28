@@ -28,6 +28,9 @@ extension UIColor {
     class func lightCopy() -> UIColor {
         return UIColor(hexString:"#A4AAB3")
     }
+    class func lightBackground() -> UIColor {
+        return UIColor(hexString:"EFEFF4")
+    }
     
     class func dividers() -> UIColor {
         return UIColor(hexString:"#E2E2E2")

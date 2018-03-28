@@ -9,25 +9,25 @@
 import UIKit
 import CoreData
 
-enum EventListStatus {
+enum EventCollectionStatus {
     case updating
     case ready
 }
 
-protocol EventListDelegate {
-    func eventListStatusChanged(sender: EventList)
+protocol EventCollectionDelegate {
+    func eventListStatusChanged(sender: EventCollection)
 }
 
-class EventList {
+class EventCollection {
     var title = ""
     var subtitle = ""
     var predicate: NSPredicate?
     var sortDescriptors = [NSSortDescriptor]()
-    var delegate: EventListDelegate?
-    var status = EventListStatus.ready
+    var delegate: EventCollectionDelegate?
+    var status = EventCollectionStatus.ready
     var events = [Event]()
     
-    convenience init (title: String, subtitle: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?, delegate: EventListDelegate?) {
+    convenience init (title: String, subtitle: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?, delegate: EventCollectionDelegate?) {
         self.init()
         self.title = title
         self.subtitle = subtitle

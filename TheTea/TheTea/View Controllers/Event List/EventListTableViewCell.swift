@@ -18,11 +18,20 @@ class EventListTableViewCell: UITableViewCell {
         
         selectionStyle = .none
         
-        contentView.backgroundColor = UIColor.primaryBrand()
+        contentView.backgroundColor = UIColor.lightBackground()
         
         customContentView.translatesAutoresizingMaskIntoConstraints = false
         customContentView.backgroundColor = .white
-        customContentView.layer.cornerRadius = 6
+        customContentView.layer.masksToBounds = false
+        customContentView.layer.shadowColor = UIColor.black.cgColor
+        customContentView.layer.shadowOpacity = 0.1
+        customContentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        customContentView.layer.shadowRadius = 4
+        customContentView.layer.shouldRasterize = true
+        customContentView.layer.rasterizationScale = UIScreen.main.scale
+        customContentView.layer.cornerRadius = 4
+        customContentView.layer.borderWidth = 1
+        customContentView.layer.borderColor = UIColor(white: 0, alpha: 0.15).cgColor
         contentView.addSubview(customContentView)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -37,10 +46,10 @@ class EventListTableViewCell: UITableViewCell {
         subTitleLabel.numberOfLines = 0
         customContentView.addSubview(subTitleLabel)
         
-        customContentView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        customContentView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        customContentView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
-        customContentView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        customContentView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+        customContentView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+        customContentView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
+        customContentView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
         
         titleLabel.leadingAnchor.constraint(equalTo: customContentView.leadingAnchor, constant: 20).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: customContentView.trailingAnchor, constant: -20).isActive = true
@@ -49,7 +58,7 @@ class EventListTableViewCell: UITableViewCell {
         subTitleLabel.leadingAnchor.constraint(equalTo: customContentView.leadingAnchor, constant: 20).isActive = true
         subTitleLabel.trailingAnchor.constraint(equalTo: customContentView.trailingAnchor, constant: -20).isActive = true
         subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0).isActive = true
-        subTitleLabel.bottomAnchor.constraint(equalTo: customContentView.bottomAnchor, constant: -14).isActive = true
+        subTitleLabel.bottomAnchor.constraint(equalTo: customContentView.bottomAnchor, constant: -16).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
