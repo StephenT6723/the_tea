@@ -41,8 +41,8 @@ class EventListHeaderView: UITableViewHeaderFooterView {
         subTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         
         seeAllButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -17.0).isActive = true
-        seeAllButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
-        seeAllButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
+        seeAllButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4).isActive = true
+        seeAllButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

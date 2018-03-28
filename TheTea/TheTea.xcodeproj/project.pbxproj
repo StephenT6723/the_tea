@@ -40,6 +40,8 @@
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
 		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
+		93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */; };
+		93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */; };
 		D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */; };
 		D70260D01FE97C5500D20BB8 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */; };
 		D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260D11FE97C7200D20BB8 /* TopPanelView.swift */; };
@@ -95,6 +97,8 @@
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListTableViewCell.swift; sourceTree = "<group>"; };
+		93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarousel.swift; sourceTree = "<group>"; };
+		93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarouselCell.swift; sourceTree = "<group>"; };
 		D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
 		D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEditViewController.swift; sourceTree = "<group>"; };
 		D70260D11FE97C7200D20BB8 /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopPanelView.swift; sourceTree = "<group>"; };
@@ -238,6 +242,15 @@
 			path = TheTea;
 			sourceTree = "<group>";
 		};
+		93EAF8E6206C3971008B213F /* Event Collection Carousel */ = {
+			isa = PBXGroup;
+			children = (
+				93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */,
+				93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */,
+			);
+			path = "Event Collection Carousel";
+			sourceTree = "<group>";
+		};
 		D70260D31FE97DB100D20BB8 /* Root */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +295,7 @@
 				938906811F3E891900BBB88C /* EventListViewController.swift */,
 				9337C7911F4F459A00230829 /* EventListHeaderView.swift */,
 				938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */,
+				93EAF8E6206C3971008B213F /* Event Collection Carousel */,
 			);
 			path = "Event List";
 			sourceTree = "<group>";
@@ -412,6 +426,7 @@
 				D70260D01FE97C5500D20BB8 /* EventEditViewController.swift in Sources */,
 				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
 				D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */,
+				93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */,
 				D7103DC01F85543200399263 /* InputField.swift in Sources */,
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
@@ -432,6 +447,7 @@
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,
 				933956E71F440EA600F1AEE4 /* MyAccountViewController.swift in Sources */,
 				D7103DBE1F8552AD00399263 /* EditMyAccountViewController.swift in Sources */,
+				93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */,
 				D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */,
 				933956EB1F440EF600F1AEE4 /* LoginViewController.swift in Sources */,
 				9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */,

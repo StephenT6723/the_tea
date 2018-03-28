@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCollectionCarouselDelegate {
     private let tableView = UITableView(frame: CGRect(), style: UITableViewStyle.grouped)
     private let timeFormatter = DateFormatter()
     private let weekdayFormatter = DateFormatter()
@@ -52,6 +52,11 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.showsVerticalScrollIndicator = false
         tableView.clipsToBounds = false
         view.addSubview(tableView)
+        
+        //carousel
+        let carouselHeader = EventCollectionCarouselHeaderView(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
+        carouselHeader.carousel.delegate = self
+        tableView.tableHeaderView = carouselHeader
         
         //layout
         let margins = view.layoutMarginsGuide
@@ -106,7 +111,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 52
+        return 46
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -191,5 +196,40 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
+    }
+    
+    //MARK: Carousel Delegate
+    
+    func numberOfCollectionsIn(carousel: EventCollectionCarousel) -> Int {
+        return 4
+    }
+    
+    func image(for carousel: EventCollectionCarousel, atIndex: Int) -> UIImage {
+        return UIImage()
+    }
+    
+    func carousel(_ carousel: EventCollectionCarousel, didSelectIndex: Int) {
+        
+    }
+}
+
+class EventCollectionCarouselHeaderView: UIView {
+    static let preferedHeight = 172
+    let carousel = EventCollectionCarousel(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        carousel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(carousel)
+        
+        carousel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        carousel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        carousel.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
+        carousel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 }
