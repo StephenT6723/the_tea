@@ -10,7 +10,7 @@ import UIKit
 
 protocol EventCollectionCarouselDelegate {
     func numberOfCollectionsIn(carousel: EventCollectionCarousel) -> Int
-    func image(for carousel: EventCollectionCarousel, atIndex: Int) -> UIImage
+    func image(for carousel: EventCollectionCarousel, at index: Int) -> UIImage?
     func carousel(_ carousel: EventCollectionCarousel, didSelectIndex: Int)
 }
 
@@ -57,14 +57,22 @@ class EventCollectionCarousel: UIView {
         for index in 0 ..< delegate.numberOfCollectionsIn(carousel: self) {
             let cell = EventCollectionCarouselCell(frame: CGRect())
             cell.translatesAutoresizingMaskIntoConstraints = false
+            let image = delegate.image(for: self, at: index)
+            cell.imageView.image = image
             scrollView.addSubview(cell)
             
             if index == 0 {
-                cell.backgroundColor = .red
+                cell.titleLabel.text = "NIGHT LIFE"
+                cell.subTitleLabel.text = "Time to party, honey"
             } else if index == 1 {
-                cell.backgroundColor = .orange
+                cell.titleLabel.text = "HAPPY HOUR"
+                cell.subTitleLabel.text = "May it last all night"
+            } else if index == 2 {
+                cell.titleLabel.text = "DRAG SHOWS"
+                cell.subTitleLabel.text = "Category is..."
             } else {
-                cell.backgroundColor = .green
+                cell.titleLabel.text = "ST.PATTY'S"
+                cell.subTitleLabel.text = "Lucky you"
             }
             
             cell.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true

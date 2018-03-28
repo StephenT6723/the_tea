@@ -204,8 +204,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         return 4
     }
     
-    func image(for carousel: EventCollectionCarousel, atIndex: Int) -> UIImage {
-        return UIImage()
+    func image(for carousel: EventCollectionCarousel, at index: Int) -> UIImage? {
+        return UIImage(named: "collectionPlaceholder\(index)")
     }
     
     func carousel(_ carousel: EventCollectionCarousel, didSelectIndex: Int) {
