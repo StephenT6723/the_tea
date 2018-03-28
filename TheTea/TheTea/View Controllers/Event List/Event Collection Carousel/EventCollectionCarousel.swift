@@ -11,7 +11,7 @@ import UIKit
 protocol EventCollectionCarouselDelegate {
     func numberOfCollectionsIn(carousel: EventCollectionCarousel) -> Int
     func image(for carousel: EventCollectionCarousel, at index: Int) -> UIImage?
-    func carousel(_ carousel: EventCollectionCarousel, didSelectIndex: Int)
+    func carousel(_ carousel: EventCollectionCarousel, didSelect index: Int)
 }
 
 class EventCollectionCarousel: UIView {
@@ -20,7 +20,7 @@ class EventCollectionCarousel: UIView {
             updateContent()
         }
     }
-    private let scrollView = UIScrollView()
+    private let scrollView = EventCollectionCarouselScrollView()
     private let gapSize = 16
     private let previewAmount = 12
     
@@ -59,6 +59,8 @@ class EventCollectionCarousel: UIView {
             cell.translatesAutoresizingMaskIntoConstraints = false
             let image = delegate.image(for: self, at: index)
             cell.imageView.image = image
+            cell.button.tag = index
+            cell.button.addTarget(self, action: #selector(cellSelected(sender:)), for: .touchUpInside)
             scrollView.addSubview(cell)
             
             if index == 0 {
@@ -93,5 +95,21 @@ class EventCollectionCarousel: UIView {
             
             previousCell = cell
         }
+    }
+    
+    @objc func cellSelected(sender: UIButton) {
+        if let delegate = self.delegate {
+            delegate.carousel(self, didSelect: sender.tag)
+        }
+    }
+}
+
+class EventCollectionCarouselScrollView: UIScrollView {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if let superview = self.superview {
+            let superPoint = convert(point, to: superview)
+            return superview.point(inside:superPoint, with: event)
+        }
+        return false
     }
 }

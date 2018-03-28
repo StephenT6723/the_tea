@@ -46,6 +46,9 @@ class EventCollectionCarouselCell: UIView {
         subTitleLabel.textAlignment = .center
         addSubview(subTitleLabel)
         
+        button.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(button)
+        
         imageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         imageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -58,6 +61,11 @@ class EventCollectionCarouselCell: UIView {
         subTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         subTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6).isActive = true
+        
+        button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        button.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        button.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        button.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

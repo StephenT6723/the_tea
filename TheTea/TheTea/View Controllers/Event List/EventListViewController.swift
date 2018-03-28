@@ -208,8 +208,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         return UIImage(named: "collectionPlaceholder\(index)")
     }
     
-    func carousel(_ carousel: EventCollectionCarousel, didSelectIndex: Int) {
-        
+    func carousel(_ carousel: EventCollectionCarousel, didSelect index: Int) {
+        print("Present Collection \(index)")
     }
 }
 
