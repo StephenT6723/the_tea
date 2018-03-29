@@ -44,13 +44,15 @@ class TGAServer {
                         for eventData in todaysData {
                             var updatedEventData = [String: String]()
                             updatedEventData[Event.nameKey] = eventData[Event.nameKey]
+                            updatedEventData[Event.gayIDKey] = eventData[Event.gayIDKey]
+                            updatedEventData[Event.hotnessKey] = "\(Int32(arc4random_uniform(1000)))"
                             if let startTimeString = eventData[Event.startTimeKey] {
-                                let updatedStartTime = dateFrom(time: startTimeString, date: currentDay)
+                                let updatedStartTime = date(from: startTimeString, date: currentDay)
                                 let updatedStartTimeString = dateFormatter.string(from: updatedStartTime!)
                                 updatedEventData[Event.startTimeKey] = updatedStartTimeString
                             }
                             if let endTimeString = eventData[Event.endTimeKey] {
-                                let updatedEndTime = dateFrom(time: endTimeString, date: currentDay)
+                                let updatedEndTime = date(from: endTimeString, date: currentDay)
                                 let updatedEndTimeString = dateFormatter.string(from: updatedEndTime!)
                                 updatedEventData[Event.endTimeKey] = updatedEndTimeString
                             }
@@ -74,7 +76,7 @@ class TGAServer {
         return allEvents
     }
     
-    class func dateFrom(time: String, date: Date) -> Date? {
+    class func date(from time: String, date: Date) -> Date? {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
         

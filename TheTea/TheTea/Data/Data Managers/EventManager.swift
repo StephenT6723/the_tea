@@ -10,29 +10,7 @@ import UIKit
 import CoreData
 
 class EventManager: NSObject {
-    //MARK: CRUD
     
-    //TODO: Connect this to TGAServer
-    
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
-        if self.event(name: name) != nil {
-            return
-        }
-        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
-        let event = Event(context: context)
-        event.update(name: name, startTime: startTime, endTime: endTime, about: about, location: location)
-        CoreDataManager.sharedInstance.saveContext()
-    }
-    
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
-        event.update(name: name, startTime: startTime, endTime: endTime, about: about, location: location)
-        CoreDataManager.sharedInstance.saveContext()
-    }
-    
-    class func delete(event:Event) {
-        CoreDataManager.sharedInstance.persistentContainer.viewContext.delete(event)
-        CoreDataManager.sharedInstance.saveContext()
-    }
     
     //MARK: Fetches
     
@@ -75,9 +53,9 @@ class EventManager: NSObject {
         return eventsFRC
     }
     
-    class func event(name: String) -> Event? {
+    class func event(gayID: String) -> Event? {
         let request = NSFetchRequest<Event>(entityName:"Event")
-        request.predicate = NSPredicate(format: "name like %@", name)
+        request.predicate = NSPredicate(format: "gayID like %@", gayID)
         
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         do {
@@ -95,21 +73,35 @@ class EventManager: NSObject {
     //MARK: Debug
     
     class func updateDebugEvents() {
-        let futureEventsFRC = allFutureEvents()
-        if futureEventsFRC.fetchedObjects?.count == 0 {
-            let eventData = TGAServer.fetchEvents()
-            for eventDict in eventData {
-                createEventFromData(data: eventDict)
-            }
+        let eventData = TGAServer.fetchEvents()
+        updateLocalEvents(from: eventData)
+    }
+    
+    //MARK: Local Data Updates
+    
+    class func updateLocalEvents(from data: [[String: String]]) {
+        for eventDict in data {
+            updateLocalEvent(from: eventDict)
         }
     }
     
-    class func createEventFromData(data: [String: String]) {
+    class func updateLocalEvent(from data: [String: String]) {
+        guard let gayID = data[Event.gayIDKey]  else {
+            print("TRIED TO UPDATE EVENT WITHOUT GAYID")
+            return
+        }
+        
+        //TODO: Check last updated to prevent rapidly updating over and over?
+        
+        //find or create event object
+        let event = self.event(gayID: gayID) ?? createLocalEvent(gayID: gayID)
+        
+        //parse data
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy h:mm a"
         
-        guard let name = data[Event.nameKey], let startTimeString = data[Event.startTimeKey]  else {
-            print("TRIED TO CREATE EVENT WITHOUT NAME AND START TIME")
+        guard let name = data[Event.nameKey], let startTimeString = data[Event.startTimeKey] else {
+            print("TRIED TO CREATE EVENT WITHOUT REQUIRED DATA")
             return
         }
         
@@ -129,7 +121,53 @@ class EventManager: NSObject {
         }
         
         let endTimeString = data[Event.endTimeKey] ?? ""
+        let hotness = Int32(data[Event.hotnessKey] ?? "")
         
-        createEvent(name: name, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location)
+        let price = Double(data[Event.priceKey] ?? "")
+        let ticketURL = data[Event.ticketURLKey]
+        
+        //update event object
+        event.update(name: name, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location, price: price, ticketURL:ticketURL)
+        CoreDataManager.sharedInstance.saveContext()
+    }
+    
+    class func createLocalEvent(gayID: String) -> Event {
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        let event = Event(context: context)
+        event.gayID = gayID
+        CoreDataManager.sharedInstance.saveContext()
+        
+        return event
+    }
+    
+    //MARK: Remote Data Updates
+    
+    //TODO: Connect this to TGAServer
+    
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
+        /*
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        let event = Event(context: context)
+        let hotness = Int32(arc4random_uniform(1000))
+        event.update(name: name, hotness: hotness, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
+        CoreDataManager.sharedInstance.saveContext() */
+        
+        //PUSH TO SERVER AND WAIT FOR RESPONSE
+    }
+    
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
+        /*
+        event.update(name: name, hotness: nil, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
+        CoreDataManager.sharedInstance.saveContext() */
+        
+        //PUSH TO SERVER AND WAIT FOR RESPONSE
+    }
+    
+    class func delete(event:Event) {
+        /*
+        CoreDataManager.sharedInstance.persistentContainer.viewContext.delete(event)
+        CoreDataManager.sharedInstance.saveContext() */
+        
+        //PUSH TO SERVER AND WAIT FOR RESPONSE
     }
 }

@@ -7,6 +7,8 @@
 		<dict>
 			<key>name</key>
 			<string>Sinful Monday</string>
+			<key>gayID</key>
+			<string>1</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -24,6 +26,8 @@
 	<key>Tuesday</key>
 	<array>
 		<dict>
+			<key>gayID</key>
+			<string>2</string>
 			<key>name</key>
 			<string>Sinful Tuesday</string>
 			<key>startTime</key>
@@ -42,6 +46,8 @@
 		<dict>
 			<key>name</key>
 			<string>Thirsty Thursdays Rise</string>
+			<key>gayID</key>
+			<string>3</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -58,6 +64,8 @@
 		<dict>
 			<key>name</key>
 			<string>The Best of Queerball</string>
+			<key>gayID</key>
+			<string>4</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -77,6 +85,8 @@
 		<dict>
 			<key>name</key>
 			<string>Sinful Wednesday</string>
+			<key>gayID</key>
+			<string>5</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -93,6 +103,8 @@
 		<dict>
 			<key>name</key>
 			<string>Jasmine LIVE</string>
+			<key>gayID</key>
+			<string>6</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -109,6 +121,8 @@
 		<dict>
 			<key>name</key>
 			<string>Trading Spaces</string>
+			<key>gayID</key>
+			<string>7</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -128,6 +142,8 @@
 		<dict>
 			<key>name</key>
 			<string>Sinful Thursday</string>
+			<key>gayID</key>
+			<string>8</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -144,6 +160,8 @@
 		<dict>
 			<key>name</key>
 			<string>Ruffhouse</string>
+			<key>gayID</key>
+			<string>9</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -160,6 +178,8 @@
 		<dict>
 			<key>name</key>
 			<string>Queen4Queen</string>
+			<key>gayID</key>
+			<string>10</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -179,6 +199,8 @@
 		<dict>
 			<key>name</key>
 			<string>Sinful Friday</string>
+			<key>gayID</key>
+			<string>11</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -195,6 +217,8 @@
 		<dict>
 			<key>name</key>
 			<string>RuPaul’s Drag Race All Stars S3 Viewing Party at Mr Biggs</string>
+			<key>gayID</key>
+			<string>12</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -211,6 +235,8 @@
 		<dict>
 			<key>name</key>
 			<string>All Stars RDR S3 Premiere w/ Alotta, Heidi, Megababe, Debbie Cupcakes</string>
+			<key>gayID</key>
+			<string>13</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -230,6 +256,8 @@
 		<dict>
 			<key>name</key>
 			<string>Sinful Saturday</string>
+			<key>gayID</key>
+			<string>14</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -246,6 +274,8 @@
 		<dict>
 			<key>name</key>
 			<string>MEAT - DJ Nina Flowers - Special Event</string>
+			<key>gayID</key>
+			<string>15</string>
 			<key>startTime</key>
 			<string>23:00</string>
 			<key>about</key>
@@ -262,6 +292,8 @@
 		<dict>
 			<key>name</key>
 			<string>Gayzer Tag: November~Holiday Edition / Presented by Guy Social</string>
+			<key>gayID</key>
+			<string>16</string>
 			<key>startTime</key>
 			<string>20:00</string>
 			<key>endTime</key>
@@ -280,6 +312,8 @@
 		<dict>
 			<key>name</key>
 			<string>Super Size Queen</string>
+			<key>gayID</key>
+			<string>17</string>
 			<key>startTime</key>
 			<string>20:00</string>
 			<key>endTime</key>
@@ -298,6 +332,8 @@
 		<dict>
 			<key>name</key>
 			<string>TORQ – 2018 Cherry Kickoff Party</string>
+			<key>gayID</key>
+			<string>18</string>
 			<key>startTime</key>
 			<string>20:00</string>
 			<key>endTime</key>
@@ -319,6 +355,8 @@
 		<dict>
 			<key>name</key>
 			<string>Sinful Sunday</string>
+			<key>gayID</key>
+			<string>19</string>
 			<key>startTime</key>
 			<string>22:00</string>
 			<key>about</key>
@@ -335,6 +373,8 @@
 		<dict>
 			<key>name</key>
 			<string>Tall Gay Agenda: NYC&apos;s Monthly Tall Party (all heights welcome!)</string>
+			<key>gayID</key>
+			<string>20</string>
 			<key>startTime</key>
 			<string>20:00</string>
 			<key>about</key>
@@ -351,6 +391,8 @@
 		<dict>
 			<key>name</key>
 			<string>Boy Bordello:VIP Exhibition Preview and Sale</string>
+			<key>gayID</key>
+			<string>21</string>
 			<key>startTime</key>
 			<string>20:00</string>
 			<key>about</key>

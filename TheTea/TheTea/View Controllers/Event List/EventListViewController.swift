@@ -17,7 +17,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let maxEventsPerDay = 3
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
-            eventsFRC.delegate = self
+            //eventsFRC.delegate = self
             tableView.reloadData()
         }
     }

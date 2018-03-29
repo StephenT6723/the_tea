@@ -11,6 +11,8 @@ import CoreData
 
 extension Event {
     static let nameKey = "name"
+    static let hotnessKey = "hotness"
+    static let gayIDKey = "gayID"
     static let startTimeKey = "startTime"
     static let endTimeKey = "endTime"
     static let aboutKey = "about"
@@ -18,14 +20,25 @@ extension Event {
     static let addressKey = "address"
     static let latitudeKey = "latitude"
     static let longitudeKey = "longitude"
+    static let priceKey = "price"
+    static let ticketURLKey = "ticketURL"
     
-    func update(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
+    func update(name: String, hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?) {
         self.name = name
+        if let hotness = hotness {
+            self.hotness = hotness
+        }
         self.startTime = startTime
         self.endTime = endTime
         self.about = about
         self.locationName = location?.locationName
         self.address = location?.address
+        if let price = price {
+            self.price = price
+        }
+        if let ticketURL = ticketURL {
+            self.ticketURL = ticketURL
+        }
         if let latitude = location?.latitude, let longitude = location?.longitude {
             self.latitude = latitude
             self.longitude = longitude
