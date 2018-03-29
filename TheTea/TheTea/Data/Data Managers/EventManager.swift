@@ -56,6 +56,25 @@ class EventManager: NSObject {
         return eventsFRC
     }
     
+    class func events(with sectionIdentifier: String) -> NSFetchedResultsController<Event> {
+        let request = NSFetchRequest<Event>(entityName:"Event")
+        let predicate = NSPredicate(format: "daySectionIdentifier == %@", sectionIdentifier)
+        request.predicate = predicate
+        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
+        request.sortDescriptors = [startTimeSort]
+        
+        let context = CoreDataManager.sharedInstance.viewContext()
+        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
+        
+        do {
+            try eventsFRC.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+        
+        return eventsFRC
+    }
+    
     class func event(name: String) -> Event? {
         let request = NSFetchRequest<Event>(entityName:"Event")
         request.predicate = NSPredicate(format: "name like %@", name)

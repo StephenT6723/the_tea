@@ -39,7 +39,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
         navigationItem.rightBarButtonItem = createButton
         
-        //setup table view
+        //table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 50
@@ -81,6 +81,20 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let loginNav = UINavigationController(rootViewController: loginVC)
         loginNav.navigationBar.isTranslucent = false
         present(loginNav, animated: true, completion: nil)
+    }
+    
+    @objc func seeAllTapped(sender: UIButton) {
+        let section = sender.tag
+        
+        guard let sectionInfo = eventsFRC.sections?[section] else { return }
+        
+        let sectionName = sectionInfo.name
+        
+        let eventCollectionVC = EventCollectionViewController()
+        let selectedEventsFRC = EventManager.events(with: sectionName)
+        eventCollectionVC.eventsFRC = selectedEventsFRC
+        eventCollectionVC.title = "\(title(forHeader: section)) | \(subTitle(forHeader: section))"
+        navigationController?.pushViewController(eventCollectionVC, animated: true)
     }
     
     //MARK: Table View
@@ -126,20 +140,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: EventListHeaderView.self)) as? EventListHeaderView else {
             return EventListHeaderView()
         }
-        guard let sectionInfo = eventsFRC.sections?[section] else { return header }
         
-        let todayString = DateStringHelper.dataString(from: Date())
+        header.titleLabel.text = title(forHeader: section)
+        header.subTitleLabel.text = subTitle(forHeader: section)
         
-        let dataString = sectionInfo.name
-        guard let sectionDate = DateStringHelper.date(from: dataString) else { return header }
-        
-        if todayString == dataString {
-            header.titleLabel.text = "TODAY"
-        } else {
-            header.titleLabel.text = weekdayFormatter.string(from: sectionDate).uppercased()
-        }
-        
-        header.subTitleLabel.text = dateFormatter.string(from: sectionDate)
+        header.seeAllButton.tag = section
+        header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
         
         return header
     }
@@ -210,6 +216,32 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func carousel(_ carousel: EventCollectionCarousel, didSelect index: Int) {
         print("Present Collection \(index)")
+    }
+    
+    //MARK: Helpers
+    
+    func title(forHeader section: Int) -> String {
+        guard let sectionInfo = eventsFRC.sections?[section] else { return "" }
+        
+        let todayString = DateStringHelper.dataString(from: Date())
+        
+        let dataString = sectionInfo.name
+        guard let sectionDate = DateStringHelper.date(from: dataString) else { return "" }
+        
+        if todayString == dataString {
+            return "TODAY"
+        }
+        
+        return weekdayFormatter.string(from: sectionDate).uppercased()
+    }
+    
+    func subTitle(forHeader section: Int) -> String {
+        guard let sectionInfo = eventsFRC.sections?[section] else { return "" }
+        
+        let dataString = sectionInfo.name
+        guard let sectionDate = DateStringHelper.date(from: dataString) else { return "" }
+        
+        return dateFormatter.string(from: sectionDate).uppercased()
     }
 }
 

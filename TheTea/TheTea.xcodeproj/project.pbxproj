@@ -42,6 +42,8 @@
 		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
 		93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */; };
 		93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */; };
+		93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */; };
+		93EAF8EF206D72D7008B213F /* EventCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */; };
 		D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */; };
 		D70260D01FE97C5500D20BB8 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */; };
 		D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260D11FE97C7200D20BB8 /* TopPanelView.swift */; };
@@ -99,6 +101,8 @@
 		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListTableViewCell.swift; sourceTree = "<group>"; };
 		93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarousel.swift; sourceTree = "<group>"; };
 		93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarouselCell.swift; sourceTree = "<group>"; };
+		93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewController.swift; sourceTree = "<group>"; };
+		93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionHeaderView.swift; sourceTree = "<group>"; };
 		D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
 		D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEditViewController.swift; sourceTree = "<group>"; };
 		D70260D11FE97C7200D20BB8 /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopPanelView.swift; sourceTree = "<group>"; };
@@ -251,6 +255,15 @@
 			path = "Event Collection Carousel";
 			sourceTree = "<group>";
 		};
+		93EAF8EB206D6C15008B213F /* Event Collection */ = {
+			isa = PBXGroup;
+			children = (
+				93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */,
+				93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */,
+			);
+			path = "Event Collection";
+			sourceTree = "<group>";
+		};
 		D70260D31FE97DB100D20BB8 /* Root */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,6 +277,7 @@
 			children = (
 				D70260D31FE97DB100D20BB8 /* Root */,
 				D70260D91FE97ECB00D20BB8 /* Event List */,
+				93EAF8EB206D6C15008B213F /* Event Collection */,
 				D70260DB1FE97EFF00D20BB8 /* Event Edit */,
 				D70260DA1FE97EDB00D20BB8 /* Event Detail */,
 				D70260D81FE97EB500D20BB8 /* Login */,
@@ -433,6 +447,7 @@
 				D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */,
 				D7103DC21F85599300399263 /* AlertCTA.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
+				93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
@@ -450,6 +465,7 @@
 				93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */,
 				D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */,
 				933956EB1F440EF600F1AEE4 /* LoginViewController.swift in Sources */,
+				93EAF8EF206D72D7008B213F /* EventCollectionHeaderView.swift in Sources */,
 				9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */,
 				93399AF21F40E0A100ED02E9 /* MemberDataManager.swift in Sources */,
 				D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */,
