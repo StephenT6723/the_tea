@@ -41,29 +41,4 @@ extension Member {
     func canEditEvent(event: Event) -> Bool {
         return true
     }
-    
-    func hostedEvents() -> EventCollection {
-        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
-        
-        let eventCollection = EventCollection(title: "\(String(describing: self.name)) Hosted Events", subtitle: "", predicate: nil, sortDescriptors: [startTimeSort], delegate: nil)
-        return eventCollection
-    }
-    
-    func upcomingHostedEvents() -> EventCollection {
-        let todayString = DateStringHelper.dataString(from: Date())
-        let predicate = NSPredicate(format: "daySectionIdentifier >= %@", todayString)
-        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
-        
-        let eventCollection = EventCollection(title: "\(String(describing: self.name)) Upcoming Hosted Events", subtitle: "", predicate: predicate, sortDescriptors: [startTimeSort], delegate: nil)
-        return eventCollection
-    }
-    
-    func pastHostedEvents() -> EventCollection {
-        let todayString = DateStringHelper.dataString(from: Date())
-        let predicate = NSPredicate(format: "daySectionIdentifier < %@", todayString)
-        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
-        
-        let eventCollection = EventCollection(title: "\(String(describing: self.name)) Past Hosted Events", subtitle: "", predicate: predicate, sortDescriptors: [startTimeSort], delegate: nil)
-        return eventCollection
-    }
 }

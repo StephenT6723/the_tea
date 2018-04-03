@@ -76,6 +76,18 @@ class TGAServer {
         return allEvents
     }
     
+    class func fetchEventCollections() -> [[String: Any]] {
+        let allCollections = [[String: String]]()
+        var myArray: NSArray?
+        if let path = Bundle.main.path(forResource: "test_event_collections", ofType: "plist") {
+            myArray = NSArray(contentsOfFile: path)
+            if let data = myArray as? [[String: Any]] {
+                return data
+            }
+        }
+        return allCollections
+    }
+    
     class func date(from time: String, date: Date) -> Date? {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"

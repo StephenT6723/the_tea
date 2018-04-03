@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKLoginKit
 
-class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EventCollectionDelegate {
+class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
     var upcomingEvents = EventCollection()
     var currentMember = MemberDataManager.sharedInstance.currentMember()
@@ -29,12 +29,6 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
-        
-        if let member = currentMember {
-            upcomingEvents = member.upcomingHostedEvents()
-            upcomingEvents.delegate = self
-            upcomingEvents.update()
-        }
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 0.01))
@@ -93,13 +87,8 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func myEventsOptionChanged(sender: SegmentedControl) {
-        let isUpcoming = sender.selectedIndex == 0
+        //let isUpcoming = sender.selectedIndex == 0
         
-        if let member = currentMember {
-            upcomingEvents = isUpcoming ? member.upcomingHostedEvents() : member.pastHostedEvents()
-            upcomingEvents.delegate = self
-            upcomingEvents.update()
-        }
     }
     
     //MARK: Table View
@@ -113,10 +102,6 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             if section == 0 && aboutText.count > 0 {
                 return 1
             }
-        }
-        
-        if section == 1 {
-            return upcomingEvents.events.count
         }
         
         return 0
@@ -199,30 +184,12 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             return EventListTableViewCell()
         }
         
-        if indexPath.row < upcomingEvents.events.count {
-            let event = upcomingEvents.events[indexPath.row]
-            cell.titleLabel.text = event.name
-            cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: event, timeFormatter: timeFormatter)
-        }
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            if indexPath.row < upcomingEvents.events.count {
-                let event = upcomingEvents.events[indexPath.row]
-                let detailVC = EventDetailViewController(event:event)
-                navigationController?.pushViewController(detailVC, animated: true)
-            }
-        }
-    }
-    
-    //MARK: Event List Delegate
-    
-    func eventListStatusChanged(sender: EventCollection) {
-        if sender.status == .ready {
-            tableView.reloadData()
+            
         }
     }
 }

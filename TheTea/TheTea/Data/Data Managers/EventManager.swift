@@ -9,9 +9,7 @@
 import UIKit
 import CoreData
 
-class EventManager: NSObject {
-    
-    
+class EventManager {
     //MARK: Fetches
     
     class func allFutureEvents() -> NSFetchedResultsController<Event> {
@@ -81,14 +79,14 @@ class EventManager: NSObject {
     
     class func updateLocalEvents(from data: [[String: String]]) {
         for eventDict in data {
-            updateLocalEvent(from: eventDict)
+            let _ = updateLocalEvent(from: eventDict)
         }
     }
     
-    class func updateLocalEvent(from data: [String: String]) {
+    class func updateLocalEvent(from data: [String: String]) -> Event? {
         guard let gayID = data[Event.gayIDKey]  else {
             print("TRIED TO UPDATE EVENT WITHOUT GAYID")
-            return
+            return nil
         }
         
         //TODO: Check last updated to prevent rapidly updating over and over?
@@ -102,12 +100,12 @@ class EventManager: NSObject {
         
         guard let name = data[Event.nameKey], let startTimeString = data[Event.startTimeKey] else {
             print("TRIED TO CREATE EVENT WITHOUT REQUIRED DATA")
-            return
+            return nil
         }
         
         guard let startTime = dateFormatter.date(from: startTimeString) else {
             print("UNABLE TO PARSE START TIME")
-            return
+            return nil
         }
         
         var location: EventLocation?
@@ -129,6 +127,8 @@ class EventManager: NSObject {
         //update event object
         event.update(name: name, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location, price: price, ticketURL:ticketURL)
         CoreDataManager.sharedInstance.saveContext()
+        
+        return event
     }
     
     class func createLocalEvent(gayID: String) -> Event {

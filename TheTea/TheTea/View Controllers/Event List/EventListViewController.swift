@@ -15,6 +15,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let weekdayFormatter = DateFormatter()
     private let dateFormatter = DateFormatter()
     private let maxEventsPerDay = 3
+    private var featuredCollections = EventCollectionManager.featuredEventCollections()
+    private let carouselHeader = EventCollectionCarouselHeaderView(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             //eventsFRC.delegate = self
@@ -54,7 +56,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         view.addSubview(tableView)
         
         //carousel
-        let carouselHeader = EventCollectionCarouselHeaderView(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
         carouselHeader.carousel.delegate = self
         tableView.tableHeaderView = carouselHeader
         
@@ -65,6 +66,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        
+        NotificationCenter.default.addObserver(forName: .featuredUpdatedNotificationName, object: nil, queue: nil) { (notification: Notification) in
+            self.featuredCollections = EventCollectionManager.featuredEventCollections()
+            self.carouselHeader.carousel.updateContent()
+        }
+        
+        EventCollectionManager.updateDebugEventCollections()
     }
     
     //MARK: Actions
@@ -207,11 +215,15 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     //MARK: Carousel Delegate
     
     func numberOfCollectionsIn(carousel: EventCollectionCarousel) -> Int {
-        return 4
+        return featuredCollections.count
     }
     
-    func image(for carousel: EventCollectionCarousel, at index: Int) -> UIImage? {
-        return UIImage(named: "collectionPlaceholder\(index)")
+    func collection(for carousel: EventCollectionCarousel, at index: Int) -> EventCollection? {
+        if index < featuredCollections.count {
+            let collection = featuredCollections[index]
+            return collection
+        }
+        return nil
     }
     
     func carousel(_ carousel: EventCollectionCarousel, didSelect index: Int) {

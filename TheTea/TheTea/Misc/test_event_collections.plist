@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>title</key>
+		<string>Night Life</string>
+		<key>subtitle</key>
+		<string>Time to party</string>
+		<key>gayID</key>
+		<string>1</string>
+		<key>sortIndex</key>
+		<string>0</string>
+		<key>imageURL</key>
+		<string>https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/sites/2/2017/11/19154408/world-of-edc-social-share-1200x630.jpg</string>
+		<key>events</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>Sinful Monday</string>
+				<key>gayID</key>
+				<string>1</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Hosted by Bootsie Lefaris with a special guest every week.</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+			<dict>
+				<key>gayID</key>
+				<string>2</string>
+				<key>name</key>
+				<string>Sinful Tuesday</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Hosted by Bootsie Lefaris with a special guest every week.</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Thirsty Thursdays Rise</string>
+				<key>gayID</key>
+				<string>3</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Thirsty Thursdays at Rise Bar is Your Top Place for Top Music Videos Every Thursday enjoy Top music videos from all decades at Rise gay bar in Hell’s Kitchen. Start the weekend early with surprise performances and giveaways throughout the evening. Read more at</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Happy Hour</string>
+		<key>subtitle</key>
+		<string>May it last all night</string>
+		<key>gayID</key>
+		<string>2</string>
+		<key>sortIndex</key>
+		<string>1</string>
+		<key>imageURL</key>
+		<string>https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/sites/2/2017/11/19154408/world-of-edc-social-share-1200x630.jpg</string>
+		<key>events</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>Sinful Friday</string>
+				<key>gayID</key>
+				<string>11</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Hosted by Bootsie Lefaris with a special guest every week.</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>RuPaul’s Drag Race All Stars S3 Viewing Party at Mr Biggs</string>
+				<key>gayID</key>
+				<string>12</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>The Olympics of Drag Returns!!!! Starting January 25th</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>All Stars RDR S3 Premiere w/ Alotta, Heidi, Megababe, Debbie Cupcakes</string>
+				<key>gayID</key>
+				<string>13</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Rupaul&apos;s Drag Race ALL STARS LIVE AT Macri Park!!! with ACID BETTY, Alotta McGriddles, Miz Jade, Heidi Glum</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Drag Shows</string>
+		<key>subtitle</key>
+		<string>Category is...</string>
+		<key>gayID</key>
+		<string>3</string>
+		<key>sortIndex</key>
+		<string>2</string>
+		<key>imageURL</key>
+		<string>https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/sites/2/2017/11/19154408/world-of-edc-social-share-1200x630.jpg</string>
+		<key>events</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>Sinful Saturday</string>
+				<key>gayID</key>
+				<string>14</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Hosted by Bootsie Lefaris with a special guest every week.</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Ruffhouse</string>
+				<key>gayID</key>
+				<string>9</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Monthly themed underwear party... check out</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Queen4Queen</string>
+				<key>gayID</key>
+				<string>10</string>
+				<key>startTime</key>
+				<string>22:00</string>
+				<key>about</key>
+				<string>Momo Shade and Kandy Muse</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>St.Patty&apos;s</string>
+		<key>subtitle</key>
+		<string>Lucky You</string>
+		<key>gayID</key>
+		<string>4</string>
+		<key>sortIndex</key>
+		<string>3</string>
+		<key>imageURL</key>
+		<string>https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/sites/2/2017/11/19154408/world-of-edc-social-share-1200x630.jpg</string>
+		<key>events</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>MEAT - DJ Nina Flowers - Special Event</string>
+				<key>gayID</key>
+				<string>15</string>
+				<key>startTime</key>
+				<string>23:00</string>
+				<key>about</key>
+				<string>M.E.A.T. returns Saturday, November 11th with Daddy issues... Unleash your deepest, dirtiest desires. Strap on that harness squeeze into your leather gear and get ready to SWEAT at our exclusive underground playground: KING.\n\nDJ NINA FLOWERS makes her M.E.A.T. debut back pumping the dancefloor for NYC&apos;s SEXIEST men, plus enjoy a fresh selection of beats by red-hot JOE PACHECO heating up our all-new &quot;MARKET&quot;. Oil up and save big by getting your presale tickets now.\n\nPresented by John Blair and Jake Resnicow in association with Alan Picus and Joe Roszak.</string>
+				<key>locationName</key>
+				<string>237 W 42nd St</string>
+				<key>address</key>
+				<string>New York, NY, United States</string>
+				<key>latitude</key>
+				<string>40.756836900000003</string>
+				<key>longitude</key>
+				<string>-73.988439900000003</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Gayzer Tag: November~Holiday Edition / Presented by Guy Social</string>
+				<key>gayID</key>
+				<string>16</string>
+				<key>startTime</key>
+				<string>20:00</string>
+				<key>endTime</key>
+				<string>23:00</string>
+				<key>about</key>
+				<string>You&apos;re invited to the next monthly edition of GAYZER TAG!\n\nFeaturing: \n*UNLIMITED LASER TAG\n*UNLIMITED BOWLING\n* $8 GREY GOOSE DRINKS/ $14 FEATURED BEER PITCHERS\n*200 GREAT GUYS TO MEET N&apos; MINGLE WITH!\n\n*PLUS* NEW GAME PLAY IN THE ARENA + MONTHLY PRIZES!\n\n~Master Blaster Reward: Highest Individual Laser Tag Score in solo rounds wins a drink ticket. (one win per guest)\n\n~Group Starter: Bring 4 friends, (Groups of 5 or more) start with a free pitcher or appetizer. (tickets must all be purchased together online or in person\n\nFee: $15 VERY LIMITED EARLY BIRD / $20 ADVANCE TICKETS / $25 @ THE DOOR---GET YOURS AHEAD OF TIME AND SAVE\n\n$15 Student / $20 Advance / $25 Door</string>
+				<key>locationName</key>
+				<string>Bowlmor Chelsea Piers</string>
+				<key>address</key>
+				<string>Chelsea Piers - Pier 60, New York, NY 10011, United States</string>
+				<key>latitude</key>
+				<string>40.7459737</string>
+				<key>longitude</key>
+				<string>-74.009220400000004</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Tall Gay Agenda: NYC&apos;s Monthly Tall Party (all heights welcome!)</string>
+				<key>gayID</key>
+				<string>20</string>
+				<key>startTime</key>
+				<string>20:00</string>
+				<key>about</key>
+				<string>Join NYC&apos;s network of tall gays &amp; the people who love them. We have regular social gatherings for guys to make new friends and find husbands. The vibe is friendly &amp; the guys are great!</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Boy Bordello:VIP Exhibition Preview and Sale</string>
+				<key>gayID</key>
+				<string>21</string>
+				<key>startTime</key>
+				<string>20:00</string>
+				<key>about</key>
+				<string>One Night Only - 15% off all art purchases</string>
+				<key>locationName</key>
+				<string>Pieces</string>
+				<key>address</key>
+				<string>8 Christopher St, New York, NY  10014, United States</string>
+				<key>latitude</key>
+				<string>40.733837999999999</string>
+				<key>longitude</key>
+				<string>-74.000082000000006</string>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>

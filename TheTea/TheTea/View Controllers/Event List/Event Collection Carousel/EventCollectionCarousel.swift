@@ -10,7 +10,7 @@ import UIKit
 
 protocol EventCollectionCarouselDelegate {
     func numberOfCollectionsIn(carousel: EventCollectionCarousel) -> Int
-    func image(for carousel: EventCollectionCarousel, at index: Int) -> UIImage?
+    func collection(for carousel: EventCollectionCarousel, at index: Int) -> EventCollection?
     func carousel(_ carousel: EventCollectionCarousel, didSelect index: Int)
 }
 
@@ -57,25 +57,14 @@ class EventCollectionCarousel: UIView {
         for index in 0 ..< delegate.numberOfCollectionsIn(carousel: self) {
             let cell = EventCollectionCarouselCell(frame: CGRect())
             cell.translatesAutoresizingMaskIntoConstraints = false
-            let image = delegate.image(for: self, at: index)
+            let collection = delegate.collection(for: self, at: index)
+            let image = EventCollection.placeholderImage(for: index)
             cell.imageView.image = image
             cell.button.tag = index
             cell.button.addTarget(self, action: #selector(cellSelected(sender:)), for: .touchUpInside)
+            cell.titleLabel.text = collection?.title
+            cell.subTitleLabel.text = collection?.subtitle
             scrollView.addSubview(cell)
-            
-            if index == 0 {
-                cell.titleLabel.text = "NIGHT LIFE"
-                cell.subTitleLabel.text = "Time to party, honey"
-            } else if index == 1 {
-                cell.titleLabel.text = "HAPPY HOUR"
-                cell.subTitleLabel.text = "May it last all night"
-            } else if index == 2 {
-                cell.titleLabel.text = "DRAG SHOWS"
-                cell.subTitleLabel.text = "Category is..."
-            } else {
-                cell.titleLabel.text = "ST.PATTY'S"
-                cell.subTitleLabel.text = "Lucky you"
-            }
             
             cell.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
             cell.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
