@@ -101,7 +101,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let eventCollectionVC = EventCollectionViewController()
         let selectedEventsFRC = EventManager.events(with: sectionName)
         eventCollectionVC.eventsFRC = selectedEventsFRC
-        eventCollectionVC.title = "\(title(forHeader: section)) | \(subTitle(forHeader: section))"
+        eventCollectionVC.title = "\(title(forHeader: section)), \(subTitle(forHeader: section))"
         navigationController?.pushViewController(eventCollectionVC, animated: true)
     }
     
@@ -227,7 +227,15 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func carousel(_ carousel: EventCollectionCarousel, didSelect index: Int) {
-        print("Present Collection \(index)")
+        if index < featuredCollections.count {
+            let collection = featuredCollections[index]
+            
+            let eventCollectionVC = EventCollectionViewController()
+            let selectedEventsFRC = collection.eventsFRC(sortDescriptors: nil)
+            eventCollectionVC.eventsFRC = selectedEventsFRC
+            eventCollectionVC.title = collection.title?.uppercased()
+            navigationController?.pushViewController(eventCollectionVC, animated: true)
+        }
     }
     
     //MARK: Helpers

@@ -20,7 +20,7 @@ class EventListHeaderView: UITableViewHeaderFooterView {
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.headerOne()
-        titleLabel.textColor = UIColor.primaryCopy()
+        titleLabel.textColor = UIColor.lightCopy()
         contentView.addSubview(titleLabel)
         
         subTitleLabel.translatesAutoresizingMaskIntoConstraints = false

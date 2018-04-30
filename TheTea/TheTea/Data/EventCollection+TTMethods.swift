@@ -36,7 +36,12 @@ extension EventCollection {
         }
         
         for eventData in events {
-            if let event = EventManager.updateLocalEvent(from: eventData) {
+            //TODO: Update the event properly. We can't do that with placeholder data that has no real dates.
+            guard let gayID = eventData[Event.gayIDKey]  else {
+                print("TRIED TO UPDATE EVENT WITHOUT GAYID")
+                return
+            }
+            if let event = EventManager.event(gayID: gayID) {
                 addToEvents(event)
             }
         }
@@ -44,5 +49,24 @@ extension EventCollection {
     
     class func placeholderImage(for index: Int) -> UIImage? {
         return UIImage(named: "collectionPlaceholder\(index)")
+    }
+    
+    func eventsFRC(sortDescriptors: [NSSortDescriptor]?) -> NSFetchedResultsController<Event> {
+        let request = NSFetchRequest<Event>(entityName:"Event")
+        let predicate = NSPredicate(format: "ANY collections == %@", self)
+        request.predicate = predicate
+        let sort = sortDescriptors ?? [NSSortDescriptor(key: "hotness", ascending: true)]
+        request.sortDescriptors = sort
+        
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try eventsFRC.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+        
+        return eventsFRC
     }
 }
