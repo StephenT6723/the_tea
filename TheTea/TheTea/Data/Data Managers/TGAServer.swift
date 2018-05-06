@@ -9,20 +9,45 @@
 import UIKit
 
 class TGAServer {
-    class func authenticateMember(facebookUserID: String, name: String) -> [String: AnyObject] {
+    //MARK: Users
+    
+    class func authenticateMember(facebookUserID: String, name: String) -> String? {
+        /*
         var memberData = [String: AnyObject]()
         memberData[Member.nameKey] = name as AnyObject
         memberData[Member.tgaIDKey] = "12345" as AnyObject
         memberData[Member.facebookIDKey] = facebookUserID as AnyObject
-        memberData[Member.likeToFBKey] = false as AnyObject
+        memberData[Member.linkToFBKey] = false as AnyObject
+        memberData[Member.instagramKey] = "" as AnyObject
+        memberData[Member.twitterKey] = "" as AnyObject
+        memberData[Member.aboutKey] = "" as AnyObject
+        return memberData */
+        return "12345"
+    }
+    
+    class func fetchMember(tgaID: String) -> [String: AnyObject] {
+        var memberData = [String: AnyObject]()
+        memberData[Member.nameKey] = "Peter Parker" as AnyObject
+        memberData[Member.tgaIDKey] = tgaID as AnyObject
+        memberData[Member.facebookIDKey] = "abcdefg" as AnyObject
+        memberData[Member.linkToFBKey] = false as AnyObject
         memberData[Member.instagramKey] = "" as AnyObject
         memberData[Member.twitterKey] = "" as AnyObject
         memberData[Member.aboutKey] = "" as AnyObject
         return memberData
     }
     
-    class func fetchEvents() -> [[String: String]] {
+    class func updateMember(name: String, linkToFacebook: Bool, instagram: String?, twitter: String?) -> Bool {
+        return true
+    }
+    
+    //MARK: Event Fetches
+    
+    class func fetchEvents(starting: Date, days: Int) -> [[String: String]] {
         var allEvents = [[String: String]]()
+        if days < 1 {
+            return allEvents
+        }
         var myDict: NSDictionary?
         if let path = Bundle.main.path(forResource: "test_events", ofType: "plist") {
             myDict = NSDictionary(contentsOfFile: path)
@@ -30,14 +55,14 @@ class TGAServer {
         if let dict = myDict {
             if let eventsData = dict as? [String:[[String:String]]] {
                 var currentWeekday = ""
-                var currentDay = Date()
+                var currentDay = starting
                 let weekdayFormatter = DateFormatter()
                 weekdayFormatter.dateFormat = "EEEE"
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MM-dd-yyyy h:mm a"
                 
-                for _ in 1...7 {
+                for _ in 1...days {
                     currentWeekday = weekdayFormatter.string(from: currentDay)
                     
                     if let todaysData = eventsData[currentWeekday] {
@@ -76,6 +101,8 @@ class TGAServer {
         return allEvents
     }
     
+    //MARK: Event Collection Fetches
+    
     class func fetchEventCollections() -> [[String: Any]] {
         let allCollections = [[String: String]]()
         var myArray: NSArray?
@@ -87,6 +114,45 @@ class TGAServer {
         }
         return allCollections
     }
+    
+    //MARK: EVENT CRUD
+    
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
+        /*
+         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+         let event = Event(context: context)
+         let hotness = Int32(arc4random_uniform(1000))
+         event.update(name: name, hotness: hotness, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
+         CoreDataManager.sharedInstance.saveContext() */
+        
+        //PUSH TO SERVER AND WAIT FOR RESPONSE
+        
+        return true
+    }
+    
+    class func fetchEvent(tgaID: String) -> [String: String] {
+        return [String: String]()
+    }
+    
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
+        /*
+         event.update(name: name, hotness: nil, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
+         CoreDataManager.sharedInstance.saveContext() */
+        
+        //PUSH TO SERVER AND WAIT FOR RESPONSE
+        return true
+    }
+    
+    class func delete(event:Event) -> Bool {
+        /*
+         CoreDataManager.sharedInstance.persistentContainer.viewContext.delete(event)
+         CoreDataManager.sharedInstance.saveContext() */
+        
+        //PUSH TO SERVER AND WAIT FOR RESPONSE
+        return true
+    }
+    
+    //MARK: DEBUG
     
     class func date(from time: String, date: Date) -> Date? {
         let timeFormatter = DateFormatter()

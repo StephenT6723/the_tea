@@ -26,15 +26,17 @@ class MemberDataManager {
         }
         
         //make server call to auth with FB data
-        let memberData = TGAServer.authenticateMember(facebookUserID: profile.userID, name: profile.name)
-        
-        //auth successfull: got a bunch of data from the server with a tb member
-        guard let tgaID = memberData[Member.tgaIDKey] as? String else {
+        guard let tgaID = TGAServer.authenticateMember(facebookUserID: profile.userID, name: profile.name) else {
+            print("TGA Authentication Failed")
             return false
         }
+        let memberData = TGAServer.fetchMember(tgaID: tgaID)
         
         if let member = addNewMember(tgaID: tgaID) {
             member.updateWithData(data: memberData)
+            //DEBUG HACK TO USE REAL NAME AND ID
+            member.name = profile.name
+            member.facebookID = profile.userID
             CoreDataManager.sharedInstance.saveContext()
             
             return true
@@ -62,15 +64,19 @@ class MemberDataManager {
     }
     
     func updateCurrentMember(name: String, linkToFacebook: Bool, instagram: String?, twitter: String?) {
-        let member = currentMember()
-        var memberData = [String: AnyObject]()
-        memberData[Member.nameKey] = name as AnyObject
-        memberData[Member.likeToFBKey] = linkToFacebook as AnyObject
-        memberData[Member.instagramKey] = instagram as AnyObject
-        memberData[Member.twitterKey] = twitter as AnyObject
-        member?.updateWithData(data: memberData)
-        CoreDataManager.sharedInstance.saveContext()
-        //TODO: Sent this to TGAServer
+        let success = TGAServer.updateMember(name: name, linkToFacebook: linkToFacebook, instagram: instagram, twitter: twitter)
+        if success {
+            let member = currentMember()
+            var memberData = [String: AnyObject]()
+            memberData[Member.nameKey] = name as AnyObject
+            memberData[Member.linkToFBKey] = linkToFacebook as AnyObject
+            memberData[Member.instagramKey] = instagram as AnyObject
+            memberData[Member.twitterKey] = twitter as AnyObject
+            member?.updateWithData(data: memberData)
+            CoreDataManager.sharedInstance.saveContext()
+        } else {
+            //Handle Error
+        }
     }
     
     func canEditEvent(event: Event) -> Bool {

@@ -49,7 +49,7 @@ class EventCollectionManager {
     
     //MARK: Debug
     
-    class func updateDebugEventCollections() {
+    class func updateFeaturedEventCollections() {
         let collectionData = TGAServer.fetchEventCollections()
         updateLocalEventCollections(from: collectionData)
         

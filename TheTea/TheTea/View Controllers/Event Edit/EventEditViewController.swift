@@ -365,7 +365,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         return false
     }
     
-    func saveEvent() {
+    func saveEvent() -> Bool {
         var aboutText = ""
         if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.count > 0 {
             aboutText = aboutTextView.textView.text
@@ -373,27 +373,28 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         if isCreatingNew() {
             if let name = nameTextField.textField.text {
                 if name.count > 0 {
-                    EventManager.createEvent(name: name,
-                                             startTime: startTimePicker.date,
-                                             endTime: isEndTimeVisible() ? endTimePicker.date : nil,
-                                             about: aboutText,
-                                             location: selectedLocation)
+                    return EventManager.createEvent(name: name,
+                                                    startTime: startTimePicker.date,
+                                                    endTime: isEndTimeVisible() ? endTimePicker.date : nil,
+                                                    about: aboutText,
+                                                    location: selectedLocation)
                 }
             }
         } else {
             if let event = self.event {
                 if let name = nameTextField.textField.text {
                     if name.count > 0 {
-                        EventManager.updateEvent(event: event,
-                                                 name: name,
-                                                 startTime: startTimePicker.date,
-                                                 endTime: isEndTimeVisible() ? endTimePicker.date : nil,
-                                                 about: aboutText,
-                                                 location: selectedLocation)
+                        return EventManager.updateEvent(event: event,
+                                                        name: name,
+                                                        startTime: startTimePicker.date,
+                                                        endTime: isEndTimeVisible() ? endTimePicker.date : nil,
+                                                        about: aboutText,
+                                                        location: selectedLocation)
                     }
                 }
             }
         }
+        return false
     }
     
     //MARK: Actions
@@ -403,13 +404,19 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     @objc func doneButtonTouched() {
-        saveEvent()
-        dismiss(animated: true, completion: nil)
+        if saveEvent() {
+            dismiss(animated: true, completion: nil)
+        } else {
+            print("SAVE FAILED")
+        }
     }
     
     @objc func createButtonTouched() {
-        saveEvent()
-        dismiss(animated: true, completion: nil)
+        if saveEvent() {
+            dismiss(animated: true, completion: nil)
+        } else {
+            print("SAVE FAILED")
+        }
     }
     
     @objc func datePickerChanged(picker: UIDatePicker) {
@@ -467,8 +474,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         let alert = UIAlertController(title: nil, message: "Are you sure you want to delete \(eventName)", preferredStyle: UIAlertControllerStyle.alert)
         let deleteAction = UIAlertAction(title: "DELETE", style: UIAlertActionStyle.destructive)  { (action: UIAlertAction) in
             if let event = self.event {
-                EventManager.delete(event: event)
-                self.dismiss(animated: true, completion: nil)
+                if EventManager.delete(event: event) {
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    print("DELETE FAILED")
+                }
             }
         }
         alert.addAction(deleteAction)

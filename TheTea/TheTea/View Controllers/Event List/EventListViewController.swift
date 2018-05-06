@@ -19,7 +19,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let carouselHeader = EventCollectionCarouselHeaderView(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
-            //eventsFRC.delegate = self
+            eventsFRC.delegate = self
             tableView.reloadData()
         }
     }
@@ -28,7 +28,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
 
         title = "The Gay Agenda".uppercased()
-        //edgesForExtendedLayout = UIRectEdge()
         view.backgroundColor = .white
 
         timeFormatter.dateStyle = .none
@@ -68,11 +67,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
         
         NotificationCenter.default.addObserver(forName: .featuredUpdatedNotificationName, object: nil, queue: nil) { (notification: Notification) in
-            self.featuredCollections = EventCollectionManager.featuredEventCollections()
-            self.carouselHeader.carousel.updateContent()
+            self.updateCarouselContent()
         }
         
-        EventCollectionManager.updateDebugEventCollections()
+        updateCarouselContent()
     }
     
     //MARK: Actions
@@ -103,6 +101,11 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         eventCollectionVC.eventsFRC = selectedEventsFRC
         eventCollectionVC.title = "\(title(forHeader: section)), \(subTitle(forHeader: section))"
         navigationController?.pushViewController(eventCollectionVC, animated: true)
+    }
+    
+    func updateCarouselContent() {
+        self.featuredCollections = EventCollectionManager.featuredEventCollections()
+        self.carouselHeader.carousel.updateContent()
     }
     
     //MARK: Table View
@@ -179,37 +182,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     //MARK: FRC Delegate
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .move:
-            break
-        case .update:
-            break
-        }
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
-        case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
-        case .update:
-            tableView.reloadRows(at: [indexPath!], with: .fade)
-        case .move:
-            tableView.reloadData()
-        }
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
+        tableView.reloadData()
     }
     
     //MARK: Carousel Delegate

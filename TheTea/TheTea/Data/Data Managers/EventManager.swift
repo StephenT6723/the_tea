@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 
 class EventManager {
+    static let daysPerFetch = 7
+    
     //MARK: Fetches
     
     class func allFutureEvents() -> NSFetchedResultsController<Event> {
@@ -70,20 +72,20 @@ class EventManager {
     
     //MARK: Debug
     
-    class func updateDebugEvents() {
-        let eventData = TGAServer.fetchEvents()
+    class func updateUpcomingEvents() {
+        let eventData = TGAServer.fetchEvents(starting: Date(), days: daysPerFetch)
         updateLocalEvents(from: eventData)
     }
     
     //MARK: Local Data Updates
     
-    class func updateLocalEvents(from data: [[String: String]]) {
+    private class func updateLocalEvents(from data: [[String: String]]) {
         for eventDict in data {
             let _ = updateLocalEvent(from: eventDict)
         }
     }
     
-    class func updateLocalEvent(from data: [String: String]) -> Event? {
+    private class func updateLocalEvent(from data: [String: String]) -> Event? {
         guard let gayID = data[Event.gayIDKey]  else {
             print("TRIED TO UPDATE EVENT WITHOUT GAYID")
             return nil
@@ -131,7 +133,7 @@ class EventManager {
         return event
     }
     
-    class func createLocalEvent(gayID: String) -> Event {
+    private class func createLocalEvent(gayID: String) -> Event {
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let event = Event(context: context)
         event.gayID = gayID
@@ -142,32 +144,15 @@ class EventManager {
     
     //MARK: Remote Data Updates
     
-    //TODO: Connect this to TGAServer
-    
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
-        /*
-        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
-        let event = Event(context: context)
-        let hotness = Int32(arc4random_uniform(1000))
-        event.update(name: name, hotness: hotness, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
-        CoreDataManager.sharedInstance.saveContext() */
-        
-        //PUSH TO SERVER AND WAIT FOR RESPONSE
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
+        return TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location)
     }
     
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
-        /*
-        event.update(name: name, hotness: nil, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
-        CoreDataManager.sharedInstance.saveContext() */
-        
-        //PUSH TO SERVER AND WAIT FOR RESPONSE
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
+        return TGAServer.updateEvent(event: event, name: name, startTime: startTime, endTime: endTime, about: about, location: location)
     }
     
-    class func delete(event:Event) {
-        /*
-        CoreDataManager.sharedInstance.persistentContainer.viewContext.delete(event)
-        CoreDataManager.sharedInstance.saveContext() */
-        
-        //PUSH TO SERVER AND WAIT FOR RESPONSE
+    class func delete(event:Event) -> Bool {
+        return TGAServer.delete(event: event)
     }
 }

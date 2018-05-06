@@ -13,7 +13,7 @@ import CoreData
 extension Member {
     static let nameKey = "name"
     static let tgaIDKey = "tgaID"
-    static let likeToFBKey = "linkToFacebook"
+    static let linkToFBKey = "linkToFacebook"
     static let facebookIDKey = "facebookID"
     static let instagramKey = "instagram"
     static let twitterKey = "twitter"
@@ -26,7 +26,7 @@ extension Member {
         }
         self.name = name
         
-        if let linkToFB = data[Member.likeToFBKey] as? Bool {
+        if let linkToFB = data[Member.linkToFBKey] as? Bool {
             self.linkToFacebook = linkToFB
         } else {
             self.linkToFacebook = false
@@ -39,6 +39,6 @@ extension Member {
     }
     
     func canEditEvent(event: Event) -> Bool {
-        return true
+        return event.creatorTGAID == tgaID
     }
 }
