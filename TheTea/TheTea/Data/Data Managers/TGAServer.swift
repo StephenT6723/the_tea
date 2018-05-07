@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class TGAServer {
+    static let domain = "https://the-gay-agenda.herokuapp.com"
+    
     //MARK: Users
     
     class func authenticateMember(facebookUserID: String, name: String) -> String? {
@@ -43,62 +47,53 @@ class TGAServer {
     
     //MARK: Event Fetches
     
-    class func fetchEvents(starting: Date, days: Int) -> [[String: String]] {
-        var allEvents = [[String: String]]()
-        if days < 1 {
-            return allEvents
-        }
-        var myDict: NSDictionary?
-        if let path = Bundle.main.path(forResource: "test_events", ofType: "plist") {
-            myDict = NSDictionary(contentsOfFile: path)
-        }
-        if let dict = myDict {
-            if let eventsData = dict as? [String:[[String:String]]] {
-                var currentWeekday = ""
-                var currentDay = starting
-                let weekdayFormatter = DateFormatter()
-                weekdayFormatter.dateFormat = "EEEE"
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "MM-dd-yyyy h:mm a"
-                
-                for _ in 1...days {
-                    currentWeekday = weekdayFormatter.string(from: currentDay)
-                    
-                    if let todaysData = eventsData[currentWeekday] {
-                        for eventData in todaysData {
-                            var updatedEventData = [String: String]()
-                            updatedEventData[Event.nameKey] = eventData[Event.nameKey]
-                            updatedEventData[Event.gayIDKey] = eventData[Event.gayIDKey]
-                            updatedEventData[Event.hotnessKey] = "\(Int32(arc4random_uniform(1000)))"
-                            if let startTimeString = eventData[Event.startTimeKey] {
-                                let updatedStartTime = date(from: startTimeString, date: currentDay)
-                                let updatedStartTimeString = dateFormatter.string(from: updatedStartTime!)
-                                updatedEventData[Event.startTimeKey] = updatedStartTimeString
-                            }
-                            if let endTimeString = eventData[Event.endTimeKey] {
-                                let updatedEndTime = date(from: endTimeString, date: currentDay)
-                                let updatedEndTimeString = dateFormatter.string(from: updatedEndTime!)
-                                updatedEventData[Event.endTimeKey] = updatedEndTimeString
-                            }
-                            updatedEventData[Event.aboutKey] = eventData[Event.aboutKey]
-                            updatedEventData[Event.locationNameKey] = eventData[Event.locationNameKey]
-                            updatedEventData[Event.addressKey] = eventData[Event.addressKey]
-                            updatedEventData[Event.latitudeKey] = eventData[Event.latitudeKey]
-                            updatedEventData[Event.longitudeKey] = eventData[Event.longitudeKey]
-                            allEvents.append(updatedEventData)
-                        }
+    class func fetchEvents(onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        Alamofire.request("\(domain)/events/").responseJSON { response in
+            guard let data = response.data else {
+                failure(response.error)
+                return
+            }
+            do {
+                let json = try JSON(data: data)
+                var cleanedData = [[String:String]]()
+                for eventData in json["data"] {
+                    var eventDict = [String:String]()
+                    let jsonData = eventData.1
+                    if let name = jsonData["attributes"]["name"].string {
+                        eventDict[Event.nameKey] = name
                     }
-                    
-                    if let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: currentDay) {
-                        currentDay = nextDay
-                    } else {
-                        break
+                    if let gayID = jsonData["id"].string {
+                        eventDict[Event.gayIDKey] = gayID
                     }
+                    if let startTime = jsonData["attributes"]["start_time"].string {
+                        eventDict[Event.startTimeKey] = startTime
+                    }
+                    if let endTime = jsonData["attributes"]["end_time"].string {
+                        eventDict[Event.endTimeKey] = endTime
+                    }
+                    if let about = jsonData["attributes"]["about"].string {
+                        eventDict[Event.aboutKey] = about
+                    }
+                    if let locationName = jsonData["attributes"]["location_name"].string {
+                        eventDict[Event.locationNameKey] = locationName
+                    }
+                    if let address = jsonData["attributes"]["address"].string {
+                        eventDict[Event.addressKey] = address
+                    }
+                    if let latitude = jsonData["attributes"]["latitude"].number {
+                        eventDict[Event.latitudeKey] = "\(latitude)"
+                    }
+                    if let longitude = jsonData["attributes"]["longitude"].number {
+                        eventDict[Event.longitudeKey] = "\(longitude)"
+                    }
+                    cleanedData.append(eventDict)
                 }
+                success(cleanedData)
+            } catch {
+                failure(error)
             }
         }
-        return allEvents
     }
     
     //MARK: Event Collection Fetches

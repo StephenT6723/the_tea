@@ -70,11 +70,17 @@ class EventManager {
         return nil
     }
     
-    //MARK: Debug
+    //MARK: Fetch
     
     class func updateUpcomingEvents() {
-        let eventData = TGAServer.fetchEvents(starting: Date(), days: daysPerFetch)
-        updateLocalEvents(from: eventData)
+        TGAServer.fetchEvents(onSuccess: { (data) in
+            self.updateLocalEvents(from: data)
+        }) { (error) in
+            if let error = error {
+                print("EVENT FETCH FAILED: \(error.localizedDescription)")
+            }
+            //TODO: Post notification
+        }
     }
     
     //MARK: Local Data Updates
@@ -98,7 +104,7 @@ class EventManager {
         
         //parse data
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy h:mm a"
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss z"
         
         guard let name = data[Event.nameKey], let startTimeString = data[Event.startTimeKey] else {
             print("TRIED TO CREATE EVENT WITHOUT REQUIRED DATA")
@@ -106,7 +112,7 @@ class EventManager {
         }
         
         guard let startTime = dateFormatter.date(from: startTimeString) else {
-            print("UNABLE TO PARSE START TIME")
+            print("UNABLE TO PARSE START TIME: \(startTimeString)")
             return nil
         }
         

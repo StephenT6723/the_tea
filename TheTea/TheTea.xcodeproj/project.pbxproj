@@ -33,7 +33,6 @@
 		935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */; };
 		935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65941F3EA7C700E979E9 /* CoreDataManager.swift */; };
 		935A65971F3EAC9400E979E9 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65961F3EAC9400E979E9 /* EventManager.swift */; };
-		935D25BF1F93B82A007D25B8 /* test_events.plist in Resources */ = {isa = PBXBuildFile; fileRef = 935D25BE1F93B82A007D25B8 /* test_events.plist */; };
 		935D25C11F93CC1B007D25B8 /* Date+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935D25C01F93CC1B007D25B8 /* Date+TheTea.swift */; };
 		9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906691F3E86D400BBB88C /* AppDelegate.swift */; };
 		938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 938906701F3E86D400BBB88C /* TheTea.xcdatamodeld */; };
@@ -90,7 +89,6 @@
 		935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+TTMethods.swift"; path = "Data/Event+TTMethods.swift"; sourceTree = "<group>"; };
 		935A65941F3EA7C700E979E9 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = "Data/Data Managers/CoreDataManager.swift"; sourceTree = "<group>"; };
 		935A65961F3EAC9400E979E9 /* EventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventManager.swift; path = "Data/Data Managers/EventManager.swift"; sourceTree = "<group>"; };
-		935D25BE1F93B82A007D25B8 /* test_events.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = test_events.plist; path = Misc/test_events.plist; sourceTree = "<group>"; };
 		935D25C01F93CC1B007D25B8 /* Date+TheTea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Date+TheTea.swift"; path = "Helpers/Date+TheTea.swift"; sourceTree = "<group>"; };
 		938906661F3E86D400BBB88C /* TheTea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheTea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		938906691F3E86D400BBB88C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -150,7 +148,6 @@
 				938906751F3E86D400BBB88C /* LaunchScreen.storyboard */,
 				938906781F3E86D400BBB88C /* Info.plist */,
 				938906701F3E86D400BBB88C /* TheTea.xcdatamodeld */,
-				935D25BE1F93B82A007D25B8 /* test_events.plist */,
 				93EAF8F0206DA621008B213F /* test_event_collections.plist */,
 			);
 			name = Misc;
@@ -432,7 +429,6 @@
 				938906741F3E86D400BBB88C /* Assets.xcassets in Resources */,
 				9337C7841F4F40EE00230829 /* SourceSansPro-Black.otf in Resources */,
 				9337C78B1F4F40EE00230829 /* SourceSansPro-Light.otf in Resources */,
-				935D25BF1F93B82A007D25B8 /* test_events.plist in Resources */,
 				9337C78C1F4F40EE00230829 /* SourceSansPro-LightIt.otf in Resources */,
 				9337C7861F4F40EE00230829 /* SourceSansPro-Bold.otf in Resources */,
 				9337C7851F4F40EE00230829 /* SourceSansPro-BlackIt.otf in Resources */,
@@ -467,21 +463,25 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-TheTea/Pods-TheTea-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKMessengerShareKit/FBSDKMessengerShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKMessengerShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
