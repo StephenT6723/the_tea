@@ -37,8 +37,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         dateFormatter.dateFormat = "MMM d"
         
         //navigation buttons
-        let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
-        navigationItem.rightBarButtonItem = createButton
+        if MemberDataManager.authEnabled {
+            let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
+            navigationItem.rightBarButtonItem = createButton
+        }
         
         //table view
         tableView.translatesAutoresizingMaskIntoConstraints = false

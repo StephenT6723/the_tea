@@ -110,7 +110,7 @@ class TGAServer {
         return allCollections
     }
     
-    //MARK: EVENT CRUD
+    //MARK: Event CRUD
     
     class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
         /*
@@ -145,26 +145,5 @@ class TGAServer {
         
         //PUSH TO SERVER AND WAIT FOR RESPONSE
         return true
-    }
-    
-    //MARK: DEBUG
-    
-    class func date(from time: String, date: Date) -> Date? {
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HH:mm"
-        
-        let calendar = Calendar.current
-        
-        if let timeDate = timeFormatter.date(from: time) {
-            var timeComponents = calendar.dateComponents([.hour, .minute], from: timeDate)
-            let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
-            timeComponents.year = dateComponents.year
-            timeComponents.month = dateComponents.month
-            timeComponents.day = dateComponents.day
-            
-            return calendar.date(from: timeComponents)
-        }
-        
-        return nil
     }
 }

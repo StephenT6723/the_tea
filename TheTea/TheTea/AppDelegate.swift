@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        let authEnabled = MemberDataManager.authEnabled
+        
         StyleManager.updateNavBarStyling()
         
         let eventListVC = EventListViewController()
@@ -24,19 +26,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootNav = UINavigationController(rootViewController: eventListVC)
         rootNav.navigationBar.prefersLargeTitles = true
         
-        let myAccountVC = UIViewController()
-        myAccountVC.title = "MY ACCOUNT"
-        let myAccountNav = UINavigationController(rootViewController: myAccountVC)
-        myAccountVC.view.backgroundColor = .white
-        myAccountNav.navigationBar.isTranslucent = false
-        
-        let tabBarController = UITabBarController()
-        tabBarController.tabBar.isTranslucent = false
-        tabBarController.viewControllers = [rootNav, myAccountNav]
-        
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window!.rootViewController = tabBarController
-        window!.makeKeyAndVisible()
+        if authEnabled {
+            let myAccountVC = UIViewController()
+            myAccountVC.title = "MY ACCOUNT"
+            let myAccountNav = UINavigationController(rootViewController: myAccountVC)
+            myAccountVC.view.backgroundColor = .white
+            myAccountNav.navigationBar.isTranslucent = false
+            
+            let tabBarController = UITabBarController()
+            tabBarController.tabBar.isTranslucent = false
+            tabBarController.viewControllers = [rootNav, myAccountNav]
+            
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window!.rootViewController = tabBarController
+            window!.makeKeyAndVisible()
+        } else {
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window!.rootViewController = rootNav
+            window!.makeKeyAndVisible()
+        }
         
         FBSDKProfile.enableUpdates(onAccessTokenChange: true)
         

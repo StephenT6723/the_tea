@@ -12,6 +12,7 @@ import FBSDKLoginKit
 
 class MemberDataManager {
     static let sharedInstance = MemberDataManager()
+    static let authEnabled = false
     private init() {}
     
     func isLoggedIn() -> Bool {
