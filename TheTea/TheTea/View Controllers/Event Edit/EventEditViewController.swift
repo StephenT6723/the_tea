@@ -55,6 +55,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         hostTextField.translatesAutoresizingMaskIntoConstraints = false
         hostTextField.textField.autocapitalizationType = .words
         hostTextField.showDivider = false
+        hostTextField.textField.isUserInteractionEnabled = false
         scrollView.addSubview(hostTextField)
         
         hostTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
@@ -225,8 +226,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         updateTimeTextFields()
         updateSaveButtons()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -238,13 +239,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         } else {
             loginView.alpha = 0
             hostHeightConstraint.constant = textFieldHeight
-            if let member = MemberDataManager.sharedInstance.currentMember() {
-                guard let name = member.name else {
-                    return
-                }
-                
-                hostTextField.textField.text = "HOSTED BY: \(name)"
-            }
+            hostTextField.textField.text = "HOSTED BY: TGA ADMIN"
         }
     }
     
@@ -373,11 +368,19 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         if isCreatingNew() {
             if let name = nameTextField.textField.text {
                 if name.count > 0 {
-                    return EventManager.createEvent(name: name,
+                    EventManager.createEvent(name: name,
                                                     startTime: startTimePicker.date,
                                                     endTime: isEndTimeVisible() ? endTimePicker.date : nil,
                                                     about: aboutText,
-                                                    location: selectedLocation)
+                                                    location: selectedLocation, onSuccess: { (data) in
+                                                        self.dismiss(animated: true, completion: nil)
+                                                    }) { (error) in
+                                                        if let error = error {
+                                                            print("EVENT FETCH FAILED: \(error.localizedDescription)")
+                                                        }
+                                                        //TODO: Post notification
+                                                    }
+                    return true
                 }
             }
         } else {
@@ -471,8 +474,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             return
         }
         
-        let alert = UIAlertController(title: nil, message: "Are you sure you want to delete \(eventName)", preferredStyle: UIAlertControllerStyle.alert)
-        let deleteAction = UIAlertAction(title: "DELETE", style: UIAlertActionStyle.destructive)  { (action: UIAlertAction) in
+        let alert = UIAlertController(title: nil, message: "Are you sure you want to delete \(eventName)", preferredStyle: UIAlertController.Style.alert)
+        let deleteAction = UIAlertAction(title: "DELETE", style: UIAlertAction.Style.destructive)  { (action: UIAlertAction) in
             if let event = self.event {
                 if EventManager.delete(event: event) {
                     self.dismiss(animated: true, completion: nil)
@@ -498,7 +501,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     //MARK: Keyboard updates
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             let screenHeight = UIScreen.main.bounds.height
             view.frame = CGRect(x: 0, y: view.frame.origin.y, width: view.frame.width, height: screenHeight - (keyboardSize.height + view.frame.origin.y))
         }

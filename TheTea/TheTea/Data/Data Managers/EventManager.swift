@@ -89,6 +89,7 @@ class EventManager {
         for eventDict in data {
             let _ = updateLocalEvent(from: eventDict)
         }
+        CoreDataManager.sharedInstance.saveContext()
     }
     
     private class func updateLocalEvent(from data: [String: String]) -> Event? {
@@ -134,7 +135,6 @@ class EventManager {
         
         //update event object
         event.update(name: name, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location, price: price, ticketURL:ticketURL)
-        CoreDataManager.sharedInstance.saveContext()
         
         return event
     }
@@ -143,15 +143,23 @@ class EventManager {
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let event = Event(context: context)
         event.gayID = gayID
-        CoreDataManager.sharedInstance.saveContext()
         
         return event
     }
     
     //MARK: Remote Data Updates
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
-        return TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location)
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?,
+                           onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location, onSuccess: { (data) in
+            self.updateLocalEvents(from: data)
+        }) { (error) in
+            if let error = error {
+                print("EVENT FETCH FAILED: \(error.localizedDescription)")
+            }
+            //TODO: Post notification
+        }
     }
     
     class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {

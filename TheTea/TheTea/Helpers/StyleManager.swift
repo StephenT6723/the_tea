@@ -11,14 +11,14 @@ import UIKit
 class StyleManager {
     class func updateNavBarStyling() {
         let navigationBarAppearace = UINavigationBar.appearance()
-        navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.font:UIFont.headerTwo() as Any,
-                                                      NSAttributedStringKey.foregroundColor:UIColor.primaryCopy()]
-        navigationBarAppearace.largeTitleTextAttributes = [NSAttributedStringKey.font:UIFont(name: "SourceSansPro-Bold", size: 30) as Any,
-                                                           NSAttributedStringKey.foregroundColor:UIColor.primaryCopy()]
+        navigationBarAppearace.titleTextAttributes = [NSAttributedString.Key.font:UIFont.headerTwo() as Any,
+                                                      NSAttributedString.Key.foregroundColor:UIColor.primaryCopy()]
+        navigationBarAppearace.largeTitleTextAttributes = [NSAttributedString.Key.font:UIFont(name: "SourceSansPro-Bold", size: 30) as Any,
+                                                           NSAttributedString.Key.foregroundColor:UIColor.primaryCopy()]
         
         let barButtonAppearace = UIBarButtonItem.appearance()
         barButtonAppearace.tintColor = UIColor.primaryCTA()
-        barButtonAppearace.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.barButtonTitle() as Any,
-                                                   NSAttributedStringKey.foregroundColor:UIColor.primaryCTA()], for: .normal)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.barButtonTitle() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .normal)
     }
 }

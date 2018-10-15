@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCollectionCarouselDelegate {
-    private let tableView = UITableView(frame: CGRect(), style: UITableViewStyle.grouped)
+    private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
     private let timeFormatter = DateFormatter()
     private let weekdayFormatter = DateFormatter()
     private let dateFormatter = DateFormatter()
@@ -37,10 +37,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         dateFormatter.dateFormat = "MMM d"
         
         //navigation buttons
-        if MemberDataManager.authEnabled {
-            let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
-            navigationItem.rightBarButtonItem = createButton
-        }
+        let createButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEventTapped))
+        navigationItem.rightBarButtonItem = createButton
         
         //table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -134,7 +132,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

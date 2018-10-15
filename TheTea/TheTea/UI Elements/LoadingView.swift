@@ -9,7 +9,7 @@
 import UIKit
 
 class LoadingView: UIControl {
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let spinner = UIActivityIndicatorView(style: .whiteLarge)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

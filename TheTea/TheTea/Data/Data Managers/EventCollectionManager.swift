@@ -47,7 +47,7 @@ class EventCollectionManager {
         return nil
     }
     
-    //MARK: Debug
+    //MARK: Fetches
     
     class func updateFeaturedEventCollections() {
         let collectionData = TGAServer.fetchEventCollections()

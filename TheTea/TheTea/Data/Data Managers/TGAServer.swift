@@ -11,7 +11,16 @@ import Alamofire
 import SwiftyJSON
 
 class TGAServer {
-    static let domain = "https://the-gay-agenda.herokuapp.com"
+    static let apiEventNameKey = "name"
+    static let apiAboutKey = "about"
+    static let apiStartTimeKey = "start_time"
+    static let apiEndTimeKey = "end_time"
+    static let apiLocationNameKey = "location_name"
+    static let apiAddressKey = "address"
+    static let apiLatitudeKey = "latitude"
+    static let apiLongitudeKey = "longitude"
+    
+    static let domain = "https://eb9c8f3f.ngrok.io"
     
     //MARK: Users
     
@@ -49,51 +58,60 @@ class TGAServer {
     
     class func fetchEvents(onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
-        Alamofire.request("\(domain)/events/").responseJSON { response in
+        Alamofire.request("\(domain)/events/",
+                            method: .get,
+                            parameters: ["format": "json"],
+                            encoding: URLEncoding(destination: .queryString),
+                            headers: nil).responseJSON { response in
             guard let data = response.data else {
                 failure(response.error)
                 return
             }
             do {
                 let json = try JSON(data: data)
-                var cleanedData = [[String:String]]()
-                for eventData in json["data"] {
-                    var eventDict = [String:String]()
-                    let jsonData = eventData.1
-                    if let name = jsonData["attributes"]["name"].string {
-                        eventDict[Event.nameKey] = name
-                    }
-                    if let gayID = jsonData["id"].string {
-                        eventDict[Event.gayIDKey] = gayID
-                    }
-                    if let startTime = jsonData["attributes"]["start_time"].string {
-                        eventDict[Event.startTimeKey] = startTime
-                    }
-                    if let endTime = jsonData["attributes"]["end_time"].string {
-                        eventDict[Event.endTimeKey] = endTime
-                    }
-                    if let about = jsonData["attributes"]["about"].string {
-                        eventDict[Event.aboutKey] = about
-                    }
-                    if let locationName = jsonData["attributes"]["location_name"].string {
-                        eventDict[Event.locationNameKey] = locationName
-                    }
-                    if let address = jsonData["attributes"]["address"].string {
-                        eventDict[Event.addressKey] = address
-                    }
-                    if let latitude = jsonData["attributes"]["latitude"].number {
-                        eventDict[Event.latitudeKey] = "\(latitude)"
-                    }
-                    if let longitude = jsonData["attributes"]["longitude"].number {
-                        eventDict[Event.longitudeKey] = "\(longitude)"
-                    }
-                    cleanedData.append(eventDict)
-                }
-                success(cleanedData)
+                let data = dictFrom(json: json)
+                success(data)
             } catch {
                 failure(error)
             }
         }
+    }
+    
+    private class func dictFrom(json: JSON) -> [[String: String]] {
+        var cleanedData = [[String:String]]()
+        for eventData in json["data"] {
+            var eventDict = [String:String]()
+            let jsonData = eventData.1
+            if let name = jsonData["attributes"][apiEventNameKey].string {
+                eventDict[Event.nameKey] = name
+            }
+            if let gayID = jsonData["id"].string {
+                eventDict[Event.gayIDKey] = gayID
+            }
+            if let startTime = jsonData["attributes"][apiStartTimeKey].string {
+                eventDict[Event.startTimeKey] = startTime
+            }
+            if let endTime = jsonData["attributes"][apiEndTimeKey].string {
+                eventDict[Event.endTimeKey] = endTime
+            }
+            if let about = jsonData["attributes"][apiAboutKey].string {
+                eventDict[Event.aboutKey] = about
+            }
+            if let locationName = jsonData["attributes"][apiLocationNameKey].string {
+                eventDict[Event.locationNameKey] = locationName
+            }
+            if let address = jsonData["attributes"][apiAddressKey].string {
+                eventDict[Event.addressKey] = address
+            }
+            if let latitude = jsonData["attributes"][apiLatitudeKey].number {
+                eventDict[Event.latitudeKey] = "\(latitude)"
+            }
+            if let longitude = jsonData["attributes"][apiLongitudeKey].number {
+                eventDict[Event.longitudeKey] = "\(longitude)"
+            }
+            cleanedData.append(eventDict)
+        }
+        return cleanedData
     }
     
     //MARK: Event Collection Fetches
@@ -112,17 +130,52 @@ class TGAServer {
     
     //MARK: Event CRUD
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
-        /*
-         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
-         let event = Event(context: context)
-         let hotness = Int32(arc4random_uniform(1000))
-         event.update(name: name, hotness: hotness, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
-         CoreDataManager.sharedInstance.saveContext() */
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?,
+                           onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss z"
         
-        //PUSH TO SERVER AND WAIT FOR RESPONSE
+        var params = [String: String]()
+        params["format"] = "json"
+        params[apiEventNameKey] = name
+        params[apiStartTimeKey] = dateFormatter.string(from: startTime)
+        if let endTime = endTime {
+            params[apiEndTimeKey] = dateFormatter.string(from: endTime)
+        }
+        if let about = about {
+            params[apiAboutKey] = about
+        }
+        if let address = location?.address {
+            params[apiAddressKey] = address
+        }
+        if let locationName = location?.locationName {
+            params[apiLocationNameKey] = locationName
+        }
+        if let latitude = location?.latitude {
+            params[apiLatitudeKey] = "\(latitude)"
+        }
+        if let longitude = location?.longitude {
+            params[apiLongitudeKey] = "\(longitude)"
+        }
         
-        return true
+        Alamofire.request("\(domain)/events/",
+            method: .post,
+            parameters: params,
+            encoding: URLEncoding(destination: .queryString),
+            headers: nil).responseJSON { response in
+                guard let data = response.data else {
+                    failure(response.error)
+                    return
+                }
+                do {
+                    let json = try JSON(data: data)
+                    let dict = dictFrom(json: json)
+                    success(dict)
+                } catch {
+                    failure(error)
+                }
+        }
     }
     
     class func fetchEvent(tgaID: String) -> [String: String] {

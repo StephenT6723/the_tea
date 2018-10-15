@@ -56,9 +56,9 @@ class EventCollectionHeaderView: UITableViewHeaderFooterView {
             sortLabel.text = ""
             return
         }
-        let attributes = [ NSAttributedStringKey.foregroundColor: UIColor.primaryCTA(), NSAttributedStringKey.font: font ] as [NSAttributedStringKey : Any]
+        let attributes = [ NSAttributedString.Key.foregroundColor: UIColor.primaryCTA(), NSAttributedString.Key.font: font ] as [NSAttributedString.Key : Any]
         let attrString = NSMutableAttributedString(string: sortString, attributes: attributes)
-        attrString.setAttributes([ NSAttributedStringKey.foregroundColor: UIColor.lightCopy(), NSAttributedStringKey.font: font ] as [NSAttributedStringKey : Any], range: NSMakeRange(0, 8))
+        attrString.setAttributes([ NSAttributedString.Key.foregroundColor: UIColor.lightCopy(), NSAttributedString.Key.font: font ] as [NSAttributedString.Key : Any], range: NSMakeRange(0, 8))
         
         sortLabel.attributedText = attrString
     }

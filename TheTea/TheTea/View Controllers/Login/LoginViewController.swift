@@ -183,7 +183,7 @@ class LoginViewController: UIViewController {
     @objc func connectWithFacebookTouched() {
         if FBSDKProfile.current() == nil {
             connectWithFacebook()
-        } else if !MemberDataManager.sharedInstance.isLoggedIn(){
+        } else if !MemberDataManager.sharedInstance.isLoggedIn() {
             connectWithTGA()
         } else {
             print("Login tapped for already logged in member.")

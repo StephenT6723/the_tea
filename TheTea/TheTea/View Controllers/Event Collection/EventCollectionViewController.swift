@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class EventCollectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
-    private let tableView = UITableView(frame: CGRect(), style: UITableViewStyle.grouped)
+    private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
     private let timeFormatter = DateFormatter()
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
@@ -69,7 +69,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

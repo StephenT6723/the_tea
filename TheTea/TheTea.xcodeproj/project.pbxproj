@@ -389,7 +389,7 @@
 					938906651F3E86D400BBB88C = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = D2GNKS5EWA;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -678,8 +678,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "31a53158-fa80-4832-aebc-4ffd747cb1e9";
 				PROVISIONING_PROFILE_SPECIFIER = "The Gay Distribution Profile";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -702,8 +701,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "31a53158-fa80-4832-aebc-4ffd747cb1e9";
 				PROVISIONING_PROFILE_SPECIFIER = "The Gay Distribution Profile";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
