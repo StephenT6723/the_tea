@@ -58,7 +58,6 @@ class EventRepeatRules {
     var repeatsFridays = false
     var repeatsSaturdays = false
     var repeatsSundays = false
-    private init() {}
     
     convenience init(repeatsMondays: Bool, repeatsTuesdays: Bool, repeatsWednesdays: Bool, repeatsThursdays: Bool, repeatsFridays: Bool, repeatsSaturdays: Bool, repeatsSundays: Bool) {
         self.init()

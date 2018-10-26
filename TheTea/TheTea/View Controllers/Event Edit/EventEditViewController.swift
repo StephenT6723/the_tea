@@ -38,6 +38,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let aboutTextViewPlaceholder = "MORE INFO"
     private let textFieldHeight: CGFloat = 48.0
     private var selectedLocation: EventLocation?
+    private var selectedRepeats = EventRepeatRules()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -229,6 +230,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                     selectedLocation = eventLocation
                 }
                 
+                selectedRepeats = event.repeatRules()
+                
                 if MemberDataManager.sharedInstance.canEditEvent(event: event) {
                     deleteButton.translatesAutoresizingMaskIntoConstraints = false
                     deleteButton.setTitle("DELETE EVENT", for: .normal)
@@ -267,6 +270,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             hostHeightConstraint.constant = textFieldHeight
             hostTextField.textField.text = "HOSTED BY: TGA ADMIN"
         }
+        
+        repeatsLabel.text = selectedRepeats.rules()
     }
     
     //MARK: Display Update

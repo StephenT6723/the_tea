@@ -57,4 +57,9 @@ extension Event {
         }
         return nil
     }
+    
+    func repeatRules() -> EventRepeatRules {
+        let rules = EventRepeatRules(repeatsMondays: repeatsMondays, repeatsTuesdays: repeatsTuesdays, repeatsWednesdays: repeatsWednesdays, repeatsThursdays: repeatsThursdays, repeatsFridays: repeatsFridays, repeatsSaturdays: repeatsSaturdays, repeatsSundays: repeatsSundays)
+        return rules
+    }
 }
