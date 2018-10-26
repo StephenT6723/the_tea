@@ -496,13 +496,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     @objc func repeatsButtonTouched() {
-        print("REPAT BITCH")
-        /*
-        let locationVC = LocationPickerViewController()
-        locationVC.delegate = self
-        let locationNav = UINavigationController(rootViewController: locationVC)
-        locationNav.navigationBar.isTranslucent = false
-        present(locationNav, animated: true, completion: nil) */
+        let repeatVC = RepeatEditViewController()
+        //locationVC.delegate = self
+        let repeatNav = UINavigationController(rootViewController: repeatVC)
+        repeatNav.navigationBar.isTranslucent = false
+        present(repeatNav, animated: true, completion: nil)
     }
     
     @objc func deleteButtonTouched() {

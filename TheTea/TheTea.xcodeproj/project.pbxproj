@@ -40,6 +40,8 @@
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
 		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
+		93E440AB21836DD2001E82E0 /* RepeatEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E440AA21836DD2001E82E0 /* RepeatEditViewController.swift */; };
+		93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E440AC21837201001E82E0 /* EventRepeatRules.swift */; };
 		93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */; };
 		93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */; };
 		93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */; };
@@ -98,6 +100,8 @@
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListTableViewCell.swift; sourceTree = "<group>"; };
+		93E440AA21836DD2001E82E0 /* RepeatEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatEditViewController.swift; sourceTree = "<group>"; };
+		93E440AC21837201001E82E0 /* EventRepeatRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventRepeatRules.swift; path = Data/EventRepeatRules.swift; sourceTree = "<group>"; };
 		93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarousel.swift; sourceTree = "<group>"; };
 		93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarouselCell.swift; sourceTree = "<group>"; };
 		93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 				93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */,
 				D739CD291F706D6F00E3779B /* Member+TTMethods.swift */,
 				933956E21F4400EB00F1AEE4 /* EventLocation.swift */,
+				93E440AC21837201001E82E0 /* EventRepeatRules.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -334,6 +339,7 @@
 			children = (
 				D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */,
 				D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */,
+				93E440AA21836DD2001E82E0 /* RepeatEditViewController.swift */,
 			);
 			path = "Event Edit";
 			sourceTree = "<group>";
@@ -505,6 +511,8 @@
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
 				D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */,
 				D7103DC21F85599300399263 /* AlertCTA.swift in Sources */,
+				93E440AB21836DD2001E82E0 /* RepeatEditViewController.swift in Sources */,
+				93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */,
 				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
