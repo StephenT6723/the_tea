@@ -10,16 +10,12 @@ import UIKit
 
 class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
+    var rules = EventRepeatRules()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "REPEATS"
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
-        navigationItem.leftBarButtonItem = cancelButton
-        
-        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTouched))
-        navigationItem.rightBarButtonItem = saveButton
         
         view.backgroundColor = .white
         
@@ -38,16 +34,6 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    //MARK: Actions
-    
-    @objc func cancelButtonTouched() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func saveButtonTouched() {
-        dismiss(animated: true, completion: nil)
-    }
-    
     //MARK: Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -55,7 +41,7 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return DaysOfTheWeek.allCases.count + 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -67,30 +53,47 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
             return RepeatTableViewCell()
         }
         
-        switch indexPath.row {
-        case 0:
-            cell.titleLabel.text = "Mondays"
-        case 1:
-            cell.titleLabel.text = "Tuesdays"
-        case 2:
-            cell.titleLabel.text = "Wednesdays"
-        case 3:
-            cell.titleLabel.text = "Thursdays"
-        case 4:
-            cell.titleLabel.text = "Fridays"
-        case 5:
-            cell.titleLabel.text = "Saturdays"
-        default:
-            cell.titleLabel.text = "Sunday"
+        let allDays = DaysOfTheWeek.allCases
+        let repeatingDays = rules.repeatingDays()
+        
+        if indexPath.row == DaysOfTheWeek.allCases.count {
+            cell.titleLabel.text = "NEVER"
+            
+            if repeatingDays.count == 0 {
+                cell.titleLabel.textColor = UIColor.primaryCopy()
+            } else {
+                cell.titleLabel.textColor = UIColor.lightCopy()
+            }
+            
+            cell.accessoryType = .none
+            
+            return cell
+        }
+        
+        let day = allDays[indexPath.row]
+        
+        cell.titleLabel.text = day.plural().uppercased()
+        if repeatingDays.contains(day) {
+            cell.titleLabel.textColor = UIColor.primaryCopy()
+            cell.accessoryType = .checkmark
+        } else {
+            cell.titleLabel.textColor = UIColor.lightCopy()
+            cell.accessoryType = .none
         }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let event = eventsFRC.object(at: indexPath)
-        //let detailVC = EventDetailViewController(event:event)
-        //navigationController?.pushViewController(detailVC, animated: true)
+        if indexPath.row == DaysOfTheWeek.allCases.count {
+            rules.neverRepeat()
+        } else {
+            let allDays = DaysOfTheWeek.allCases
+            let day = allDays[indexPath.row]
+            rules.toggleDay(day: day)
+        }
+        
+        tableView.reloadData()
     }
 }
 

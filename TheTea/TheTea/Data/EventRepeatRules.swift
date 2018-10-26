@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum DaysOfTheWeek: String {
+enum DaysOfTheWeek: String, CaseIterable {
     case monday = "Monday"
     case tuesday = "Tuesday"
     case wednesday = "Wednesday"
@@ -69,6 +69,35 @@ class EventRepeatRules {
         self.repeatsFridays = repeatsFridays
         self.repeatsSaturdays = repeatsSaturdays
         self.repeatsSundays = repeatsSundays
+    }
+    
+    func toggleDay(day:DaysOfTheWeek) {
+        switch day {
+        case .monday:
+            repeatsMondays = !repeatsMondays
+        case .tuesday:
+            repeatsTuesdays = !repeatsTuesdays
+        case .wednesday:
+            repeatsWednesdays = !repeatsWednesdays
+        case .thursday:
+            repeatsThursdays = !repeatsThursdays
+        case .friday:
+            repeatsFridays = !repeatsFridays
+        case .saturday:
+            repeatsSaturdays = !repeatsSaturdays
+        default:
+            repeatsSundays = !repeatsSundays
+        }
+    }
+    
+    func neverRepeat() {
+        repeatsMondays = false
+        repeatsTuesdays = false
+        repeatsWednesdays = false
+        repeatsThursdays = false
+        repeatsFridays = false
+        repeatsSaturdays = false
+        repeatsSundays = false
     }
     
     func repeatingDays() -> [DaysOfTheWeek] {
