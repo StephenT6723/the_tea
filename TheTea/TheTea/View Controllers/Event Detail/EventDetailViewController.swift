@@ -61,6 +61,7 @@ class EventDetailViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.headerOne()
         titleLabel.textColor = UIColor.primaryCopy()
+        titleLabel.numberOfLines = 0
         contentView.addSubview(titleLabel)
         
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true

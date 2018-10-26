@@ -32,6 +32,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let aboutTextView = InputField()
     private let deleteButton = AlertCTA()
     
+    private let priceInputField = InputField()
+    private let priceStepper = UIStepper()
+    
+    private let ticketURLTextField = InputField()
+    
     private let createContainer = UIView()
     private let createButton = PrimaryCTA(frame: CGRect())
     
@@ -136,6 +141,26 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         aboutTextView.showDivider = false
         scrollView.addSubview(aboutTextView)
         
+        priceInputField.translatesAutoresizingMaskIntoConstraints = false
+        priceInputField.type = .button
+        priceInputField.label.text = "FREE"
+        priceInputField.button.isUserInteractionEnabled = false
+        scrollView.addSubview(priceInputField)
+        
+        priceStepper.minimumValue = 0
+        priceStepper.maximumValue = 300
+        priceStepper.value = 0
+        priceStepper.addTarget(self, action: #selector(updatePrice), for: .valueChanged)
+        priceStepper.tintColor = UIColor.primaryCTA()
+        priceInputField.accessoryView = priceStepper
+        
+        ticketURLTextField.translatesAutoresizingMaskIntoConstraints = false
+        ticketURLTextField.textField.placeholder = "TICKET LINK"
+        ticketURLTextField.textField.keyboardType = .URL
+        ticketURLTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
+        ticketURLTextField.showDivider = false
+        scrollView.addSubview(ticketURLTextField)
+        
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -163,7 +188,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         hideEndTimeButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
         repeatsInputView.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor).isActive = true
-        
         repeatsInputView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         repeatsInputView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         repeatsInputView.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
@@ -177,6 +201,16 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         aboutTextView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         aboutTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
+        
+        priceInputField.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor, constant: 20).isActive = true
+        priceInputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        priceInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        priceInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        ticketURLTextField.topAnchor.constraint(equalTo: priceInputField.bottomAnchor).isActive = true
+        ticketURLTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        ticketURLTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        ticketURLTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         if isCreatingNew() {
             createContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -321,6 +355,18 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         locationLabel.label.text = "LOCATION"
         locationLabel.label.textColor = UIColor.lightCopy()
+    }
+    
+    @objc func updatePrice() {
+        let price = priceStepper.value
+        if price == 0 {
+            priceInputField.label.text = "FREE"
+        } else {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .currency
+            
+            priceInputField.label.text = numberFormatter.string(from: NSNumber(value: priceStepper.value))
+        }
     }
     
     @objc func updateSaveButtons() {
