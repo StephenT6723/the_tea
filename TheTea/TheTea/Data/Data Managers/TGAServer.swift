@@ -20,7 +20,7 @@ class TGAServer {
     static let apiLatitudeKey = "latitude"
     static let apiLongitudeKey = "longitude"
     
-    static let domain = "https://eb9c8f3f.ngrok.io"
+    static let domain = "https://www.thegayagenda.com"
     
     //MARK: Users
     

@@ -33,7 +33,7 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "app_icon 2x.png",
+      "filename" : "icon2 copy.png",
       "scale" : "2x"
     },
     {
@@ -45,7 +45,7 @@
     {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "Artboard.png",
+      "filename" : "app_store_icon copy-1.png",
       "scale" : "1x"
     }
   ],
