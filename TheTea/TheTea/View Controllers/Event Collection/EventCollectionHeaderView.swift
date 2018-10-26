@@ -8,10 +8,32 @@
 
 import UIKit
 
-enum CollectionSortType: String {
+enum CollectionSortType: String, CaseIterable {
     case hot = "HOT"
-    case new = "NEW"
-    case upcoming = "UPCOMING"
+    case name = "NAME"
+    case time = "TIME"
+    case place = "PLACE"
+    
+    func sortDecriptors() -> [NSSortDescriptor] {
+        var descriptors = [NSSortDescriptor]()
+        
+        switch self {
+        case .hot:
+            let hotnessSort = NSSortDescriptor(key: "hotness", ascending: true)
+            descriptors.append(hotnessSort)
+        case .name:
+            let nameSort = NSSortDescriptor(key: "name", ascending: true)
+            descriptors.append(nameSort)
+        case .time:
+            let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
+            descriptors.append(startTimeSort)
+        default:
+            let locationSort = NSSortDescriptor(key: "locationName", ascending: true)
+            descriptors.append(locationSort)
+        }
+        
+        return descriptors
+    }
 }
 
 class EventCollectionHeaderView: UITableViewHeaderFooterView {
@@ -41,7 +63,7 @@ class EventCollectionHeaderView: UITableViewHeaderFooterView {
         sortButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         sortButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4).isActive = true
         sortButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        sortButton.widthAnchor.constraint(equalToConstant: 117).isActive = true
+        sortButton.widthAnchor.constraint(equalToConstant: 122).isActive = true
         
         updateSortString()
     }

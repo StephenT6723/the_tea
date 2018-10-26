@@ -19,8 +19,9 @@ class EventManager {
         let todayString = DateStringHelper.dataString(from: Date())
         let predicate = NSPredicate(format: "daySectionIdentifier >= %@", todayString)
         request.predicate = predicate
-        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
-        request.sortDescriptors = [startTimeSort]
+        let startTimeSort = NSSortDescriptor(key: "daySectionIdentifier", ascending: true)
+        let hotnessSort = NSSortDescriptor(key: "hotness", ascending: true)
+        request.sortDescriptors = [startTimeSort, hotnessSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()
         let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
@@ -38,7 +39,7 @@ class EventManager {
         let request = NSFetchRequest<Event>(entityName:"Event")
         let predicate = NSPredicate(format: "daySectionIdentifier == %@", sectionIdentifier)
         request.predicate = predicate
-        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
+        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: true)
         request.sortDescriptors = [startTimeSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()

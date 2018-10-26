@@ -12,6 +12,11 @@ import CoreData
 class EventCollectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
     private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
     private let timeFormatter = DateFormatter()
+    private var selectedSort = CollectionSortType.hot {
+        didSet {
+            updateData()
+        }
+    }
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             eventsFRC.delegate = self
@@ -89,8 +94,8 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
             return EventCollectionHeaderView()
         }
         
-        header.sortButton.tag = section
-        //header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
+        header.selectedSort = selectedSort
+        header.sortButton.addTarget(self, action: #selector(sortTapped), for: .touchUpInside)
         
         return header
     }
@@ -147,5 +152,41 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
+    }
+    
+    //MARK: Actions
+    
+    @objc func sortTapped() {
+        let sortMenu = UIAlertController(title: nil, message: "Sort By", preferredStyle: .actionSheet)
+        
+        for sortType in CollectionSortType.allCases {
+            let action =  UIAlertAction(title: sortType.rawValue.capitalized, style: .default) { _ in
+                self.selectedSort = sortType
+            }
+            sortMenu.addAction(action)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        sortMenu.addAction(cancelAction)
+        
+        self.present(sortMenu, animated: true, completion: nil)
+    }
+    
+    func updateData() {
+        let request = NSFetchRequest<Event>(entityName:"Event")
+        request.predicate = eventsFRC.fetchRequest.predicate
+        request.sortDescriptors = selectedSort.sortDecriptors()
+        
+        let context = CoreDataManager.sharedInstance.viewContext()
+        let newFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
+        
+        do {
+            try newFRC.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+        eventsFRC = newFRC
+        tableView.reloadData()
     }
 }
