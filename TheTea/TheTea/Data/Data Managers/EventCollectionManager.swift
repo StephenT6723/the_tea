@@ -30,6 +30,22 @@ class EventCollectionManager {
         }
     }
     
+    class func userUpdatedEventCollections() -> [EventCollection] {
+        let request = NSFetchRequest<EventCollection>(entityName:"EventCollection")
+        let predicate = NSPredicate(format: "userUpdated == 1")
+        request.predicate = predicate
+        let sort = NSSortDescriptor(key: "sortIndex", ascending: true)
+        request.sortDescriptors = [sort]
+        
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        do {
+            let collections = try context.fetch(request)
+            return collections
+        } catch {
+            return []
+        }
+    }
+    
     class func eventCollection(gayID: String) -> EventCollection? {
         let request = NSFetchRequest<EventCollection>(entityName:"EventCollection")
         request.predicate = NSPredicate(format: "gayID like %@", gayID)
@@ -83,7 +99,12 @@ class EventCollectionManager {
             sortIndex = Int16(sortIndexString)
         }
         
-        collection.update(title: title, subtitle: data[EventCollection.subtitleKey] as? String, sortIndex: sortIndex, imageURL: data[EventCollection.imageURLKey] as? String, about: data[EventCollection.aboutKey] as? String, featured: true)
+        var userUpdated: Bool = false
+        if let updated = data[EventCollection.userUpdatedKey] as? Bool {
+            userUpdated = updated
+        }
+        
+        collection.update(title: title, subtitle: data[EventCollection.subtitleKey] as? String, sortIndex: sortIndex, imageURL: data[EventCollection.imageURLKey] as? String, about: data[EventCollection.aboutKey] as? String, featured: true, userUpdated: userUpdated)
         
         if let events = data[EventCollection.eventKey] as? [[String: String]] {
             collection.update(events: events)

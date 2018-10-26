@@ -32,9 +32,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let aboutTextView = InputField()
     private let deleteButton = AlertCTA()
     
+    private let collectionsLabel = UILabel()
+    private var collectionInputFields = [InputField]()
+    private var selectedCollections = [EventCollection]()
+    
     private let priceInputField = InputField()
     private let priceStepper = UIStepper()
-    
+    private var ticketURLTopConstraint = NSLayoutConstraint()
     private let ticketURLTextField = InputField()
     
     private let createContainer = UIView()
@@ -159,7 +163,43 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         ticketURLTextField.textField.keyboardType = .URL
         ticketURLTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         ticketURLTextField.showDivider = false
-        scrollView.addSubview(ticketURLTextField)
+        scrollView.insertSubview(ticketURLTextField, belowSubview: priceInputField)
+        
+        collectionsLabel.translatesAutoresizingMaskIntoConstraints = false
+        collectionsLabel.text = "COLLECTIONS"
+        collectionsLabel.font = UIFont.headerOne()
+        collectionsLabel.textColor = UIColor.lightCopy()
+        scrollView.addSubview(collectionsLabel)
+        
+        let collections = EventCollectionManager.userUpdatedEventCollections()
+        var previousCollectionInputField: InputField? = nil
+        for collection in collections {
+            let currentIndex = collections.index(of: collection) ?? 0
+            
+            let inputField = InputField()
+            inputField.translatesAutoresizingMaskIntoConstraints = false
+            inputField.type = .button
+            inputField.label.text = collection.title
+            inputField.button.tag = currentIndex
+            inputField.button.addTarget(self, action: #selector(collectionButtonTouched), for: .touchUpInside)
+            if currentIndex == collections.count - 1 {
+                inputField.showDivider = false
+            }
+            scrollView.addSubview(inputField)
+            
+            if let previousInputField = previousCollectionInputField {
+                inputField.topAnchor.constraint(equalTo: previousInputField.bottomAnchor).isActive = true
+            } else {
+                inputField.topAnchor.constraint(equalTo: collectionsLabel.bottomAnchor, constant: 20).isActive = true
+            }
+            
+            inputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+            inputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+            inputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+            
+            previousCollectionInputField = inputField
+            collectionInputFields.append(inputField)
+        }
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -207,10 +247,15 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         priceInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         priceInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        ticketURLTextField.topAnchor.constraint(equalTo: priceInputField.bottomAnchor).isActive = true
+        ticketURLTopConstraint = ticketURLTextField.topAnchor.constraint(equalTo: priceInputField.topAnchor)
+        ticketURLTopConstraint.isActive = true
         ticketURLTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         ticketURLTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         ticketURLTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        collectionsLabel.topAnchor.constraint(equalTo: ticketURLTextField.bottomAnchor, constant: 20).isActive = true
+        collectionsLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        collectionsLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         
         if isCreatingNew() {
             createContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -287,6 +332,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         updateLocationLabel()
         updateTimeTextFields()
+        updateTicketURL(visible: false, animated: false)
+        updateCollections()
         updateSaveButtons()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -357,6 +404,21 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         locationLabel.label.textColor = UIColor.lightCopy()
     }
     
+    func updateCollections() {
+        let collections = EventCollectionManager.userUpdatedEventCollections()
+        for collection in collections {
+            guard let index = collections.index(of: collection) else {
+                return
+            }
+            let inputField = collectionInputFields[index]
+            if selectedCollections.contains(collection) {
+                inputField.label.textColor = UIColor.primaryCopy()
+            } else {
+                inputField.label.textColor = UIColor.lightCopy()
+            }
+        }
+    }
+    
     @objc func updatePrice() {
         let price = priceStepper.value
         if price == 0 {
@@ -367,6 +429,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             
             priceInputField.label.text = numberFormatter.string(from: NSNumber(value: priceStepper.value))
         }
+        
+        updateTicketURL(visible: price != 0, animated: true)
     }
     
     @objc func updateSaveButtons() {
@@ -519,6 +583,22 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         present(loginNav, animated: true, completion: nil)
     }
     
+    @objc func collectionButtonTouched(sender: UIButton) {
+        let index = sender.tag
+        
+        let collections = EventCollectionManager.userUpdatedEventCollections()
+        let tappedCollection = collections[index]
+        if selectedCollections.contains(tappedCollection) {
+            if let selectedIndex = selectedCollections.index(of: tappedCollection) {
+                selectedCollections.remove(at: selectedIndex)
+            }
+        } else {
+            selectedCollections.append(tappedCollection)
+        }
+        
+        updateCollections()
+    }
+    
     func updateEndTime(visible: Bool, animated: Bool) {
         if visible {
             endTimeTopConstraint.constant = textFieldHeight
@@ -534,6 +614,23 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 self.view.layoutIfNeeded()
             }) { (complete: Bool) in
                 self.endTimeTextField.alpha = 0
+            }
+        }
+    }
+    
+    func updateTicketURL(visible: Bool, animated: Bool) {
+        if visible {
+            ticketURLTopConstraint.constant = textFieldHeight
+            self.priceInputField.showDivider = true
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.view.layoutIfNeeded()
+            })
+        } else {
+            ticketURLTopConstraint.constant = 0
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.view.layoutIfNeeded()
+            })  { (complete: Bool) in
+                self.priceInputField.showDivider = false
             }
         }
     }

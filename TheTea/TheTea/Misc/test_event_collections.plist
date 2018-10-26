@@ -3,6 +3,8 @@
 <plist version="1.0">
 <array>
 	<dict>
+		<key>userUpdated</key>
+		<true/>
 		<key>title</key>
 		<string>Night Life</string>
 		<key>subtitle</key>
@@ -82,6 +84,8 @@
 		<string>1</string>
 		<key>imageURL</key>
 		<string>https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/sites/2/2017/11/19154408/world-of-edc-social-share-1200x630.jpg</string>
+		<key>userUpdated</key>
+		<false/>
 		<key>events</key>
 		<array>
 			<dict>
@@ -141,6 +145,8 @@
 		</array>
 	</dict>
 	<dict>
+		<key>userUpdated</key>
+		<true/>
 		<key>title</key>
 		<string>Drag Shows</string>
 		<key>subtitle</key>
@@ -210,6 +216,8 @@
 		</array>
 	</dict>
 	<dict>
+		<key>userUpdated</key>
+		<false/>
 		<key>title</key>
 		<string>St.Patty&apos;s</string>
 		<key>subtitle</key>

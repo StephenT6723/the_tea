@@ -18,8 +18,9 @@ extension EventCollection {
     static let eventKey = "events"
     static let aboutKey = "about"
     static let featuredKey = "featured"
+    static let userUpdatedKey = "userUpdated"
     
-    func update(title: String, subtitle: String?, sortIndex: Int16?, imageURL: String?, about: String?, featured: Bool) {
+    func update(title: String, subtitle: String?, sortIndex: Int16?, imageURL: String?, about: String?, featured: Bool, userUpdated: Bool) {
         self.title = title
         self.subtitle = subtitle
         if let sortIndex = sortIndex {
@@ -28,6 +29,7 @@ extension EventCollection {
         self.imageURL = imageURL
         self.about = about
         self.featured = featured
+        self.userUpdated = userUpdated
     }
     
     func update(events: [[String: String]]) {
