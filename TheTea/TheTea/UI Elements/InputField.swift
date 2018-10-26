@@ -69,6 +69,13 @@ class InputField: UIView {
         label.alpha = 0
         addSubview(label)
         
+        accessoryContainer.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(accessoryContainer)
+        
+        accessoryView = UIView()
+        accessoryView.widthAnchor.constraint(equalToConstant: 0).isActive = true
+        updateAccessoryView(newView: accessoryView)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         button.alpha = 0
         addSubview(button)
@@ -84,13 +91,6 @@ class InputField: UIView {
         divider.backgroundColor = UIColor.dividers()
         addSubview(divider)
         
-        accessoryContainer.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(accessoryContainer)
-        
-        accessoryView = UIView()
-        accessoryView.widthAnchor.constraint(equalToConstant: 0).isActive = true
-        updateAccessoryView(newView: accessoryView)
-        
         textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         textField.trailingAnchor.constraint(equalTo: accessoryContainer.leadingAnchor, constant: -10).isActive = true
         textField.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -100,6 +100,10 @@ class InputField: UIView {
         label.trailingAnchor.constraint(equalTo: accessoryContainer.leadingAnchor, constant: -10).isActive = true
         label.topAnchor.constraint(equalTo: topAnchor).isActive = true
         label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        accessoryContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        accessoryContainer.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        accessoryContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         button.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
@@ -115,10 +119,6 @@ class InputField: UIView {
         divider.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
         divider.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        
-        accessoryContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        accessoryContainer.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        accessoryContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

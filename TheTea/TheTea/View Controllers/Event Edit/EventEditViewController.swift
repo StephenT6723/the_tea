@@ -12,10 +12,12 @@ import MapKit
 class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, LocationPickerViewControllerDelegate {
     var event: Event?
     private let scrollView = UIScrollView()
+    
     private let nameTextField = InputField()
     private let hostTextField = InputField()
     private var hostHeightConstraint = NSLayoutConstraint()
     private let loginView = EventEditLoginView(frame: CGRect())
+    
     private let startTimeTextField = InputField()
     private let startTimePicker = UIDatePicker()
     private let addEndTimeButton = UIButton()
@@ -23,6 +25,9 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let endTimeTextField = InputField()
     private let endTimePicker = UIDatePicker()
     private let hideEndTimeButton = UIButton()
+    private let repeatsInputView = InputField()
+    private let repeatsLabel = UILabel()
+    
     private let locationLabel = InputField()
     private let aboutTextView = InputField()
     private let deleteButton = AlertCTA()
@@ -104,6 +109,20 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         hideEndTimeButton.contentHorizontalAlignment = .right
         endTimeTextField.accessoryView = hideEndTimeButton
         
+        repeatsInputView.translatesAutoresizingMaskIntoConstraints = false
+        repeatsInputView.type = .button
+        repeatsInputView.label.text = "Repeats"
+        repeatsInputView.showDivider = false
+        repeatsInputView.button.addTarget(self, action: #selector(repeatsButtonTouched), for: .touchUpInside)
+        scrollView.addSubview(repeatsInputView)
+        
+        repeatsLabel.translatesAutoresizingMaskIntoConstraints = false
+        repeatsLabel.font = UIFont.cta()
+        repeatsLabel.textColor = UIColor.primaryCTA()
+        repeatsLabel.text = "NEVER"
+        repeatsLabel.textAlignment = .right
+        repeatsInputView.accessoryView = repeatsLabel
+        
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.type = .button
         locationLabel.button.addTarget(self, action: #selector(locationButtonTouched), for: .touchUpInside)
@@ -113,6 +132,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         aboutTextView.textView.text = aboutTextViewPlaceholder
         aboutTextView.textView.delegate = self
         aboutTextView.type = .textView
+        aboutTextView.showDivider = false
         scrollView.addSubview(aboutTextView)
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -141,7 +161,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         hideEndTimeButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
-        locationLabel.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor).isActive = true
+        repeatsInputView.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor).isActive = true
+        
+        repeatsInputView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        repeatsInputView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        repeatsInputView.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        locationLabel.topAnchor.constraint(equalTo: repeatsInputView.bottomAnchor, constant: 20).isActive = true
         locationLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         locationLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         locationLabel.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
@@ -467,6 +493,16 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         let locationNav = UINavigationController(rootViewController: locationVC)
         locationNav.navigationBar.isTranslucent = false
         present(locationNav, animated: true, completion: nil)
+    }
+    
+    @objc func repeatsButtonTouched() {
+        print("REPAT BITCH")
+        /*
+        let locationVC = LocationPickerViewController()
+        locationVC.delegate = self
+        let locationNav = UINavigationController(rootViewController: locationVC)
+        locationNav.navigationBar.isTranslucent = false
+        present(locationNav, animated: true, completion: nil) */
     }
     
     @objc func deleteButtonTouched() {
