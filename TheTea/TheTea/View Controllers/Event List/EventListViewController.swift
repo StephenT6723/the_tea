@@ -28,7 +28,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
 
         title = "The Gay Agenda".uppercased()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.lightBackground()
 
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short

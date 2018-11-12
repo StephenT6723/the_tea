@@ -27,10 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootNav.navigationBar.prefersLargeTitles = true
         
         if authEnabled {
-            let myAccountVC = UIViewController()
-            myAccountVC.title = "MY ACCOUNT"
+            let myAccountVC = MyAccountViewController()
             let myAccountNav = UINavigationController(rootViewController: myAccountVC)
-            myAccountVC.view.backgroundColor = .white
+            myAccountNav.navigationBar.prefersLargeTitles = true
             myAccountNav.navigationBar.isTranslucent = false
             
             let tabBarController = UITabBarController()

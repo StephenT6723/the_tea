@@ -14,18 +14,17 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     var upcomingEvents = EventCollection()
     var currentMember = MemberDataManager.sharedInstance.currentMember()
     var hasShownLogin = false
+    let signUpPrompt = UIView()
+    let signUpLabel = UILabel()
+    let signUpCTA = PrimaryCTA(frame: CGRect())
     private let timeFormatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "MY PROFILE"
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTouched))
-        navigationItem.leftBarButtonItem = doneButton
-        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
-        navigationItem.rightBarButtonItem = editButton
         
-        view.backgroundColor = UIColor.primaryBrand()
+        view.backgroundColor = .white
         
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
@@ -42,42 +41,65 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 130
-        tableView.alpha = 1
         view.addSubview(tableView)
+        
+        signUpPrompt.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(signUpPrompt)
+        
+        signUpLabel.translatesAutoresizingMaskIntoConstraints = false
+        signUpLabel.text = "Sign up to access your profile"
+        signUpLabel.textColor = UIColor.primaryCopy()
+        signUpLabel.font = UIFont.headerTwo()
+        signUpLabel.textAlignment = .center
+        signUpPrompt.addSubview(signUpLabel)
+        
+        signUpCTA.translatesAutoresizingMaskIntoConstraints = false
+        signUpCTA.setTitle("SIGN UP", for: .normal)
+        signUpCTA.addTarget(self, action: #selector(presentLoginView), for: .touchUpInside)
+        signUpPrompt.addSubview(signUpCTA)
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        signUpPrompt.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        signUpPrompt.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        signUpPrompt.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        signUpPrompt.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        signUpLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        signUpLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        signUpLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -90).isActive = true
+        
+        signUpCTA.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        signUpCTA.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        signUpCTA.topAnchor.constraint(equalTo: signUpLabel.bottomAnchor, constant: 40).isActive = true
+        signUpCTA.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        currentMember = MemberDataManager.sharedInstance.currentMember()
         
         if !MemberDataManager.sharedInstance.isLoggedIn() {
-            if hasShownLogin {
-                dismiss(animated: true, completion: nil)
-                return
+            if !hasShownLogin {
+                presentLoginView()
+                hasShownLogin = true
             }
             tableView.alpha = 0
-            let loginVC = LoginViewController()
-            let loginNav = UINavigationController(rootViewController: loginVC)
-            loginNav.navigationBar.isTranslucent = false
-            present(loginNav, animated: true, completion: nil)
-            hasShownLogin = true
+            signUpPrompt.alpha = 1
+            navigationItem.rightBarButtonItem = nil
         } else {
             hasShownLogin = false
             tableView.alpha = 1
+            signUpPrompt.alpha = 0
             tableView.reloadData()
+            let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
+            navigationItem.rightBarButtonItem = editButton
         }
     }
     
     //MARK: Actions
-    
-    @objc func doneButtonTouched() {
-        dismiss(animated: true, completion: nil)
-    }
     
     @objc func editButtonTouched() {
         let editVC = EditMyAccountViewController()
@@ -89,6 +111,14 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     @objc func myEventsOptionChanged(sender: SegmentedControl) {
         //let isUpcoming = sender.selectedIndex == 0
         
+    }
+    
+    @objc func presentLoginView() {
+        let loginVC = LoginViewController()
+        let loginNav = UINavigationController(rootViewController: loginVC)
+        loginNav.navigationBar.prefersLargeTitles = true
+        loginNav.navigationBar.isTranslucent = false
+        present(loginNav, animated: true, completion: nil)
     }
     
     //MARK: Table View
