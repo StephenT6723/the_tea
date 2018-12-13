@@ -14,9 +14,9 @@ class AlertCTA: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .white
+        backgroundColor = .red
         layer.cornerRadius = 8
-        setTitleColor(.red, for: .normal)
+        setTitleColor(.white, for: .normal)
         titleLabel?.font = UIFont.cta()
     }
     

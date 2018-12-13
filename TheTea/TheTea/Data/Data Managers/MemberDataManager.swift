@@ -29,6 +29,7 @@ class MemberDataManager {
             }
             let newMember = self.addNewMember(tgaID: id)
             newMember?.updateWithData(data: data)
+            CoreDataManager.sharedInstance.saveContext()
             success()
         }) { (error) in
             failure(error)
@@ -46,18 +47,21 @@ class MemberDataManager {
             }
             let newMember = self.addNewMember(tgaID: id)
             newMember?.updateWithData(data: data)
+            CoreDataManager.sharedInstance.saveContext()
             success()
         }) { (error) in
             failure(error)
         }
     }
     
-    class func updateMember(name: String, email: String, facebookID: String, instagram: String, twitter: String, about: String,
+    class func updateMember(name: String, email: String?, facebookID: String?, instagram: String?, twitter: String?, about: String?,
                            onSuccess success:@escaping () -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
-        TGAServer.updateMember(name: name, email: email, facebookID: facebookID, instagram: instagram, twitter: twitter, about: about, onSuccess: { (data) in
+        //TODO: Validate Email Correctly.
+        TGAServer.updateMember(name: name, email: email ?? "", facebookID: facebookID ?? "", instagram: instagram ?? "", twitter: twitter ?? "", about: about ?? "", onSuccess: { (data) in
             let member = self.currentMember()
             member?.updateWithData(data: data)
+            CoreDataManager.sharedInstance.saveContext()
             success()
         }) { (error) in
             failure(error)

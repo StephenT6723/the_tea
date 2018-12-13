@@ -62,6 +62,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         view.addSubview(scrollView)
         
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        //TODO: Update placeholder color
         nameTextField.textField.placeholder = "EVENT NAME"
         nameTextField.textField.autocapitalizationType = .words
         nameTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
@@ -179,7 +180,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             let inputField = InputField()
             inputField.translatesAutoresizingMaskIntoConstraints = false
             inputField.type = .button
-            inputField.label.text = collection.title
+            inputField.label.text = collection.title?.uppercased()
             inputField.button.tag = currentIndex
             inputField.button.addTarget(self, action: #selector(collectionButtonTouched), for: .touchUpInside)
             if currentIndex == collections.count - 1 {
