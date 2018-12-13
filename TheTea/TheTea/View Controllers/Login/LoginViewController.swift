@@ -16,16 +16,18 @@ enum AuthType: Int {
 
 class LoginViewController: UIViewController {
     private let modeSelectSegmentedControl = UISegmentedControl()
+    private let emailErrorLabel = UILabel()
     private let emailInputField = InputField()
-    private let usernameInputField = InputField()
     private let passwordInputField = InputField()
     private let confirmPasswordInputField = InputField()
+    private let passwordErrorLabel = UILabel()
     
     private let submitContainer = UIView()
     private let submitButton = PrimaryCTA(frame: CGRect())
+    private let activityIndicator = UIActivityIndicatorView(style: .gray)
     
     private let textFieldHeight: CGFloat = 48.0
-    private var usernameTopConstraint = NSLayoutConstraint()
+    private var emailTopConstraint = NSLayoutConstraint()
     private var confirmPasswordTopConstraint = NSLayoutConstraint()
     
     override func viewDidLoad() {
@@ -47,18 +49,18 @@ class LoginViewController: UIViewController {
         modeSelectSegmentedControl.setTitleTextAttributes([.font :UIFont.cta() as Any], for: .normal)
         view.addSubview(modeSelectSegmentedControl)
         
+        emailErrorLabel.translatesAutoresizingMaskIntoConstraints = false
+        emailErrorLabel.numberOfLines = 0
+        emailErrorLabel.font = UIFont.body()
+        emailErrorLabel.textColor = .red
+        view.addSubview(emailErrorLabel)
+        
         emailInputField.translatesAutoresizingMaskIntoConstraints = false
         emailInputField.textField.placeholder = "EMAIL"
         emailInputField.textField.autocapitalizationType = .none
         emailInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
+        emailInputField.showDivider = false
         view.addSubview(emailInputField)
-        
-        usernameInputField.translatesAutoresizingMaskIntoConstraints = false
-        usernameInputField.textField.placeholder = "USERNAME"
-        usernameInputField.textField.autocapitalizationType = .words
-        usernameInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
-        usernameInputField.showDivider = false
-        view.insertSubview(usernameInputField, belowSubview: emailInputField)
         
         passwordInputField.translatesAutoresizingMaskIntoConstraints = false
         passwordInputField.textField.placeholder = "PASSWORD"
@@ -75,21 +77,26 @@ class LoginViewController: UIViewController {
         confirmPasswordInputField.showDivider = false
         view.insertSubview(confirmPasswordInputField, belowSubview: passwordInputField)
         
+        passwordErrorLabel.translatesAutoresizingMaskIntoConstraints = false
+        passwordErrorLabel.numberOfLines = 0
+        passwordErrorLabel.font = UIFont.body()
+        passwordErrorLabel.textColor = .red
+        view.addSubview(passwordErrorLabel)
+        
         modeSelectSegmentedControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
         modeSelectSegmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        emailInputField.topAnchor.constraint(equalTo: modeSelectSegmentedControl.bottomAnchor, constant: 20).isActive = true
+        emailErrorLabel.topAnchor.constraint(equalTo: modeSelectSegmentedControl.bottomAnchor, constant: 20).isActive = true
+        emailErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        emailErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        
+        emailTopConstraint = emailInputField.topAnchor.constraint(equalTo: emailErrorLabel.bottomAnchor, constant: 10)
+        emailTopConstraint.isActive = true
         emailInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         emailInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         emailInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        usernameTopConstraint = usernameInputField.topAnchor.constraint(equalTo: emailInputField.bottomAnchor)
-        usernameTopConstraint.isActive = true
-        usernameInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        usernameInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        usernameInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        passwordInputField.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 20).isActive = true
+        passwordInputField.topAnchor.constraint(equalTo: emailInputField.bottomAnchor, constant: 40).isActive = true
         passwordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         passwordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         passwordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
@@ -99,6 +106,10 @@ class LoginViewController: UIViewController {
         confirmPasswordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         confirmPasswordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         confirmPasswordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        passwordErrorLabel.topAnchor.constraint(equalTo: confirmPasswordInputField.bottomAnchor, constant: 10).isActive = true
+        passwordErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        passwordErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         //SUBMIT
         
@@ -111,6 +122,10 @@ class LoginViewController: UIViewController {
         submitContainer.layer.shouldRasterize = true
         submitContainer.layer.rasterizationScale = UIScreen.main.scale
         view.addSubview(submitContainer)
+        
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        submitContainer.addSubview(activityIndicator)
         
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.setTitle("SUBMIT", for: .normal)
@@ -126,6 +141,16 @@ class LoginViewController: UIViewController {
         submitButton.trailingAnchor.constraint(equalTo: submitContainer.trailingAnchor, constant: -20).isActive = true
         submitButton.bottomAnchor.constraint(equalTo: submitContainer.bottomAnchor, constant: -20).isActive = true
         submitButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight)).isActive = true
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: submitContainer.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: submitContainer.centerYAnchor).isActive = true
+        
+        //SETUP
+        
+        updateEmailError(text: "", animated: false)
+        updatePasswordError(text: "", animated: false)
+        updateSubmitButton()
+        self.updateLoader(visible: false, animated: false)
     }
     
     //MARK: Actions
@@ -137,10 +162,6 @@ class LoginViewController: UIViewController {
     @objc func modeChanged() {
         let selectedType = self.selectedType()
         if selectedType == .register {
-            usernameTopConstraint.constant = 0
-            usernameInputField.alpha = 1
-            emailInputField.showDivider = true
-            
             confirmPasswordTopConstraint.constant = 0
             confirmPasswordInputField.alpha = 1
             passwordInputField.showDivider = true
@@ -149,36 +170,125 @@ class LoginViewController: UIViewController {
                 self.view.layoutIfNeeded()
             })
         } else {
-            usernameTopConstraint.constant = -1 * textFieldHeight
-            
             confirmPasswordTopConstraint.constant = -1 * textFieldHeight
             
             UIView.animate(withDuration: 0.3, animations: {
-                self.usernameInputField.alpha = 0
                 self.confirmPasswordInputField.alpha = 0
                 self.view.layoutIfNeeded()
             }) { (complete: Bool) in
-                self.emailInputField.showDivider = false
                 self.passwordInputField.showDivider = false
+            }
+        }
+        updateSubmitButton()
+    }
+    
+    @objc func updateSubmitButton() {
+        var enabled = true
+        
+        if (emailInputField.textField.text?.count == 0) ||
+            (passwordInputField.textField.text?.count ?? 0 == 0) ||
+            (self.selectedType() == .register && confirmPasswordInputField.textField.text?.count ?? 0 == 0) {
+            enabled = false
+        }
+        
+        submitButton.isEnabled = enabled
+    }
+    
+    @objc func submitButtonTouched() {
+        let email = emailInputField.textField.text ?? ""
+        let emailValid = MemberDataManager.isValidEmail(email: email)
+        let passwordsMatch = passwordInputField.textField.text ?? "" == confirmPasswordInputField.textField.text ?? "" || selectedType() == .signIn
+        let passwordValid = MemberDataManager.isValidPassword(password: passwordInputField.textField.text ?? "")
+        
+        var emailError = ""
+        var passwordError = ""
+        
+        if !emailValid {
+            emailError = "Please enter a valid e-mail address"
+        }
+        if !passwordsMatch {
+            passwordError = "Your passwords do not match"
+        }
+        if !passwordValid {
+            passwordError = "Your password must be at least \(MemberDataManager.minPasswordLength) characters"
+        }
+        
+        updateEmailError(text: emailError, animated: true)
+        updatePasswordError(text: passwordError, animated: true)
+        
+        if emailValid && passwordsMatch && passwordValid {
+            updateLoader(visible: true, animated: true)
+            if selectedType() == .signIn {
+                MemberDataManager.loginMember(email: email, password: "", onSuccess: {
+                    self.dismiss(animated: true, completion: nil)
+                }) { (error) in
+                    self.updateLoader(visible: false, animated: true)
+                    guard let description = error?.localizedDescription else {
+                        return
+                    }
+                    self.updateEmailError(text: description, animated: true)
+                }
+            } else {
+                MemberDataManager.createMember(email: email, password: "", onSuccess: {
+                    self.dismiss(animated: true, completion: nil)
+                }) { (error) in
+                    self.updateLoader(visible: false, animated: true)
+                    guard let description = error?.localizedDescription else {
+                        return
+                    }
+                    self.updateEmailError(text: description, animated: true)
+                }
             }
         }
     }
     
-    @objc func updateSubmitButton() {
-        /*
-        let enabled = dataUpdated()
-        
-        submitButton.isEnabled = enabled
-        navigationItem.rightBarButtonItem?.isEnabled = enabled */
-    }
-    
-    @objc func submitButtonTouched() {
-        print("sumbit")
+    func updateLoader(visible: Bool, animated: Bool) {
+        UIView.animate(withDuration: animated ? 0.5 : 0) {
+            self.submitButton.alpha = visible ? 0 : 1
+            self.activityIndicator.alpha = visible ? 1 : 0
+        }
     }
     
     //MARK: Helpers
     
     func selectedType() -> AuthType {
         return AuthType(rawValue: modeSelectSegmentedControl.selectedSegmentIndex) ?? .register
+    }
+    
+    func updateEmailError(text: String, animated: Bool) {
+        if text.count > 0 {
+            emailTopConstraint.constant = 10
+            emailErrorLabel.text = text
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.emailErrorLabel.alpha = 1
+                
+                self.view.layoutIfNeeded()
+            })
+        } else {
+            emailTopConstraint.constant =  emailErrorLabel.bounds.height * -1
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.emailErrorLabel.alpha = 0
+                
+                self.view.layoutIfNeeded()
+            }) { (complete: Bool) in
+                self.emailErrorLabel.text = ""
+                self.emailTopConstraint.constant =  0
+            }
+        }
+    }
+    
+    func updatePasswordError(text: String, animated: Bool) {
+        if text.count > 0 {
+            passwordErrorLabel.text = text
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.passwordErrorLabel.alpha = 1
+            })
+        } else {
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.passwordErrorLabel.alpha = 0
+            }) { (complete: Bool) in
+                self.passwordErrorLabel.text = ""
+            }
+        }
     }
 }

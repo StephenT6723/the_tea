@@ -155,12 +155,12 @@ class EditMyAccountViewController: UIViewController {
         guard let name = nameTextField.textField.text else {
             return
         }
-        MemberDataManager.sharedInstance.updateCurrentMember(name: name, linkToFacebook: facebookSwitch.isOn, instagram: instagramTextField.textField.text, twitter: twitterTextField.textField.text)
+        //MemberDataManager.sharedInstance.updateCurrentMember(name: name, linkToFacebook: facebookSwitch.isOn, instagram: instagramTextField.textField.text, twitter: twitterTextField.textField.text)
         dismiss(animated: true, completion: nil)
     }
     
     @objc func logoutButtonTouched() {
-        MemberDataManager.sharedInstance.logoutCurrentMember()
+        //MemberDataManager.sharedInstance.logoutCurrentMember()
         dismiss(animated: true, completion: nil)
     }
 }
