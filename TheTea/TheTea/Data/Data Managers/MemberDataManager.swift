@@ -74,6 +74,7 @@ class MemberDataManager {
             let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
             context.delete(currentMember)
             CoreDataManager.sharedInstance.saveContext()
+            success()
         }
     }
     

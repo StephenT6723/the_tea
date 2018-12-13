@@ -218,8 +218,9 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         guard let name = nameTextField.textField.text else {
             return
         }
+        let about = aboutTextView.textView.text == aboutTextViewPlaceholder ? nil : aboutTextView.textView.text
         self.updateLoader(visible: true, animated: true)
-        MemberDataManager.updateMember(name: name, email: MemberDataManager.currentMember()?.email, facebookID: facebookTextField.textField.text, instagram: instagramTextField.textField.text, twitter: twitterTextField.textField.text, about: aboutTextView.textView.text, onSuccess: {
+        MemberDataManager.updateMember(name: name, email: MemberDataManager.currentMember()?.email, facebookID: facebookTextField.textField.text, instagram: instagramTextField.textField.text, twitter: twitterTextField.textField.text, about: about, onSuccess: {
             self.dismiss(animated: true, completion: nil)
         }) { (error) in
             //TODO: Display Error somewhere
@@ -243,7 +244,6 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
             //TODO: Display Error somewhere
             print(error?.localizedDescription)
         }
-        dismiss(animated: true, completion: nil)
     }
     
     //MARK Text View Delegate
