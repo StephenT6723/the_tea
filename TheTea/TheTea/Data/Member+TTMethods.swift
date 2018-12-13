@@ -11,31 +11,21 @@ import CoreData
 
 
 extension Member {
-    static let nameKey = "name"
     static let tgaIDKey = "tgaID"
-    static let linkToFBKey = "linkToFacebook"
+    static let nameKey = "name"
+    static let emailKey = "email"
     static let facebookIDKey = "facebookID"
     static let instagramKey = "instagram"
     static let twitterKey = "twitter"
     static let aboutKey = "about"
     
-    func updateWithData(data: [String: AnyObject]) {
-        var name = ""
-        if let dataName = data[Member.nameKey] as? String {
-            name = dataName
-        }
-        self.name = name
-        
-        if let linkToFB = data[Member.linkToFBKey] as? Bool {
-            self.linkToFacebook = linkToFB
-        } else {
-            self.linkToFacebook = false
-        }
-        
-        self.facebookID = data[Member.facebookIDKey] as? String
-        self.instagram = data[Member.instagramKey] as? String
-        self.twitter = data[Member.twitterKey] as? String
-        self.about = data[Member.aboutKey] as? String
+    func updateWithData(data: [String: String]) {
+        self.email = data[Member.emailKey]
+        self.name = data[Member.nameKey]
+        self.facebookID = data[Member.facebookIDKey]
+        self.instagram = data[Member.instagramKey]
+        self.twitter = data[Member.twitterKey]
+        self.about = data[Member.aboutKey]
     }
     
     func canEditEvent(event: Event) -> Bool {

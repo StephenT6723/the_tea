@@ -20,38 +20,89 @@ class TGAServer {
     static let apiLatitudeKey = "latitude"
     static let apiLongitudeKey = "longitude"
     
+    static let apiMemberNameKey = "name"
+    static let apiMemberAboutKey = "about"
+    static let apiMemberEmailKey = "email"
+    static let apiMemberFacebookIDKey = "facebookID"
+    static let apiMemberInstagramKey = "instagram"
+    static let apiMemberTwitterKey = "twitter"
+    
     static let domain = "https://www.thegayagenda.com"
     
     //MARK: Users
     
-    class func authenticateMember(facebookUserID: String, name: String) -> String? {
-        /*
-        var memberData = [String: AnyObject]()
-        memberData[Member.nameKey] = name as AnyObject
-        memberData[Member.tgaIDKey] = "12345" as AnyObject
-        memberData[Member.facebookIDKey] = facebookUserID as AnyObject
-        memberData[Member.linkToFBKey] = false as AnyObject
-        memberData[Member.instagramKey] = "" as AnyObject
-        memberData[Member.twitterKey] = "" as AnyObject
-        memberData[Member.aboutKey] = "" as AnyObject
-        return memberData */
-        return "12345"
+    class func createMember(email: String, password: String,
+                            onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                            onFailure failure: @escaping (_ error: Error?) -> Void) {
+        var memberDict = [String:String]()
+        memberDict[Member.tgaIDKey] = "1"
+        memberDict[Member.emailKey] = email
+        let deadlineTime = DispatchTime.now() + .seconds(3)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            success(memberDict)
+        }
     }
     
-    class func fetchMember(tgaID: String) -> [String: AnyObject] {
-        var memberData = [String: AnyObject]()
-        memberData[Member.nameKey] = "Peter Parker" as AnyObject
-        memberData[Member.tgaIDKey] = tgaID as AnyObject
-        memberData[Member.facebookIDKey] = "abcdefg" as AnyObject
-        memberData[Member.linkToFBKey] = false as AnyObject
-        memberData[Member.instagramKey] = "" as AnyObject
-        memberData[Member.twitterKey] = "" as AnyObject
-        memberData[Member.aboutKey] = "" as AnyObject
-        return memberData
+    class func loginMember(email: String, password: String,
+                            onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                            onFailure failure: @escaping (_ error: Error?) -> Void) {
+        var memberDict = [String:String]()
+        memberDict[Member.tgaIDKey] = "1"
+        memberDict[Member.emailKey] = email
+        let deadlineTime = DispatchTime.now() + .seconds(3)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            success(memberDict)
+        }
     }
     
-    class func updateMember(name: String, linkToFacebook: Bool, instagram: String?, twitter: String?) -> Bool {
-        return true
+    class func updateMember(name: String, email: String, facebookID: String, instagram: String, twitter: String, about: String,
+                           onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        var memberDict = [String:String]()
+        memberDict[Member.tgaIDKey] = "1"
+        memberDict[Member.nameKey] = name
+        memberDict[Member.emailKey] = email
+        memberDict[Member.facebookIDKey] = facebookID
+        memberDict[Member.instagramKey] = instagram
+        memberDict[Member.twitterKey] = twitter
+        memberDict[Member.aboutKey] = about
+        let deadlineTime = DispatchTime.now() + .seconds(3)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            success(memberDict)
+        }
+    }
+    
+    class func fetchMember(id: String,
+                           onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void){
+        failure(NSError(domain: "", code: 404, userInfo: nil))
+    }
+    
+    private class func memberDictFrom(json: JSON) -> [String: String] {
+        var memberDict = [String:String]()
+        let jsonData = json["data"]
+        if let gayID = jsonData["id"].string {
+            memberDict[Member.tgaIDKey] = gayID
+        }
+        if let name = jsonData["attributes"][apiMemberNameKey].string {
+            memberDict[Member.nameKey] = name
+        }
+        if let email = jsonData["attributes"][apiMemberEmailKey].string {
+            memberDict[Member.emailKey] = email
+        }
+        if let facebookID = jsonData["attributes"][apiMemberFacebookIDKey].string {
+            memberDict[Member.facebookIDKey] = facebookID
+        }
+        if let instagram = jsonData["attributes"][apiMemberInstagramKey].string {
+            memberDict[Member.instagramKey] = instagram
+        }
+        if let twitter = jsonData["attributes"][apiMemberTwitterKey].string {
+            memberDict[Member.twitterKey] = twitter
+        }
+        if let about = jsonData["attributes"][apiMemberAboutKey].string {
+            memberDict[Member.aboutKey] = about
+        }
+        return memberDict
     }
     
     //MARK: Event Fetches
@@ -69,7 +120,7 @@ class TGAServer {
             }
             do {
                 let json = try JSON(data: data)
-                let data = dictFrom(json: json)
+                let data = eventDictFrom(json: json)
                 success(data)
             } catch {
                 failure(error)
@@ -77,7 +128,7 @@ class TGAServer {
         }
     }
     
-    private class func dictFrom(json: JSON) -> [[String: String]] {
+    private class func eventDictFrom(json: JSON) -> [[String: String]] {
         var cleanedData = [[String:String]]()
         for eventData in json["data"] {
             var eventDict = [String:String]()
@@ -170,7 +221,7 @@ class TGAServer {
                 }
                 do {
                     let json = try JSON(data: data)
-                    let dict = dictFrom(json: json)
+                    let dict = eventDictFrom(json: json)
                     success(dict)
                 } catch {
                     failure(error)

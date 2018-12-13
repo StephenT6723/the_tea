@@ -12,7 +12,7 @@ import FBSDKLoginKit
 class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
     var upcomingEvents = EventCollection()
-    var currentMember = MemberDataManager.sharedInstance.currentMember()
+    var currentMember = MemberDataManager.currentMember()
     var hasShownLogin = false
     let signUpPrompt = UIView()
     let signUpLabel = UILabel()
@@ -81,7 +81,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !MemberDataManager.sharedInstance.isLoggedIn() {
+        if !MemberDataManager.isLoggedIn() {
             if !hasShownLogin {
                 presentLoginView()
                 hasShownLogin = true
@@ -162,11 +162,6 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             header.nameLabel.text = currentMember.name?.capitalized
             header.facebookButton.alpha = 1
             header.facebookButton.isEnabled = true
-            
-            if !currentMember.linkToFacebook {
-                header.facebookButton.alpha = 0.3
-                header.facebookButton.isEnabled = false
-            }
             
             header.instagramButton.alpha = 1
             header.instagramButton.isEnabled = true

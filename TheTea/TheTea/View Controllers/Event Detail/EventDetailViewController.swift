@@ -44,7 +44,7 @@ class EventDetailViewController: UIViewController {
             return
         }
         
-        if MemberDataManager.sharedInstance.canEditEvent(event:event) {
+        if MemberDataManager.canEditEvent(event:event) {
             let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
             navigationItem.rightBarButtonItem = editButton
         } else {

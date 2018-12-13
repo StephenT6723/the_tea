@@ -311,7 +311,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 
                 selectedRepeats = event.repeatRules()
                 
-                if MemberDataManager.sharedInstance.canEditEvent(event: event) {
+                if MemberDataManager.canEditEvent(event: event) {
                     deleteButton.translatesAutoresizingMaskIntoConstraints = false
                     deleteButton.setTitle("DELETE EVENT", for: .normal)
                     deleteButton.addTarget(self, action: #selector(deleteButtonTouched), for: .touchUpInside)
@@ -343,7 +343,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !MemberDataManager.sharedInstance.isLoggedIn() {
+        if !MemberDataManager.isLoggedIn() {
             loginView.alpha = 1
             hostHeightConstraint.constant = 74
         } else {
@@ -451,7 +451,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     func dataUpdated() -> Bool {
-        if !MemberDataManager.sharedInstance.isLoggedIn() {
+        if !MemberDataManager.isLoggedIn() {
             return false
         }
         

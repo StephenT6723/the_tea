@@ -21,40 +21,61 @@ class MemberDataManager {
     class func createMember(email: String, password: String,
                             onSuccess success:@escaping () -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
-        let deadlineTime = DispatchTime.now() + .seconds(3)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+        //TODO: Validate email
+        TGAServer.createMember(email: email, password: password, onSuccess: { (data) in
+            guard let id = data[Member.tgaIDKey] else {
+                //TODO: Fail
+                return
+            }
+            let newMember = self.addNewMember(tgaID: id)
+            newMember?.updateWithData(data: data)
             success()
-            /*
-            let error = NSError(domain: "", code: 101, userInfo: [ NSLocalizedDescriptionKey: "Unable To Create Member"])
-            failure(error) */
+        }) { (error) in
+            failure(error)
         }
     }
     
     class func loginMember(email: String, password: String,
                             onSuccess success:@escaping () -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
+        //TODO: Validate email
+        TGAServer.loginMember(email: email, password: password, onSuccess: { (data) in
+            guard let id = data[Member.tgaIDKey] else {
+                //TODO: Fail
+                return
+            }
+            let newMember = self.addNewMember(tgaID: id)
+            newMember?.updateWithData(data: data)
+            success()
+        }) { (error) in
+            failure(error)
+        }
     }
     
-    class func updateMember(email: String, password: String,
+    class func updateMember(name: String, email: String, facebookID: String, instagram: String, twitter: String, about: String,
                            onSuccess success:@escaping () -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
+        TGAServer.updateMember(name: name, email: email, facebookID: facebookID, instagram: instagram, twitter: twitter, about: about, onSuccess: { (data) in
+            let member = self.currentMember()
+            member?.updateWithData(data: data)
+            success()
+        }) { (error) in
+            failure(error)
+        }
     }
     
-    func logoutMember(onSuccess success:@escaping () -> Void,
+    class func logoutMember(onSuccess success:@escaping () -> Void,
                       onFailure failure: @escaping (_ error: Error?) -> Void) {
         if let currentMember = self.currentMember() {
             let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
             context.delete(currentMember)
             CoreDataManager.sharedInstance.saveContext()
         }
-        
-        let loginManager = FBSDKLoginManager()
-        loginManager.logOut()
     }
     
     //MARK: DB Updates
     
-    func addNewMember(tgaID: String) -> Member? {
+    class func addNewMember(tgaID: String) -> Member? {
         if isLoggedIn() {
             return nil
         }
@@ -68,12 +89,12 @@ class MemberDataManager {
     
     //MARK: Helpers
     
-    func isLoggedIn() -> Bool {
+    class func isLoggedIn() -> Bool {
         let member = currentMember()
         return member != nil
     }
     
-    func currentMember() -> Member? {
+    class func currentMember() -> Member? {
         let request = NSFetchRequest<Member>(entityName:"Member")
         
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
@@ -91,7 +112,7 @@ class MemberDataManager {
         return nil
     }
     
-    func canEditEvent(event: Event) -> Bool {
+    class func canEditEvent(event: Event) -> Bool {
         if let member = self.currentMember() {
             return member.canEditEvent(event: event)
         }

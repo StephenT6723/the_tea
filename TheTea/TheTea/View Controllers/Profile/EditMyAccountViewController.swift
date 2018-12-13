@@ -31,7 +31,7 @@ class EditMyAccountViewController: UIViewController {
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTouched))
         navigationItem.rightBarButtonItem = saveButton
         
-        guard let member = MemberDataManager.sharedInstance.currentMember() else {
+        guard let member = MemberDataManager.currentMember() else {
             return
         }
         
@@ -48,7 +48,6 @@ class EditMyAccountViewController: UIViewController {
         
         facebookSwitch.tintColor = UIColor.primaryCTA()
         facebookSwitch.onTintColor = UIColor.primaryCTA()
-        facebookSwitch.isOn = member.linkToFacebook
         facebookSwitch.addTarget(self, action: #selector(updateSaveButtons), for: .valueChanged)
         
         facebookTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -117,11 +116,11 @@ class EditMyAccountViewController: UIViewController {
     }
     
     func dataUpdated() -> Bool {
-        if !MemberDataManager.sharedInstance.isLoggedIn() {
+        if !MemberDataManager.isLoggedIn() {
             return false
         }
         
-        guard let member = MemberDataManager.sharedInstance.currentMember() else {
+        guard let member = MemberDataManager.currentMember() else {
             return false
         }
         
@@ -129,9 +128,6 @@ class EditMyAccountViewController: UIViewController {
             if name.count > 0 && name != member.name {
                 return true
             }
-        }
-        if facebookSwitch.isOn != member.linkToFacebook {
-            return true
         }
         
         if instagramTextField.textField.text != member.instagram {
