@@ -176,7 +176,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 return header
             }
             
-            header.nameLabel.text = currentMember.name?.uppercased()
+            header.nameLabel.text = currentMember.name?.uppercased() ?? "MY PROFILE"
             header.facebookButton.alpha = 1
             header.facebookButton.isEnabled = true
             
@@ -195,8 +195,6 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 header.twitterButton.alpha = 0.3
                 header.twitterButton.isEnabled = false
             }
-            
-            header.profileImageView.image = UIImage(named: "placeholder_profile_image")
             
             return header
         } else {
@@ -313,6 +311,7 @@ class ProfileHeader: UITableViewHeaderFooterView {
         profileImageView.layer.borderWidth = 3
         profileImageView.clipsToBounds = true
         profileImageView.layer.cornerRadius = 8
+        profileImageView.image = UIImage(named: "placeholder_profile_image")
         contentView.addSubview(profileImageView)
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false

@@ -14,7 +14,7 @@ enum AuthType: Int {
     case signIn
 }
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     private let modeSelectSegmentedControl = UISegmentedControl()
     private let emailErrorLabel = UILabel()
     private let emailInputField = InputField()
@@ -60,12 +60,14 @@ class LoginViewController: UIViewController {
         emailInputField.textField.autocapitalizationType = .none
         emailInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
         emailInputField.showDivider = false
+        emailInputField.textField.delegate = self
         view.addSubview(emailInputField)
         
         passwordInputField.translatesAutoresizingMaskIntoConstraints = false
         passwordInputField.textField.placeholder = "PASSWORD"
         passwordInputField.textField.isSecureTextEntry = true
         passwordInputField.textField.autocapitalizationType = .none
+        passwordInputField.textField.delegate = self
         passwordInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
         view.addSubview(passwordInputField)
         
@@ -73,6 +75,7 @@ class LoginViewController: UIViewController {
         confirmPasswordInputField.textField.placeholder = "CONFIRM PASSWORD"
         confirmPasswordInputField.textField.autocapitalizationType = .none
         confirmPasswordInputField.textField.isSecureTextEntry = true
+        confirmPasswordInputField.textField.delegate = self
         confirmPasswordInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
         confirmPasswordInputField.showDivider = false
         view.insertSubview(confirmPasswordInputField, belowSubview: passwordInputField)
@@ -290,5 +293,11 @@ class LoginViewController: UIViewController {
                 self.passwordErrorLabel.text = ""
             }
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        submitButtonTouched()
+        return true
     }
 }
