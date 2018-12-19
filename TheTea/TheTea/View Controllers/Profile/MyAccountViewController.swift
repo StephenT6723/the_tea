@@ -21,8 +21,6 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "MY PROFILE"
         
         view.backgroundColor = .white
         
