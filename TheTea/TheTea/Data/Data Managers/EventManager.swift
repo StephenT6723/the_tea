@@ -73,14 +73,17 @@ class EventManager {
     
     //MARK: Fetch
     
-    class func updateUpcomingEvents() {
-        TGAServer.fetchEvents(onSuccess: { (data) in
+    class func updateUpcomingEvents(onSuccess success:@escaping () -> Void,
+                                    onFailure failure: @escaping (_ error: Error?) -> Void)  {
+        TGAServer.fetchEvents(onSuccess: { (data) in()
             self.updateLocalEvents(from: data)
+            self.updateStaleTime()
+            success()
         }) { (error) in
             if let error = error {
                 print("EVENT FETCH FAILED: \(error.localizedDescription)")
             }
-            //TODO: Post notification
+            failure(error)
         }
     }
     
@@ -169,5 +172,29 @@ class EventManager {
     
     class func delete(event:Event) -> Bool {
         return TGAServer.delete(event: event)
+    }
+    
+    //MARK: Stale
+    
+    class func eventsStale() -> Bool {
+        guard let lastFetchTime = UserDefaults.standard.object(forKey: "LastEventFetchTime") as? Date else {
+            print("FIRST FETCH")
+            return true
+        }
+        
+        let hoursSinceFetch = Calendar.current.dateComponents([.hour], from: lastFetchTime, to: Date()).hour ?? 0
+        
+        print("Hours Since Fetch: \(hoursSinceFetch)")
+        return hoursSinceFetch > staleTime()
+    }
+    
+    class func staleTime() -> Int {
+        //in hours
+        return 24
+    }
+    
+    class func updateStaleTime() {
+        UserDefaults.standard.set(Date(), forKey: "LastEventFetchTime")
+        UserDefaults.standard.synchronize()
     }
 }

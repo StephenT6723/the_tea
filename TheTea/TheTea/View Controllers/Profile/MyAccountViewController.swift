@@ -32,11 +32,13 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 0.01))
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor.primaryBrand()
+        tableView.backgroundColor = UIColor.lightBackground()
         tableView.register(ProfileAboutCell.self, forCellReuseIdentifier: String(describing: ProfileAboutCell.self))
+        tableView.register(ProfileNoEventsCell.self, forCellReuseIdentifier: String(describing: ProfileNoEventsCell.self))
         tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
         tableView.register(ProfileHeader.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileHeader.self))
-        tableView.register(ProfileMyEventsHeader.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileMyEventsHeader.self))
+        tableView.register(EventListHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventListHeaderView.self))
+        tableView.register(ProfileAddEventFooter.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileAddEventFooter.self))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44
@@ -108,11 +110,6 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         present(editNav, animated: true, completion: nil)
     }
     
-    @objc func myEventsOptionChanged(sender: SegmentedControl) {
-        //let isUpcoming = sender.selectedIndex == 0
-        
-    }
-    
     @objc func presentLoginView() {
         let loginVC = LoginViewController()
         let loginNav = UINavigationController(rootViewController: loginVC)
@@ -121,10 +118,17 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         present(loginNav, animated: true, completion: nil)
     }
     
+    @objc func addEventTapped() {
+        let addEventVC = EventEditViewController()
+        let addNav = UINavigationController(rootViewController: addEventVC)
+        addNav.navigationBar.isTranslucent = false
+        present(addNav, animated: true, completion: nil)
+    }
+    
     //MARK: Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -132,6 +136,18 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             if section == 0 && aboutText.count > 0 {
                 return 1
             }
+        }
+        
+        if section == 1 {
+            return 1
+        }
+        
+        if section == 2 {
+            return 1
+        }
+        
+        if section == 3 {
+            return 1
         }
         
         return 0
@@ -146,6 +162,9 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 2 {
+           return UITableView.automaticDimension
+        }
         return 0.01
     }
     
@@ -159,7 +178,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 return header
             }
             
-            header.nameLabel.text = currentMember.name?.capitalized
+            header.nameLabel.text = currentMember.name?.uppercased()
             header.facebookButton.alpha = 1
             header.facebookButton.isEnabled = true
             
@@ -179,19 +198,38 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 header.twitterButton.isEnabled = false
             }
             
-            header.profileImageView.profileID = currentMember.facebookID
+            header.profileImageView.image = UIImage(named: "placeholder_profile_image")
             
             return header
         } else {
-            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ProfileMyEventsHeader.self)) as? ProfileMyEventsHeader else {
-                return ProfileMyEventsHeader()
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: EventListHeaderView.self)) as? EventListHeaderView else {
+                return EventListHeaderView()
             }
             
-            header.titleLabel.text = "MY EVENTS"
-            header.segmentedControl.addTarget(self, action: #selector(myEventsOptionChanged(sender:)), for: .valueChanged)
+            if section == 1 {
+                header.titleLabel.text = "FAVORITES"
+            } else if section == 2 {
+                header.titleLabel.text = "HOSTED EVENTS"
+            } else if section == 3 {
+                header.titleLabel.text = "PAST EVENTS"
+            }
+            
+            header.seeAllButton.alpha = 0
             
             return header
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 2 {
+            guard let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ProfileAddEventFooter.self)) as? ProfileAddEventFooter else {
+                return ProfileAddEventFooter()
+            }
+            footer.addEventButton.addTarget(self, action: #selector(addEventTapped), for: .touchUpInside) //self, action: #selector(addEventTapped))
+            return footer
+        }
+        
+        return nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -201,6 +239,39 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             cell.aboutLabel.text = currentMember?.about
+            
+            return cell
+        }
+        
+        if indexPath.section == 1 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ProfileNoEventsCell.self), for: indexPath) as? ProfileNoEventsCell else {
+                return ProfileNoEventsCell()
+            }
+            
+            cell.label.text = "You don't have any favorite events yet"
+            cell.label.textAlignment = .center
+            
+            return cell
+        }
+        
+        if indexPath.section == 2 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ProfileNoEventsCell.self), for: indexPath) as? ProfileNoEventsCell else {
+                return ProfileNoEventsCell()
+            }
+            
+            cell.label.text = "You aren't hosting any events yet"
+            cell.label.textAlignment = .center
+            
+            return cell
+        }
+        
+        if indexPath.section == 3 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ProfileNoEventsCell.self), for: indexPath) as? ProfileNoEventsCell else {
+                return ProfileNoEventsCell()
+            }
+            
+            cell.label.text = "You don't have any past events"
+            cell.label.textAlignment = .center
             
             return cell
         }
@@ -221,7 +292,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
 
 class ProfileHeader: UITableViewHeaderFooterView {
     let nameLabel = UILabel()
-    let profileImageView = FBSDKProfilePictureView()
+    let profileImageView = UIImageView()
     let backgroundStripe = UIView()
     let facebookButton = UIButton()
     let instagramButton = UIButton()
@@ -232,15 +303,15 @@ class ProfileHeader: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.primaryBrand()
+        contentView.backgroundColor = UIColor.lightBackground()
         
         backgroundStripe.translatesAutoresizingMaskIntoConstraints = false
-        backgroundStripe.backgroundColor = .white
+        backgroundStripe.backgroundColor = .clear
         contentView.addSubview(backgroundStripe)
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.contentMode = .scaleAspectFill
-        profileImageView.layer.borderColor = UIColor.white.cgColor
+        profileImageView.layer.borderColor = UIColor.primaryCTA().cgColor
         profileImageView.layer.borderWidth = 3
         profileImageView.clipsToBounds = true
         profileImageView.layer.cornerRadius = 8
@@ -275,8 +346,8 @@ class ProfileHeader: UITableViewHeaderFooterView {
         backgroundStripe.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         
         profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 90).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         profileImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         
@@ -311,13 +382,13 @@ class ProfileAboutCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = UIColor.primaryBrand()
+        contentView.backgroundColor = UIColor.lightBackground()
         selectionStyle = .none
         clipsToBounds = false
         
         aboutLabel.translatesAutoresizingMaskIntoConstraints = false
         aboutLabel.font = UIFont.body()
-        aboutLabel.textColor = .white
+        aboutLabel.textColor = UIColor.primaryCopy()
         aboutLabel.numberOfLines = 0
         addSubview(aboutLabel)
         
@@ -332,32 +403,50 @@ class ProfileAboutCell: UITableViewCell {
     }
 }
 
-class ProfileMyEventsHeader: UITableViewHeaderFooterView {
-    let titleLabel = UILabel()
-    let segmentedControl = SegmentedControl()
+class ProfileNoEventsCell: UITableViewCell {
+    let label = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        
+        contentView.backgroundColor = UIColor.lightBackground()
+        selectionStyle = .none
+        clipsToBounds = false
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.body()
+        label.textColor = UIColor.primaryCopy()
+        label.numberOfLines = 0
+        addSubview(label)
+        
+        label.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
+        label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30).isActive = true
+        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+class ProfileAddEventFooter: UITableViewHeaderFooterView {
+    let addEventButton = PrimaryCTA()
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.primaryBrand()
+        contentView.backgroundColor = UIColor.lightBackground()
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.headerOne()
-        titleLabel.textColor = .white
-        contentView.addSubview(titleLabel)
+        addEventButton.translatesAutoresizingMaskIntoConstraints = false
+        addEventButton.setTitle("POST AN EVENT", for: .normal)
+        contentView.addSubview(addEventButton)
         
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.items = ["UPCOMING", "PAST"]
-        contentView.addSubview(segmentedControl)
-        
-        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        
-        segmentedControl.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14).isActive = true
-        segmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        segmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        segmentedControl.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        segmentedControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
+        addEventButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
+        addEventButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
+        addEventButton.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
+        addEventButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        addEventButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

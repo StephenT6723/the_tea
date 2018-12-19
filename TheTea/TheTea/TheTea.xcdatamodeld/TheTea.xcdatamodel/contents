@@ -24,6 +24,8 @@
         <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="ticketURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventCollection" inverseName="events" inverseEntity="EventCollection" syncable="YES"/>
+        <relationship name="favoritedBy" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Member" inverseName="favorites" inverseEntity="Member" syncable="YES"/>
+        <relationship name="hosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Member" inverseName="hosting" inverseEntity="Member" syncable="YES"/>
     </entity>
     <entity name="EventCollection" representedClassName="EventCollection" syncable="YES" codeGenerationType="class">
         <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
@@ -44,10 +46,12 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tgaID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitter" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="favorites" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="favoritedBy" inverseEntity="Event" syncable="YES"/>
+        <relationship name="hosting" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="hosts" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="390"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="420"/>
         <element name="EventCollection" positionX="-63" positionY="90" width="128" height="180"/>
-        <element name="Member" positionX="-63" positionY="63" width="128" height="150"/>
+        <element name="Member" positionX="-63" positionY="63" width="128" height="180"/>
     </elements>
 </model>

@@ -47,7 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FBSDKProfile.enableUpdates(onAccessTokenChange: true)
         
-        EventManager.updateUpcomingEvents()
         EventCollectionManager.updateFeaturedEventCollections()
         
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
