@@ -225,8 +225,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         if index < featuredCollections.count {
             let collection = featuredCollections[index]
             
+            let section = 0 //debug
+            guard let sectionInfo = eventsFRC.sections?[section] else { return } //debug
+            let sectionName = sectionInfo.name //debug
+            
             let eventCollectionVC = EventCollectionViewController()
-            let selectedEventsFRC = collection.eventsFRC(sortDescriptors: nil)
+            let selectedEventsFRC = EventManager.events(with: sectionName) //collection.eventsFRC(sortDescriptors: nil) debug
             eventCollectionVC.eventsFRC = selectedEventsFRC
             eventCollectionVC.title = collection.title?.uppercased()
             navigationController?.pushViewController(eventCollectionVC, animated: true)
