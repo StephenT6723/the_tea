@@ -25,6 +25,7 @@ class TGAServer {
     static let apiTicketURLKey = "ticketURL"
     static let apiHotnessKey = "hotness"
     static let apiHostsKey = "hosts"
+    static let apiRepeatsKey = "repeats"
     
     static let apiMemberNameKey = "name"
     static let apiMemberAboutKey = "about"
@@ -192,7 +193,9 @@ class TGAServer {
                     }
                     eventDict[Event.hostsKey] = hostsArray
                 }
-                
+            }
+            if let repeats = jsonData[apiRepeatsKey].string {
+                eventDict[Event.repeatsKey] = repeats
             }
             cleanedData.append(eventDict)
         }

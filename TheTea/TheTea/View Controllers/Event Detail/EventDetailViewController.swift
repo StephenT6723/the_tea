@@ -98,6 +98,7 @@ class EventDetailViewController: UIViewController {
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.font = UIFont.body()
         timeLabel.textColor = UIColor.primaryCopy()
+        timeLabel.numberOfLines = 0
         contentView.addSubview(timeLabel)
         
         ticketTitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -208,7 +209,7 @@ class EventDetailViewController: UIViewController {
         
         titleLabel.text = event.name?.uppercased()
         if let date = event.startTime {
-            timeLabel.text = "\(DateStringHelper.fullDescription(of: date as Date).uppercased())"
+            timeLabel.text = "\(DateStringHelper.fullDescription(of: date as Date).uppercased()) - \(event.repeatRules().rules(abreviated: false))"
         }
         aboutLabel.text = event.about
         if let locationName = event.locationName {

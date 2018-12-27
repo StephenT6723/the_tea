@@ -353,7 +353,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             hostTextField.textField.text = "HOSTED BY: TGA ADMIN"
         }
         
-        repeatsLabel.text = selectedRepeats.rules()
+        repeatsLabel.text = selectedRepeats.rules(abreviated: true)
     }
     
     //MARK: Display Update

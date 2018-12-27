@@ -141,6 +141,9 @@ class EventManager {
         
         let canceled = Bool(data[Event.canceledKey] as? String ?? "") ?? false
         let published = Bool(data[Event.publishedKey] as? String ?? "") ?? false
+        
+        let repeatRules = data[Event.repeatsKey] as? String ?? "0000000"
+        
         var hostObjects = [Member]()
         for hostData in hosts {
             guard let id = hostData[Member.tgaIDKey], let name = hostData[Member.nameKey] else {
@@ -152,7 +155,7 @@ class EventManager {
         }
         
         //update event object
-        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published)
+        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules)
         return event
     }
     

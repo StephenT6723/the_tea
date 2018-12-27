@@ -71,6 +71,37 @@ class EventRepeatRules {
         self.repeatsSundays = repeatsSundays
     }
     
+    convenience init(dataString: String) {
+        self.init()
+        if dataString.count != 7 {
+            return
+        }
+        let charArray = Array(dataString)
+        for i in 0..<charArray.count {
+            if i == 0 {
+                self.repeatsMondays = charArray[i] == "1"
+            }
+            if i == 1 {
+                self.repeatsTuesdays = charArray[i] == "1"
+            }
+            if i == 2 {
+                self.repeatsWednesdays = charArray[i] == "1"
+            }
+            if i == 3 {
+                self.repeatsThursdays = charArray[i] == "1"
+            }
+            if i == 4 {
+                self.repeatsFridays = charArray[i] == "1"
+            }
+            if i == 5 {
+                self.repeatsSaturdays = charArray[i] == "1"
+            }
+            if i == 6 {
+                self.repeatsSundays = charArray[i] == "1"
+            }
+        }
+    }
+    
     func toggleDay(day:DaysOfTheWeek) {
         switch day {
         case .monday:
@@ -127,7 +158,7 @@ class EventRepeatRules {
         return days
     }
     
-    func rules() -> String {
+    func rules(abreviated: Bool) -> String {
         var rules = ""
         let repeatingDays = self.repeatingDays()
         
@@ -143,7 +174,7 @@ class EventRepeatRules {
                 if index > 0 {
                     rules += ", "
                 }
-                rules += weekday.abreviation().uppercased()
+                rules += abreviated ? weekday.abreviation().uppercased() : weekday.plural().uppercased()
             }
         }
         
@@ -156,5 +187,9 @@ class EventRepeatRules {
         }
         
         return rules
+    }
+    
+    func dataString() -> String {
+        return (repeatsMondays ? "1" : "0") + (repeatsTuesdays ? "1" : "0") + (repeatsWednesdays ? "1" : "0") + (repeatsThursdays ? "1" : "0") + (repeatsFridays ? "1" : "0") + (repeatsSaturdays ? "1" : "0") + (repeatsSundays ? "1" : "0")
     }
 }
