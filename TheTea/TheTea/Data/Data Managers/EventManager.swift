@@ -89,15 +89,15 @@ class EventManager {
     
     //MARK: Local Data Updates
     
-    private class func updateLocalEvents(from data: [[String: String]]) {
+    private class func updateLocalEvents(from data: [[String: Any]]) {
         for eventDict in data {
             let _ = updateLocalEvent(from: eventDict)
         }
         CoreDataManager.sharedInstance.saveContext()
     }
     
-    private class func updateLocalEvent(from data: [String: String]) -> Event? {
-        guard let gayID = data[Event.gayIDKey]  else {
+    private class func updateLocalEvent(from data: [String: Any]) -> Event? {
+        guard let gayID = data[Event.gayIDKey] as? String  else {
             print("TRIED TO UPDATE EVENT WITHOUT GAYID")
             return nil
         }
@@ -113,7 +113,7 @@ class EventManager {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         
-        guard let name = data[Event.nameKey], let startTimeString = data[Event.startTimeKey] else {
+        guard let name = data[Event.nameKey] as? String, let startTimeString = data[Event.startTimeKey] as? String, let hosts = data[Event.hostsKey] as? [[String :String]] else {
             print("TRIED TO CREATE EVENT WITHOUT REQUIRED DATA")
             return nil
         }
@@ -125,7 +125,7 @@ class EventManager {
         
         var location: EventLocation?
         
-        if let locationName = data[Event.locationNameKey], let address = data[Event.addressKey], let latitudeString = data[Event.latitudeKey], let longitudeString = data[Event.longitudeKey] {
+        if let locationName = data[Event.locationNameKey] as? String, let address = data[Event.addressKey] as? String, let latitudeString = data[Event.latitudeKey] as? String, let longitudeString = data[Event.longitudeKey] as? String {
             if let latitude = Double(latitudeString), let longitude = Double(longitudeString) {
                 if latitude != 0 && longitude != 0 {
                     location = EventLocation(locationName: locationName, address: address, latitude: latitude, longitude: longitude)
@@ -133,18 +133,26 @@ class EventManager {
             }
         }
         
-        let endTimeString = data[Event.endTimeKey] ?? ""
-        let hotness = Int32(data[Event.hotnessKey] ?? "")
+        let endTimeString = data[Event.endTimeKey] as? String ?? ""
+        let hotness = Int32(data[Event.hotnessKey] as? String ?? "")
         
-        let price = Double(data[Event.priceKey] ?? "")
-        let ticketURL = data[Event.ticketURLKey]
+        let price = Double(data[Event.priceKey] as? String ?? "")
+        let ticketURL = data[Event.ticketURLKey] as? String
         
-        let canceled = Bool(data[Event.canceledKey] ?? "") ?? false
-        let published = Bool(data[Event.publishedKey] ?? "") ?? false
+        let canceled = Bool(data[Event.canceledKey] as? String ?? "") ?? false
+        let published = Bool(data[Event.publishedKey] as? String ?? "") ?? false
+        var hostObjects = [Member]()
+        for hostData in hosts {
+            guard let id = hostData[Member.tgaIDKey], let name = hostData[Member.nameKey] else {
+                print("MEMBER FOUND WITH NO ID/NAME")
+                return nil
+            }
+            let member = MemberDataManager.updateLocalMember(tgaID: id, name: name)
+            hostObjects.append(member)
+        }
         
         //update event object
-        event.update(name: name, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published)
-        
+        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published)
         return event
     }
     

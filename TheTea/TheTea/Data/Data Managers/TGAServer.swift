@@ -24,6 +24,7 @@ class TGAServer {
     static let apiPriceKey = "ticketPrice"
     static let apiTicketURLKey = "ticketURL"
     static let apiHotnessKey = "hotness"
+    static let apiHostsKey = "hosts"
     
     static let apiMemberNameKey = "name"
     static let apiMemberAboutKey = "about"
@@ -112,7 +113,7 @@ class TGAServer {
     
     //MARK: Event Fetches
     
-    class func fetchEvents(onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
+    class func fetchEvents(onSuccess success:@escaping (_ data: [[String: Any]]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         Alamofire.request("\(domain)/events/",
                             method: .get,
@@ -133,10 +134,10 @@ class TGAServer {
         }
     }
     
-    private class func eventDictFrom(json: JSON) -> [[String: String]] {
-        var cleanedData = [[String:String]]()
+    private class func eventDictFrom(json: JSON) -> [[String: Any]] {
+        var cleanedData = [[String:Any]]()
         for eventData in json["events"] {
-            var eventDict = [String:String]()
+            var eventDict = [String:Any]()
             let jsonData = eventData.1
             if let name = jsonData[apiEventNameKey].string {
                 eventDict[Event.nameKey] = name
@@ -180,6 +181,19 @@ class TGAServer {
             if let hotness = jsonData[apiHotnessKey].number {
                 eventDict[Event.hotnessKey] = "\(hotness)"
             }
+            if let hosts = jsonData[apiHostsKey].array {
+                if hosts.count > 0 {
+                    var hostsArray = [[String: String]]()
+                    for host in hosts {
+                        guard let id = host["id"].number, let name = host["name"].string else {
+                            continue
+                        }
+                        hostsArray.append([Member.tgaIDKey : "\(id)", Member.nameKey : name])
+                    }
+                    eventDict[Event.hostsKey] = hostsArray
+                }
+                
+            }
             cleanedData.append(eventDict)
         }
         return cleanedData
@@ -202,10 +216,12 @@ class TGAServer {
     //MARK: Event CRUD
     
     class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?,
-                           onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
+                           onSuccess success:@escaping (_ data: [[String: Any]]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss z"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         
         var params = [String: String]()
         params["format"] = "json"

@@ -24,9 +24,16 @@ extension Event {
     static let ticketURLKey = "ticketURL"
     static let canceledKey = "canceled"
     static let publishedKey = "published"
+    static let hostsKey = "hosts"
     
-    func update(name: String, hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool) {
+    func update(name: String, hosts: [Member], hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool) {
+        if hosts.count == 0 {
+            print("UNABLE TO UPDATE EVENT WITH NO HOSTS")
+            return
+        }        
         self.name = name
+        self.removeFromHosts(self.hosts ?? NSSet())
+        self.addToHosts(NSSet(array: hosts))
         self.hotness = hotness ?? 0
         self.startTime = startTime
         self.endTime = endTime

@@ -78,7 +78,38 @@ class MemberDataManager {
         }
     }
     
+    class func member(tgaID: String) -> Member? {
+        let request = NSFetchRequest<Member>(entityName:"Member")
+        request.predicate = NSPredicate(format: "tgaID like %@", tgaID)
+        
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        do {
+            let events = try context.fetch(request)
+            if events.count > 0 {
+                return events[0]
+            }
+        } catch {
+            return nil
+        }
+        
+        return nil
+    }
+    
     //MARK: DB Updates
+    
+    class func updateLocalMember(tgaID: String, name: String) -> Member {
+        let member = self.member(tgaID: tgaID) ?? createLocalMember(tgaID: tgaID)
+        member.name = name
+        return member
+    }
+    
+    private class func createLocalMember(tgaID: String) -> Member {
+        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
+        let member = Member(context: context)
+        member.tgaID = tgaID
+        
+        return member
+    }
     
     class func addNewMember(tgaID: String) -> Member? {
         if isLoggedIn() {
