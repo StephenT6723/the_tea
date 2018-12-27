@@ -38,7 +38,7 @@ class DateStringHelper {
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .short
         
-        return "\(dayDescription(of:date)) at \(dateFormatter.string(from:date))"
+        return "\(dayDescription(of:date)) - \(dateFormatter.string(from:date))"
     }
     
     class func dataString(from date:Date) -> String {

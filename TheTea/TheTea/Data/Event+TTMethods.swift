@@ -22,23 +22,19 @@ extension Event {
     static let longitudeKey = "longitude"
     static let priceKey = "price"
     static let ticketURLKey = "ticketURL"
+    static let canceledKey = "canceled"
+    static let publishedKey = "published"
     
-    func update(name: String, hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?) {
+    func update(name: String, hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool) {
         self.name = name
-        if let hotness = hotness {
-            self.hotness = hotness
-        }
+        self.hotness = hotness ?? 0
         self.startTime = startTime
         self.endTime = endTime
         self.about = about
         self.locationName = location?.locationName
         self.address = location?.address
-        if let price = price {
-            self.price = price
-        }
-        if let ticketURL = ticketURL {
-            self.ticketURL = ticketURL
-        }
+        self.price = price ?? 0
+        self.ticketURL = ticketURL ?? ""
         if let latitude = location?.latitude, let longitude = location?.longitude {
             self.latitude = latitude
             self.longitude = longitude
@@ -47,6 +43,8 @@ extension Event {
             self.longitude = 0
         }
         self.daySectionIdentifier = DateStringHelper.dataString(from: startTime)
+        self.canceled = canceled
+        self.published = published
     }
     
     func eventLocation() -> EventLocation? {

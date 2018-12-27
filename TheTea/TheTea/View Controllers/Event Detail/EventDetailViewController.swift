@@ -12,14 +12,26 @@ import MapKit
 class EventDetailViewController: UIViewController {
     var event : Event?
     
-    let topCarousel = EventDetailCarousel(frame: CGRect())
-    let contentView = UIView()
-    let topPanelView = TopPanelView()
+    private let topCarousel = EventDetailCarousel(frame: CGRect())
+    private let contentView = UIView()
+    private let topPanelView = TopPanelView()
     
-    let titleLabel = UILabel()
-    let detailLabel = UILabel()
-    let aboutLabel = UILabel()
-    let locationLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let subTitleLabel = UILabel()
+    private let aboutLabel = UILabel()
+    
+    private let timeTitleLabel = UILabel()
+    private let timeLabel = UILabel()
+    
+    private let ticketTitleLabel = UILabel()
+    private let ticketLabel = UILabel()
+    
+    private let locationTitleLabel = UILabel()
+    private let locationLabel = UILabel()
+    
+    private let reportButton = UIButton()
+    
+    let mapView = MKMapView()
     
     convenience init(event: Event) {
         self.init()
@@ -48,7 +60,7 @@ class EventDetailViewController: UIViewController {
             let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
             navigationItem.rightBarButtonItem = editButton
         } else {
-            let reportButton = UIBarButtonItem(title: "REPORT", style: .plain, target: self, action: #selector(reportButtonTouched))
+            let reportButton = UIBarButtonItem(title: "SHARE", style: .plain, target: self, action: #selector(shareButtonTouched))
             navigationItem.rightBarButtonItem = reportButton
         }
         
@@ -58,34 +70,18 @@ class EventDetailViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.backgroundColor = .white
         
+        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subTitleLabel.font = UIFont.headerTwo()
+        subTitleLabel.textColor = UIColor.lightCopy()
+        subTitleLabel.text = "DRAG SHOW"
+        subTitleLabel.numberOfLines = 0
+        contentView.addSubview(subTitleLabel)
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.headerOne()
         titleLabel.textColor = UIColor.primaryCopy()
         titleLabel.numberOfLines = 0
         contentView.addSubview(titleLabel)
-        
-        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        
-        detailLabel.translatesAutoresizingMaskIntoConstraints = false
-        detailLabel.font = UIFont.body()
-        detailLabel.textColor = UIColor.lightCopy()
-        contentView.addSubview(detailLabel)
-        
-        detailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        detailLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        detailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
-        
-        locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        locationLabel.numberOfLines = 0
-        locationLabel.font = UIFont.body()
-        locationLabel.textColor = UIColor.lightCopy()
-        contentView.addSubview(locationLabel)
-        
-        locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        locationLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor).isActive = true
         
         aboutLabel.translatesAutoresizingMaskIntoConstraints = false
         aboutLabel.numberOfLines = 0
@@ -93,10 +89,99 @@ class EventDetailViewController: UIViewController {
         aboutLabel.textColor = UIColor.primaryCopy()
         contentView.addSubview(aboutLabel)
         
+        timeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeTitleLabel.font = UIFont.body()
+        timeTitleLabel.textColor = UIColor.lightCopy()
+        timeTitleLabel.text = "DATE & TIME"
+        contentView.addSubview(timeTitleLabel)
+        
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.font = UIFont.body()
+        timeLabel.textColor = UIColor.primaryCopy()
+        contentView.addSubview(timeLabel)
+        
+        ticketTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        ticketTitleLabel.font = UIFont.body()
+        ticketTitleLabel.textColor = UIColor.lightCopy()
+        ticketTitleLabel.text = "TICKETS"
+        contentView.addSubview(ticketTitleLabel)
+        
+        ticketLabel.translatesAutoresizingMaskIntoConstraints = false
+        ticketLabel.font = UIFont.body()
+        ticketLabel.textColor = UIColor.primaryCopy()
+        ticketLabel.text = "FREE"
+        contentView.addSubview(ticketLabel)
+        
+        locationTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        locationTitleLabel.font = UIFont.body()
+        locationTitleLabel.textColor = UIColor.lightCopy()
+        locationTitleLabel.text = "LOCATION"
+        contentView.addSubview(locationTitleLabel)
+        
+        locationLabel.translatesAutoresizingMaskIntoConstraints = false
+        locationLabel.numberOfLines = 0
+        locationLabel.font = UIFont.body()
+        locationLabel.textColor = UIColor.primaryCopy()
+        contentView.addSubview(locationLabel)
+        
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        mapView.isUserInteractionEnabled = false
+        contentView.addSubview(mapView)
+        
+        reportButton.translatesAutoresizingMaskIntoConstraints = false
+        reportButton.setTitle("REPORT", for: .normal)
+        reportButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
+        reportButton.titleLabel?.font = UIFont.cta()
+        reportButton.addTarget(self, action: #selector(reportButtonTouched), for: .touchUpInside)
+        contentView.addSubview(reportButton)
+        
+        subTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        subTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        subTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        
+        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 4).isActive = true
+        
         aboutLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         aboutLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        aboutLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10).isActive = true
-        aboutLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        aboutLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+        //aboutLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        
+        timeTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        timeTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        timeTitleLabel.topAnchor.constraint(equalTo: aboutLabel.bottomAnchor, constant: 20).isActive = true
+        
+        timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        timeLabel.topAnchor.constraint(equalTo: timeTitleLabel.bottomAnchor, constant: 4).isActive = true
+        
+        ticketTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        ticketTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        ticketTitleLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 20).isActive = true
+        
+        ticketLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        ticketLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        ticketLabel.topAnchor.constraint(equalTo: ticketTitleLabel.bottomAnchor, constant: 4).isActive = true
+        
+        locationTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        locationTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        locationTitleLabel.topAnchor.constraint(equalTo: ticketLabel.bottomAnchor, constant: 20).isActive = true
+        
+        locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        locationLabel.topAnchor.constraint(equalTo: locationTitleLabel.bottomAnchor, constant: 4).isActive = true
+        
+        mapView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        mapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        mapView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20).isActive = true
+        mapView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        
+        reportButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        reportButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 20).isActive = true
+        reportButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        reportButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
+        reportButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         
         topPanelView.translatesAutoresizingMaskIntoConstraints = false
         topPanelView.updateContent(topPanel: topCarousel, scrollableView: contentView)
@@ -123,17 +208,28 @@ class EventDetailViewController: UIViewController {
         
         titleLabel.text = event.name?.uppercased()
         if let date = event.startTime {
-            detailLabel.text = "\(DateStringHelper.fullDescription(of: date as Date))"
+            timeLabel.text = "\(DateStringHelper.fullDescription(of: date as Date).uppercased())"
         }
         aboutLabel.text = event.about
         if let locationName = event.locationName {
             var locationString = locationName
             if let address = event.address {
                 //TODO: Find a way to do this that is smarter.
-                locationString += " - \(address.replacingOccurrences(of: ", United States", with: ""))"
+                locationString += "\n\(address.replacingOccurrences(of: ", United States", with: ""))"
             }
             locationLabel.text = locationString
         }
+        
+        let coordinate = CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = event.locationName
+        mapView.addAnnotation(annotation)
+        
+        let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001))
+        mapView.region = region
+        
         topCarousel.updateContent()
     }
     
@@ -147,6 +243,10 @@ class EventDetailViewController: UIViewController {
     
     @objc func reportButtonTouched() {
         print("REPORT")
+    }
+    
+    @objc func shareButtonTouched() {
+        print("SHARE")
     }
 }
 

@@ -109,7 +109,9 @@ class EventManager {
         
         //parse data
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss z"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         
         guard let name = data[Event.nameKey], let startTimeString = data[Event.startTimeKey] else {
             print("TRIED TO CREATE EVENT WITHOUT REQUIRED DATA")
@@ -137,8 +139,11 @@ class EventManager {
         let price = Double(data[Event.priceKey] ?? "")
         let ticketURL = data[Event.ticketURLKey]
         
+        let canceled = Bool(data[Event.canceledKey] ?? "") ?? false
+        let published = Bool(data[Event.publishedKey] ?? "") ?? false
+        
         //update event object
-        event.update(name: name, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location, price: price, ticketURL:ticketURL)
+        event.update(name: name, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey], location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published)
         
         return event
     }

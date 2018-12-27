@@ -13,12 +13,17 @@ import SwiftyJSON
 class TGAServer {
     static let apiEventNameKey = "name"
     static let apiAboutKey = "about"
-    static let apiStartTimeKey = "start_time"
-    static let apiEndTimeKey = "end_time"
-    static let apiLocationNameKey = "location_name"
+    static let apiStartTimeKey = "startTime"
+    static let apiEndTimeKey = "endTime"
+    static let apiLocationNameKey = "locationName"
     static let apiAddressKey = "address"
     static let apiLatitudeKey = "latitude"
     static let apiLongitudeKey = "longitude"
+    static let apiCanceledKey = "canceled"
+    static let apiPublishedKey = "published"
+    static let apiPriceKey = "ticketPrice"
+    static let apiTicketURLKey = "ticketURL"
+    static let apiHotnessKey = "hotness"
     
     static let apiMemberNameKey = "name"
     static let apiMemberAboutKey = "about"
@@ -130,35 +135,50 @@ class TGAServer {
     
     private class func eventDictFrom(json: JSON) -> [[String: String]] {
         var cleanedData = [[String:String]]()
-        for eventData in json["data"] {
+        for eventData in json["events"] {
             var eventDict = [String:String]()
             let jsonData = eventData.1
-            if let name = jsonData["attributes"][apiEventNameKey].string {
+            if let name = jsonData[apiEventNameKey].string {
                 eventDict[Event.nameKey] = name
             }
-            if let gayID = jsonData["id"].string {
-                eventDict[Event.gayIDKey] = gayID
+            if let gayID = jsonData["id"].number {
+                eventDict[Event.gayIDKey] = "\(gayID)"
             }
-            if let startTime = jsonData["attributes"][apiStartTimeKey].string {
+            if let startTime = jsonData[apiStartTimeKey].string {
                 eventDict[Event.startTimeKey] = startTime
             }
-            if let endTime = jsonData["attributes"][apiEndTimeKey].string {
+            if let endTime = jsonData[apiEndTimeKey].string {
                 eventDict[Event.endTimeKey] = endTime
             }
-            if let about = jsonData["attributes"][apiAboutKey].string {
+            if let about = jsonData[apiAboutKey].string {
                 eventDict[Event.aboutKey] = about
             }
-            if let locationName = jsonData["attributes"][apiLocationNameKey].string {
+            if let locationName = jsonData[apiLocationNameKey].string {
                 eventDict[Event.locationNameKey] = locationName
             }
-            if let address = jsonData["attributes"][apiAddressKey].string {
+            if let address = jsonData[apiAddressKey].string {
                 eventDict[Event.addressKey] = address
             }
-            if let latitude = jsonData["attributes"][apiLatitudeKey].number {
-                eventDict[Event.latitudeKey] = "\(latitude)"
+            if let latitude = jsonData[apiLatitudeKey].string {
+                eventDict[Event.latitudeKey] = latitude
             }
-            if let longitude = jsonData["attributes"][apiLongitudeKey].number {
-                eventDict[Event.longitudeKey] = "\(longitude)"
+            if let longitude = jsonData[apiLongitudeKey].string {
+                eventDict[Event.longitudeKey] = longitude
+            }
+            if let canceled = jsonData[apiCanceledKey].bool {
+                eventDict[Event.canceledKey] = "\(canceled)"
+            }
+            if let published = jsonData[apiPublishedKey].bool {
+                eventDict[Event.publishedKey] = "\(published)"
+            }
+            if let price = jsonData[apiPriceKey].string {
+                eventDict[Event.priceKey] = price
+            }
+            if let ticketURL = jsonData[apiTicketURLKey].string {
+                eventDict[Event.ticketURLKey] = ticketURL
+            }
+            if let hotness = jsonData[apiHotnessKey].number {
+                eventDict[Event.hotnessKey] = "\(hotness)"
             }
             cleanedData.append(eventDict)
         }
