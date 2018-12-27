@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 class EventDetailViewController: UIViewController {
-    var event : Event?
+    var event : Event
     
     private let topCarousel = EventDetailCarousel(frame: CGRect())
     private let contentView = UIView()
@@ -18,6 +18,9 @@ class EventDetailViewController: UIViewController {
     
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
+    private let favoriteButton = UIButton()
+    private let favoriteButtonSize: CGFloat = 50
+    private let favoriteActivityIndicator = UIActivityIndicatorView(style: .gray)
     private let aboutLabel = UILabel()
     
     private let timeTitleLabel = UILabel()
@@ -39,10 +42,12 @@ class EventDetailViewController: UIViewController {
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.event = Event()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.event = Event()
         super.init(coder: aDecoder)
     }
     
@@ -51,10 +56,10 @@ class EventDetailViewController: UIViewController {
 
         title = "EVENT DETAIL"
         view.backgroundColor = .white
-        
+        /*
         guard let event = self.event else {
             return
-        }
+        }*/
         
         if MemberDataManager.canEditEvent(event:event) {
             let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
@@ -82,6 +87,18 @@ class EventDetailViewController: UIViewController {
         titleLabel.textColor = UIColor.primaryCopy()
         titleLabel.numberOfLines = 0
         contentView.addSubview(titleLabel)
+        
+        favoriteButton.translatesAutoresizingMaskIntoConstraints = false
+        favoriteButton.layer.borderWidth = 2
+        favoriteButton.layer.borderColor = UIColor.primaryCTA().cgColor
+        favoriteButton.layer.cornerRadius = 8
+        favoriteButton.setTitle("FAVORITE", for: .normal)
+        favoriteButton.titleLabel?.font = UIFont.cta()
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTouched), for: .touchUpInside)
+        contentView.addSubview(favoriteButton)
+        
+        favoriteActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(favoriteActivityIndicator)
         
         aboutLabel.translatesAutoresizingMaskIntoConstraints = false
         aboutLabel.numberOfLines = 0
@@ -141,13 +158,20 @@ class EventDetailViewController: UIViewController {
         subTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
         
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -20).isActive = true
         titleLabel.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 4).isActive = true
+        
+        favoriteButton.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        favoriteButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        favoriteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        favoriteButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20).isActive = true
+        
+        favoriteActivityIndicator.centerXAnchor.constraint(equalTo: favoriteButton.centerXAnchor).isActive = true
+        favoriteActivityIndicator.topAnchor.constraint(equalTo: favoriteButton.bottomAnchor, constant: 10).isActive = true
         
         aboutLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         aboutLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         aboutLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        //aboutLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         
         timeTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         timeTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
@@ -196,18 +220,15 @@ class EventDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.event?.managedObjectContext == nil {
+        if self.event.managedObjectContext == nil {
             self.navigationController?.popViewController(animated: false)
         }
         updateContent()
     }
     
     func updateContent() {
-        guard let event = self.event else {
-            return
-        }
-        
         titleLabel.text = event.name?.uppercased()
+        updateFavoriteButton()
         if let date = event.startTime {
             timeLabel.text = "\(DateStringHelper.fullDescription(of: date as Date).uppercased()) - \(event.repeatRules().rules(abreviated: false))"
         }
@@ -232,6 +253,28 @@ class EventDetailViewController: UIViewController {
         mapView.region = region
         
         topCarousel.updateContent()
+    }
+    
+    func updateFavoriteButton() {
+        favoriteButton.backgroundColor = self.event.favorited() ? UIColor.primaryCTA() : UIColor.white
+        favoriteButton.setTitleColor(self.event.favorited() ? UIColor.white : UIColor.primaryCTA(), for: .normal)
+    }
+    
+    //MARK: Actions
+    
+    @objc func favoriteButtonTouched() {
+        favoriteActivityIndicator.startAnimating()
+        favoriteButton.isUserInteractionEnabled = false
+        EventManager.toggleFavorite(event: event, onSuccess: {
+            self.updateFavoriteButton()
+            self.favoriteActivityIndicator.stopAnimating()
+            self.favoriteButton.isUserInteractionEnabled = true
+        }) { (error) in
+            //TODO: Display this error to the user
+            print("Error setting favorite")
+            self.favoriteActivityIndicator.stopAnimating()
+            self.favoriteButton.isUserInteractionEnabled = true
+        }
     }
     
     @objc func editButtonTouched() {

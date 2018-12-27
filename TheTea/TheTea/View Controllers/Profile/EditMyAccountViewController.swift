@@ -35,7 +35,7 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
         navigationItem.leftBarButtonItem = cancelButton
         
-        guard let member = MemberDataManager.currentMember() else {
+        guard let member = MemberDataManager.loggedInMember() else {
             return
         }
         
@@ -179,7 +179,7 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
             return false
         }
         
-        guard let member = MemberDataManager.currentMember() else {
+        guard let member = MemberDataManager.loggedInMember() else {
             return false
         }
         
@@ -220,12 +220,12 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         }
         let about = aboutTextView.textView.text == aboutTextViewPlaceholder ? nil : aboutTextView.textView.text
         self.updateLoader(visible: true, animated: true)
-        MemberDataManager.updateMember(name: name, email: MemberDataManager.currentMember()?.email, facebookID: facebookTextField.textField.text, instagram: instagramTextField.textField.text, twitter: twitterTextField.textField.text, about: about, onSuccess: {
+        MemberDataManager.updateMember(name: name, email: MemberDataManager.loggedInMember()?.email, facebookID: facebookTextField.textField.text, instagram: instagramTextField.textField.text, twitter: twitterTextField.textField.text, about: about, onSuccess: {
             self.dismiss(animated: true, completion: nil)
         }) { (error) in
             //TODO: Display Error somewhere
             self.updateLoader(visible: false, animated: true)
-            print(error?.localizedDescription)
+            print(error?.localizedDescription ?? "Unable to save member")
         }
     }
     
@@ -238,12 +238,8 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
     
     @objc func logoutButtonTouched() {
         //TODO: Show loader somewhere
-        MemberDataManager.logoutMember(onSuccess: {
-            self.dismiss(animated: true, completion: nil)
-        }) { (error) in
-            //TODO: Display Error somewhere
-            print(error?.localizedDescription)
-        }
+        MemberDataManager.logoutMember()
+        self.dismiss(animated: true, completion: nil)
     }
     
     //MARK Text View Delegate

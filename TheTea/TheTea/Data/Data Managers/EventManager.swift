@@ -190,6 +190,33 @@ class EventManager {
         return TGAServer.delete(event: event)
     }
     
+    class func toggleFavorite(event:Event,
+                              onSuccess success:@escaping () -> Void,
+                              onFailure failure: @escaping (_ error: Error?) -> Void) {
+        guard let currentMember = MemberDataManager.loggedInMember() else {
+            failure(nil)
+            return
+        }
+        
+        if !event.favorited() {
+            TGAServer.addFavorite(event: event, onSuccess: { () in
+                currentMember.addToFavorites(event)
+                CoreDataManager.sharedInstance.saveContext()
+                success()
+            }) { (error) in
+                failure(error)
+            }
+        } else {
+            TGAServer.removeFavorite(event: event, onSuccess: { () in
+                currentMember.removeFromFavorites(event)
+                CoreDataManager.sharedInstance.saveContext()
+                success()
+            }) { (error) in
+                failure(error)
+            }
+        }
+    }
+    
     //MARK: Stale
     
     class func eventsStale() -> Bool {

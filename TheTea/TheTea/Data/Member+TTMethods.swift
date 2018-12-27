@@ -31,4 +31,9 @@ extension Member {
     func canEditEvent(event: Event) -> Bool {
         return event.creatorTGAID == tgaID
     }
+    
+    class func createToken(email: String, password: String) -> String {
+        let tokenString = "\(email):\(password)"
+        return Data(tokenString.utf8).base64EncodedString()
+    }
 }

@@ -12,7 +12,7 @@ import FBSDKLoginKit
 class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
     var upcomingEvents = EventCollection()
-    var currentMember = MemberDataManager.currentMember()
+    var currentMember = MemberDataManager.loggedInMember()
     var hasShownLogin = false
     let signUpPrompt = UIView()
     let signUpLabel = UILabel()

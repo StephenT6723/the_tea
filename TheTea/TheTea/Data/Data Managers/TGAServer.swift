@@ -30,35 +30,89 @@ class TGAServer {
     static let apiMemberNameKey = "name"
     static let apiMemberAboutKey = "about"
     static let apiMemberEmailKey = "email"
+    static let apiMemberPasswordKey = "password"
     static let apiMemberFacebookIDKey = "facebookID"
     static let apiMemberInstagramKey = "instagram"
     static let apiMemberTwitterKey = "twitter"
     
     static let domain = "https://www.thegayagenda.com"
     
+    //MARK: Headers
+    
+    class func headers(email: String, password: String) -> HTTPHeaders {
+        return [
+            "Authorization": "Basic \(Member.createToken(email: email, password: password))",
+            "Accept": "application/json"
+        ]
+    }
+    
+    class func headersForCurrentMember() -> HTTPHeaders? {
+        guard let currentToken = MemberDataManager.loggedInMember()?.authToken else {
+            return nil
+        }
+        return [
+            "Authorization": "Basic \(currentToken)",
+            "Accept": "application/json"
+        ]
+    }
+    
     //MARK: Users
     
     class func createMember(email: String, password: String,
                             onSuccess success:@escaping (_ data: [String: String]) -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
-        var memberDict = [String:String]()
-        memberDict[Member.tgaIDKey] = "1"
-        memberDict[Member.emailKey] = email
-        let deadlineTime = DispatchTime.now() + .seconds(3)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-            success(memberDict)
+        var params = [String: String]()
+        params["format"] = "json"
+        params[apiMemberEmailKey] = email
+        params[apiMemberPasswordKey] = password
+        
+        Alamofire.request("\(domain)/user/",
+            method: .post,
+            parameters: params,
+            encoding: URLEncoding(destination: .queryString),
+            headers: nil).responseJSON { response in
+                guard let data = response.data else {
+                    failure(response.error)
+                    return
+                }
+                do {
+                    //TODO: Handle errors when name missing or email taken.
+                    let json = try JSON(data: data)
+                    let dict = memberDictFrom(json: json)
+                    success(dict)
+                } catch {
+                    failure(error)
+                }
         }
     }
     
     class func loginMember(email: String, password: String,
                             onSuccess success:@escaping (_ data: [String: String]) -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
-        var memberDict = [String:String]()
-        memberDict[Member.tgaIDKey] = "1"
-        memberDict[Member.emailKey] = email
-        let deadlineTime = DispatchTime.now() + .seconds(3)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-            success(memberDict)
+        let headers: HTTPHeaders = [
+            "Authorization": "Basic \(Member.createToken(email: email, password: password))",
+            "Accept": "application/json"
+        ]
+        
+        var params = [String: String]()
+        params["format"] = "json"
+        
+        Alamofire.request("\(domain)/user/login",
+            method: .post,
+            parameters: params,
+            encoding: URLEncoding(destination: .queryString),
+            headers: headers).responseJSON { response in
+                guard let data = response.data else {
+                    failure(response.error)
+                    return
+                }
+                do {
+                    let json = try JSON(data: data)
+                    let dict = memberDictFrom(json: json)
+                    success(dict)
+                } catch {
+                    failure(error)
+                }
         }
     }
     
@@ -87,26 +141,26 @@ class TGAServer {
     
     private class func memberDictFrom(json: JSON) -> [String: String] {
         var memberDict = [String:String]()
-        let jsonData = json["data"]
-        if let gayID = jsonData["id"].string {
-            memberDict[Member.tgaIDKey] = gayID
+        let jsonData = json["user"]
+        if let gayID = jsonData["id"].number {
+            memberDict[Member.tgaIDKey] = "\(gayID)"
         }
-        if let name = jsonData["attributes"][apiMemberNameKey].string {
+        if let name = jsonData[apiMemberNameKey].string {
             memberDict[Member.nameKey] = name
         }
-        if let email = jsonData["attributes"][apiMemberEmailKey].string {
+        if let email = jsonData[apiMemberEmailKey].string {
             memberDict[Member.emailKey] = email
         }
-        if let facebookID = jsonData["attributes"][apiMemberFacebookIDKey].string {
+        if let facebookID = jsonData[apiMemberFacebookIDKey].string {
             memberDict[Member.facebookIDKey] = facebookID
         }
-        if let instagram = jsonData["attributes"][apiMemberInstagramKey].string {
+        if let instagram = jsonData[apiMemberInstagramKey].string {
             memberDict[Member.instagramKey] = instagram
         }
-        if let twitter = jsonData["attributes"][apiMemberTwitterKey].string {
+        if let twitter = jsonData[apiMemberTwitterKey].string {
             memberDict[Member.twitterKey] = twitter
         }
-        if let about = jsonData["attributes"][apiMemberAboutKey].string {
+        if let about = jsonData[apiMemberAboutKey].string {
             memberDict[Member.aboutKey] = about
         }
         return memberDict
@@ -288,5 +342,57 @@ class TGAServer {
         
         //PUSH TO SERVER AND WAIT FOR RESPONSE
         return true
+    }
+    
+    //MARK: Favorites
+    
+    class func addFavorite(event: Event,
+                           onSuccess success:@escaping () -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        guard let headers = headersForCurrentMember(), let currentMember = MemberDataManager.loggedInMember() else {
+            failure(nil)
+            return
+        }
+        
+        var params = [String: String]()
+        params["format"] = "json"
+        
+        Alamofire.request("\(domain)/user/\(currentMember.tgaID!)/favorite/\(event.gayID!)",
+            method: .post,
+            parameters: params,
+            encoding: URLEncoding(destination: .queryString),
+            headers: headers).responseJSON { response in
+                if response.error != nil {
+                    failure(response.error)
+                    return
+                }
+                
+                success()
+        }
+    }
+    
+    class func removeFavorite(event: Event,
+                           onSuccess success:@escaping () -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        guard let headers = headersForCurrentMember(), let currentMember = MemberDataManager.loggedInMember() else {
+            failure(nil)
+            return
+        }
+        
+        var params = [String: String]()
+        params["format"] = "json"
+        
+        Alamofire.request("\(domain)/user/\(currentMember.tgaID!)/favorite/\(event.gayID!)",
+            method: .delete,
+            parameters: params,
+            encoding: URLEncoding(destination: .queryString),
+            headers: headers).responseJSON { response in
+                if response.error != nil {
+                    failure(response.error)
+                    return
+                }
+                
+                success()
+        }
     }
 }

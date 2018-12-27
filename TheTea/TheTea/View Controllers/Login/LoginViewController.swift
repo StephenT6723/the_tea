@@ -148,6 +148,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         activityIndicator.centerXAnchor.constraint(equalTo: submitContainer.centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: submitContainer.centerYAnchor).isActive = true
         
+        //DEBUG
+        
+        emailInputField.textField.text = "slt6723@gmail.com"
+        passwordInputField.textField.text = "abc12345678"
+        confirmPasswordInputField.textField.text = "abc12345678"
+        
+        
         //SETUP
         
         updateEmailError(text: "", animated: false)
@@ -222,7 +229,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if emailValid && passwordsMatch && passwordValid {
             updateLoader(visible: true, animated: true)
             if selectedType() == .signIn {
-                MemberDataManager.loginMember(email: email, password: "", onSuccess: {
+                MemberDataManager.loginMember(email: email, password: passwordInputField.textField.text ?? "", onSuccess: {
                     self.dismiss(animated: true, completion: nil)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
@@ -232,7 +239,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     self.updateEmailError(text: description, animated: true)
                 }
             } else {
-                MemberDataManager.createMember(email: email, password: "", onSuccess: {
+                MemberDataManager.createMember(email: email, password: passwordInputField.textField.text ?? "", onSuccess: {
                     self.dismiss(animated: true, completion: nil)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)

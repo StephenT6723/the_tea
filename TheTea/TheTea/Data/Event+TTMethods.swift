@@ -80,4 +80,11 @@ extension Event {
         let rules = EventRepeatRules(repeatsMondays: repeatsMondays, repeatsTuesdays: repeatsTuesdays, repeatsWednesdays: repeatsWednesdays, repeatsThursdays: repeatsThursdays, repeatsFridays: repeatsFridays, repeatsSaturdays: repeatsSaturdays, repeatsSundays: repeatsSundays)
         return rules
     }
+    
+    func favorited() -> Bool {
+        guard let currentMember = MemberDataManager.loggedInMember() else {
+            return false
+        }
+        return currentMember.favorites?.contains(self) ?? false
+    }
 }

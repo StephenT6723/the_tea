@@ -27,8 +27,11 @@ class MemberDataManager {
                 //TODO: Fail
                 return
             }
-            let newMember = self.addNewMember(tgaID: id)
-            newMember?.updateWithData(data: data)
+            guard let newMember = self.addNewMember(tgaID: id) else {
+                return
+            }
+            newMember.updateWithData(data: data)
+            newMember.authToken = Member.createToken(email: email, password: password)
             CoreDataManager.sharedInstance.saveContext()
             success()
         }) { (error) in
@@ -45,8 +48,11 @@ class MemberDataManager {
                 //TODO: Fail
                 return
             }
-            let newMember = self.addNewMember(tgaID: id)
-            newMember?.updateWithData(data: data)
+            guard let newMember = self.addNewMember(tgaID: id) else {
+                return
+            }
+            newMember.updateWithData(data: data)
+            newMember.authToken = Member.createToken(email: email, password: password)
             CoreDataManager.sharedInstance.saveContext()
             success()
         }) { (error) in
@@ -59,7 +65,7 @@ class MemberDataManager {
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         //TODO: Validate Email Correctly.
         TGAServer.updateMember(name: name, email: email ?? "", facebookID: facebookID ?? "", instagram: instagram ?? "", twitter: twitter ?? "", about: about ?? "", onSuccess: { (data) in
-            let member = self.currentMember()
+            let member = self.loggedInMember()
             member?.updateWithData(data: data)
             CoreDataManager.sharedInstance.saveContext()
             success()
@@ -68,13 +74,10 @@ class MemberDataManager {
         }
     }
     
-    class func logoutMember(onSuccess success:@escaping () -> Void,
-                      onFailure failure: @escaping (_ error: Error?) -> Void) {
-        if let currentMember = self.currentMember() {
-            let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
-            context.delete(currentMember)
+    class func logoutMember() {
+        if let currentMember = self.loggedInMember() {
+            currentMember.authToken = nil
             CoreDataManager.sharedInstance.saveContext()
-            success()
         }
     }
     
@@ -126,12 +129,13 @@ class MemberDataManager {
     //MARK: Helpers
     
     class func isLoggedIn() -> Bool {
-        let member = currentMember()
+        let member = loggedInMember()
         return member != nil
     }
     
-    class func currentMember() -> Member? {
+    class func loggedInMember() -> Member? {
         let request = NSFetchRequest<Member>(entityName:"Member")
+        request.predicate = NSPredicate(format: "authToken != nil")
         
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         var results = [Member]()
@@ -149,7 +153,7 @@ class MemberDataManager {
     }
     
     class func canEditEvent(event: Event) -> Bool {
-        if let member = self.currentMember() {
+        if let member = self.loggedInMember() {
             return member.canEditEvent(event: event)
         }
         

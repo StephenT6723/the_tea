@@ -43,6 +43,7 @@
     </entity>
     <entity name="Member" representedClassName=".Member" syncable="YES" codeGenerationType="class">
         <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="authToken" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="instagram" optional="YES" attributeType="String" syncable="YES"/>
@@ -55,6 +56,6 @@
     <elements>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="465"/>
         <element name="EventCollection" positionX="-63" positionY="90" width="128" height="180"/>
-        <element name="Member" positionX="-63" positionY="63" width="128" height="180"/>
+        <element name="Member" positionX="-63" positionY="63" width="128" height="195"/>
     </elements>
 </model>
