@@ -18,8 +18,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private let modeSelectSegmentedControl = UISegmentedControl()
     private let emailErrorLabel = UILabel()
     private let emailInputField = InputField()
+    private let usernameInputField = InputField()
     private let passwordInputField = InputField()
     private let confirmPasswordInputField = InputField()
+    private let usernameErrorLabel = UILabel()
     private let passwordErrorLabel = UILabel()
     
     private let submitContainer = UIView()
@@ -28,6 +30,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     private let textFieldHeight: CGFloat = 48.0
     private var emailTopConstraint = NSLayoutConstraint()
+    private var usernameTopConstraint = NSLayoutConstraint()
+    private var passwordTopConstraint = NSLayoutConstraint()
     private var confirmPasswordTopConstraint = NSLayoutConstraint()
     
     override func viewDidLoad() {
@@ -59,9 +63,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailInputField.textField.placeholder = "EMAIL"
         emailInputField.textField.autocapitalizationType = .none
         emailInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
-        emailInputField.showDivider = false
         emailInputField.textField.delegate = self
         view.addSubview(emailInputField)
+        
+        usernameInputField.translatesAutoresizingMaskIntoConstraints = false
+        usernameInputField.textField.placeholder = "USERNAME"
+        usernameInputField.textField.autocapitalizationType = .words
+        usernameInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
+        usernameInputField.showDivider = false
+        usernameInputField.textField.delegate = self
+        view.insertSubview(usernameInputField, belowSubview: emailInputField)
+        
+        usernameErrorLabel.translatesAutoresizingMaskIntoConstraints = false
+        usernameErrorLabel.numberOfLines = 0
+        usernameErrorLabel.font = UIFont.body()
+        usernameErrorLabel.textColor = .red
+        view.addSubview(usernameErrorLabel)
         
         passwordInputField.translatesAutoresizingMaskIntoConstraints = false
         passwordInputField.textField.placeholder = "PASSWORD"
@@ -99,7 +116,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         emailInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        passwordInputField.topAnchor.constraint(equalTo: emailInputField.bottomAnchor, constant: 40).isActive = true
+        usernameTopConstraint = usernameInputField.topAnchor.constraint(equalTo: emailInputField.bottomAnchor)
+        usernameTopConstraint.isActive = true
+        usernameInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        usernameInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        usernameInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        usernameErrorLabel.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 10).isActive = true
+        usernameErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        usernameErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        
+        passwordTopConstraint = passwordInputField.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 40)
+        passwordTopConstraint.isActive = true
         passwordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         passwordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         passwordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
@@ -158,6 +186,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         //SETUP
         
         updateEmailError(text: "", animated: false)
+        updateUsernameError(text: "", animated: false)
         updatePasswordError(text: "", animated: false)
         updateSubmitButton()
         self.updateLoader(visible: false, animated: false)
@@ -171,22 +200,32 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @objc func modeChanged() {
         let selectedType = self.selectedType()
+        updateEmailError(text: "", animated: true)
+        updateUsernameError(text: "", animated: true)
+        updatePasswordError(text: "", animated: true)
         if selectedType == .register {
             confirmPasswordTopConstraint.constant = 0
             confirmPasswordInputField.alpha = 1
             passwordInputField.showDivider = true
+            
+            usernameTopConstraint.constant = 0
+            usernameInputField.alpha = 1
+            emailInputField.showDivider = true
             
             UIView.animate(withDuration: 0.3, animations: {
                 self.view.layoutIfNeeded()
             })
         } else {
             confirmPasswordTopConstraint.constant = -1 * textFieldHeight
+            usernameTopConstraint.constant = -1 * textFieldHeight
             
             UIView.animate(withDuration: 0.3, animations: {
                 self.confirmPasswordInputField.alpha = 0
+                self.usernameInputField.alpha = 0
                 self.view.layoutIfNeeded()
             }) { (complete: Bool) in
                 self.passwordInputField.showDivider = false
+                self.emailInputField.showDivider = false
             }
         }
         updateSubmitButton()
@@ -196,6 +235,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         var enabled = true
         
         if (emailInputField.textField.text?.count == 0) ||
+            (self.selectedType() == .register && usernameInputField.textField.text?.count == 0) ||
             (passwordInputField.textField.text?.count ?? 0 == 0) ||
             (self.selectedType() == .register && confirmPasswordInputField.textField.text?.count ?? 0 == 0) {
             enabled = false
@@ -206,15 +246,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @objc func submitButtonTouched() {
         let email = emailInputField.textField.text ?? ""
+        let username = usernameInputField.textField.text ?? ""
+        let password = passwordInputField.textField.text ?? ""
         let emailValid = MemberDataManager.isValidEmail(email: email)
+        let usernameValid = MemberDataManager.isValidUsername(username: username) || selectedType() == .signIn
         let passwordsMatch = passwordInputField.textField.text ?? "" == confirmPasswordInputField.textField.text ?? "" || selectedType() == .signIn
-        let passwordValid = MemberDataManager.isValidPassword(password: passwordInputField.textField.text ?? "")
+        let passwordValid = MemberDataManager.isValidPassword(password: password)
         
         var emailError = ""
+        var usernameError = ""
         var passwordError = ""
         
         if !emailValid {
             emailError = "Please enter a valid e-mail address"
+        }
+        if !usernameValid {
+            usernameError = "Your username must be at least \(MemberDataManager.minUsernameLength) characters"
         }
         if !passwordsMatch {
             passwordError = "Your passwords do not match"
@@ -224,12 +271,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         updateEmailError(text: emailError, animated: true)
+        updateUsernameError(text: usernameError, animated: true)
         updatePasswordError(text: passwordError, animated: true)
         
-        if emailValid && passwordsMatch && passwordValid {
+        if emailValid && usernameValid && passwordsMatch && passwordValid {
             updateLoader(visible: true, animated: true)
             if selectedType() == .signIn {
-                MemberDataManager.loginMember(email: email, password: passwordInputField.textField.text ?? "", onSuccess: {
+                MemberDataManager.loginMember(email: email, password: password, onSuccess: {
                     self.dismiss(animated: true, completion: nil)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
@@ -239,7 +287,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     self.updateEmailError(text: description, animated: true)
                 }
             } else {
-                MemberDataManager.createMember(email: email, password: passwordInputField.textField.text ?? "", onSuccess: {
+                MemberDataManager.createMember(email: email, username: username, password: password, onSuccess: {
                     self.dismiss(animated: true, completion: nil)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
@@ -283,6 +331,27 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }) { (complete: Bool) in
                 self.emailErrorLabel.text = ""
                 self.emailTopConstraint.constant =  0
+            }
+        }
+    }
+    
+    func updateUsernameError(text: String, animated: Bool) {
+        if text.count > 0 {
+            passwordTopConstraint.constant = 60
+            usernameErrorLabel.text = text
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.usernameErrorLabel.alpha = 1
+                
+                self.view.layoutIfNeeded()
+            })
+        } else {
+            passwordTopConstraint.constant =  40
+            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
+                self.usernameErrorLabel.alpha = 0
+                
+                self.view.layoutIfNeeded()
+            }) { (complete: Bool) in
+                self.usernameErrorLabel.text = ""
             }
         }
     }

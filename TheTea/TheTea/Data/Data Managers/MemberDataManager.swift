@@ -14,15 +14,16 @@ class MemberDataManager {
     static let sharedInstance = MemberDataManager()
     static let authEnabled = true
     static let minPasswordLength = 7
+    static let minUsernameLength = 7
     private init() {}
     
     //MARK: Actions
     
-    class func createMember(email: String, password: String,
+    class func createMember(email: String, username: String, password: String,
                             onSuccess success:@escaping () -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
         //TODO: Validate email
-        TGAServer.createMember(email: email, password: password, onSuccess: { (data) in
+        TGAServer.createMember(email: email, username: username, password: password, onSuccess: { (data) in
             guard let id = data[Member.tgaIDKey] else {
                 //TODO: Fail
                 return
@@ -174,5 +175,13 @@ class MemberDataManager {
         
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: email)
+    }
+    
+    static func isValidUsername(username: String) -> Bool {
+        //TODO: Update validation rules
+        if username.count < minUsernameLength {
+            return false
+        }
+        return true
     }
 }

@@ -36,4 +36,15 @@ extension Member {
         let tokenString = "\(email):\(password)"
         return Data(tokenString.utf8).base64EncodedString()
     }
+    
+    func hotFavorites() -> [Event] {
+        guard let favorites = self.favorites else {
+            return [Event]()
+        }
+        guard let favoritesArray = Array(favorites) as? [Event] else {
+            return [Event]()
+        }
+        
+        return favoritesArray.sorted(by: { $0.hotness > $1.hotness })
+    }
 }

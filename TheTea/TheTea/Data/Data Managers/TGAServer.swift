@@ -58,12 +58,13 @@ class TGAServer {
     
     //MARK: Users
     
-    class func createMember(email: String, password: String,
+    class func createMember(email: String, username: String, password: String,
                             onSuccess success:@escaping (_ data: [String: String]) -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
         var params = [String: String]()
         params["format"] = "json"
         params[apiMemberEmailKey] = email
+        params[apiMemberNameKey] = username
         params[apiMemberPasswordKey] = password
         
         Alamofire.request("\(domain)/user/",

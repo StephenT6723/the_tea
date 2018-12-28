@@ -80,7 +80,8 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        presentLoginView()
+        return
         if !MemberDataManager.isLoggedIn() {
             if !hasShownLogin {
                 presentLoginView()
@@ -123,9 +124,27 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         present(addNav, animated: true, completion: nil)
     }
     
+    @objc func seeAllTapped(sender: UIButton) {
+        let section = sender.tag
+        
+        //guard let sectionInfo = eventsFRC.sections?[section] else { return }
+        
+        //let sectionName = sectionInfo.name
+        if section == 1 {
+            let eventCollectionVC = EventCollectionViewController()
+            let selectedEventsFRC = EventManager.favoritedEvents()
+            eventCollectionVC.eventsFRC = selectedEventsFRC
+            eventCollectionVC.title = "FAVORITES"
+            navigationController?.pushViewController(eventCollectionVC, animated: true)
+        }
+    }
+    
     //MARK: Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        if MemberDataManager.loggedInMember() == nil {
+            return 0
+        }
         return 3
     }
     
@@ -137,14 +156,17 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         if section == 1 {
+            let favoriteCount = MemberDataManager.loggedInMember()?.favorites?.count
+            if favoriteCount ?? 0 > 0 {
+                if favoriteCount ?? 0 > 3 {
+                    return 3
+                }
+                return favoriteCount ?? 0
+            }
             return 1
         }
         
         if section == 2 {
-            return 1
-        }
-        
-        if section == 3 {
             return 1
         }
         
@@ -204,13 +226,22 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             
             if section == 1 {
                 header.titleLabel.text = "FAVORITES"
+                let favoriteCount = MemberDataManager.loggedInMember()?.favorites?.count
+                header.seeAllButton.alpha = 0
+                if favoriteCount ?? 0 > 3 {
+                    header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
+                    header.seeAllButton.alpha = 1
+                    header.seeAllButton.tag = 1
+                }
             } else if section == 2 {
                 header.titleLabel.text = "HOSTED EVENTS"
+                header.seeAllButton.alpha = 0
             } else if section == 3 {
                 header.titleLabel.text = "PAST EVENTS"
+                header.seeAllButton.alpha = 0
             }
             
-            header.seeAllButton.alpha = 0
+            
             
             return header
         }
@@ -240,6 +271,24 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         if indexPath.section == 1 {
+            if MemberDataManager.loggedInMember()?.favorites?.count ?? 0 > 0 {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventListTableViewCell.self), for: indexPath) as? EventListTableViewCell else {
+                    return EventListTableViewCell()
+                }
+                
+                guard let member = MemberDataManager.loggedInMember() else {
+                    return EventListTableViewCell()
+                }
+                
+                let favorites = member.hotFavorites()
+                let favorite = favorites[indexPath.row]
+                
+                cell.titleLabel.text = favorite.name
+                cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: favorite, timeFormatter: timeFormatter)
+                
+                return cell
+            }
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ProfileNoEventsCell.self), for: indexPath) as? ProfileNoEventsCell else {
                 return ProfileNoEventsCell()
             }
@@ -281,7 +330,17 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
+            guard let member = MemberDataManager.loggedInMember() else {
+                return
+            }
             
+            if member.favorites?.count ?? 0 > 0 {
+                let favorites = member.hotFavorites()
+                let favorite = favorites[indexPath.row]
+                
+                let detailVC = EventDetailViewController(event:favorite)
+                navigationController?.pushViewController(detailVC, animated: true)
+            }
         }
     }
 }
