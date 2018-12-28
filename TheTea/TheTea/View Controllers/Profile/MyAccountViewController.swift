@@ -80,8 +80,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presentLoginView()
-        return
+
         if !MemberDataManager.isLoggedIn() {
             if !hasShownLogin {
                 presentLoginView()
