@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		930E890621DD4D940013EC37 /* Montserrat-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890321DD4D940013EC37 /* Montserrat-Bold.otf */; };
+		930E890721DD4D940013EC37 /* Montserrat-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890421DD4D940013EC37 /* Montserrat-Regular.otf */; };
+		930E890821DD4D940013EC37 /* Montserrat-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */; };
 		932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932991322073E295008C7A3B /* EventCollectionManager.swift */; };
 		9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7721F4F3BEA00230829 /* StyleManager.swift */; };
 		9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */; };
@@ -65,6 +68,9 @@
 
 /* Begin PBXFileReference section */
 		65C427DA39FC9C6CDCDF2F0D /* Pods_TheTea.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TheTea.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		930E890321DD4D940013EC37 /* Montserrat-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.otf"; path = "Misc/Montserrat/Montserrat-Bold.otf"; sourceTree = "<group>"; };
+		930E890421DD4D940013EC37 /* Montserrat-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Regular.otf"; path = "Misc/Montserrat/Montserrat-Regular.otf"; sourceTree = "<group>"; };
+		930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-SemiBold.otf"; path = "Misc/Montserrat/Montserrat-SemiBold.otf"; sourceTree = "<group>"; };
 		932991322073E295008C7A3B /* EventCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventCollectionManager.swift; path = "Data/Data Managers/EventCollectionManager.swift"; sourceTree = "<group>"; };
 		9337C7721F4F3BEA00230829 /* StyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleManager.swift; path = Helpers/StyleManager.swift; sourceTree = "<group>"; };
 		9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+TheTea.swift"; path = "Helpers/UIColor+TheTea.swift"; sourceTree = "<group>"; };
@@ -144,9 +150,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		930E88FC21DD4D560013EC37 /* Montserrat */ = {
+			isa = PBXGroup;
+			children = (
+				930E890321DD4D940013EC37 /* Montserrat-Bold.otf */,
+				930E890421DD4D940013EC37 /* Montserrat-Regular.otf */,
+				930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */,
+			);
+			name = Montserrat;
+			sourceTree = "<group>";
+		};
 		9337C76F1F4F3A0D00230829 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				930E88FC21DD4D560013EC37 /* Montserrat */,
 				9337C7901F4F40FC00230829 /* SourceSans */,
 				938906731F3E86D400BBB88C /* Assets.xcassets */,
 				938906751F3E86D400BBB88C /* LaunchScreen.storyboard */,
@@ -426,13 +443,16 @@
 				9337C78E1F4F40EE00230829 /* SourceSansPro-Semibold.otf in Resources */,
 				9337C78A1F4F40EE00230829 /* SourceSansPro-It.otf in Resources */,
 				938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */,
+				930E890821DD4D940013EC37 /* Montserrat-SemiBold.otf in Resources */,
 				9337C78F1F4F40EE00230829 /* SourceSansPro-SemiboldIt.otf in Resources */,
 				9337C78D1F4F40EE00230829 /* SourceSansPro-Regular.otf in Resources */,
 				93EAF8F1206DA621008B213F /* test_event_collections.plist in Resources */,
 				9337C7871F4F40EE00230829 /* SourceSansPro-BoldIt.otf in Resources */,
+				930E890621DD4D940013EC37 /* Montserrat-Bold.otf in Resources */,
 				9337C7891F4F40EE00230829 /* SourceSansPro-ExtraLightIt.otf in Resources */,
 				9337C7881F4F40EE00230829 /* SourceSansPro-ExtraLight.otf in Resources */,
 				938906741F3E86D400BBB88C /* Assets.xcassets in Resources */,
+				930E890721DD4D940013EC37 /* Montserrat-Regular.otf in Resources */,
 				9337C7841F4F40EE00230829 /* SourceSansPro-Black.otf in Resources */,
 				9337C78B1F4F40EE00230829 /* SourceSansPro-Light.otf in Resources */,
 				9337C78C1F4F40EE00230829 /* SourceSansPro-LightIt.otf in Resources */,

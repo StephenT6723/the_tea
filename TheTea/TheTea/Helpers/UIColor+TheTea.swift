@@ -18,15 +18,15 @@ extension UIColor {
     }
     
     class func primaryCopy() -> UIColor {
-        return UIColor(hexString:"#4A4A4A")
+        return UIColor(red:0.09, green:0.08, blue:0.14, alpha:1)
     }
     
     class func primaryCTA() -> UIColor {
-        return UIColor(hexString:"#54C7FC")
+        return UIColor(red:0.59, green:0.71, blue:1, alpha:1)
     }
     
     class func lightCopy() -> UIColor {
-        return UIColor(hexString:"#A4AAB3")
+        return UIColor(red:0.19, green:0.21, blue:0.27, alpha:0.48)
     }
     class func lightBackground() -> UIColor {
         return UIColor(hexString:"EFEFF4")

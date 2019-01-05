@@ -87,4 +87,21 @@ extension Event {
         }
         return currentMember.favorites?.contains(self) ?? false
     }
+    
+    func sortedHosts() -> [Member] {
+        guard let hosts = self.hosts else {
+            return [Member]()
+        }
+        
+        guard let hostsArray = Array(hosts) as? [Member] else {
+            return [Member]()
+        }
+        
+        return hostsArray.sorted(by: { (first, second) -> Bool in
+            guard let firstName = first.name, let secondName = second.name else {
+                return false
+            }
+            return firstName > secondName
+        })
+    }
 }

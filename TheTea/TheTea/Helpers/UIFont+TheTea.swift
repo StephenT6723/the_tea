@@ -10,11 +10,11 @@ import UIKit
 
 extension UIFont {
     class func headerOne() -> UIFont? {
-        return UIFont(name: "SourceSansPro-Bold", size: 18)
+        return UIFont(name: "Montserrat-Bold", size: 24)
     }
     
     class func headerTwo() -> UIFont? {
-        return UIFont(name: "SourceSansPro-Semibold", size: 17)
+        return UIFont(name: "Montserrat-SemiBold", size: 16)
     }
     
     class func headerThree() -> UIFont? {
@@ -30,10 +30,14 @@ extension UIFont {
     }
     
     class func body() -> UIFont? {
-        return UIFont(name: "SourceSansPro-Regular", size: 15)
+        return UIFont(name: "Montserrat-Regular", size: 14)
+    }
+    
+    class func sectionTitle() -> UIFont? {
+        return UIFont(name: "Montserrat-SemiBold", size: 14)
     }
     
     class func cta() -> UIFont? {
-        return UIFont(name: "SourceSansPro-Semibold", size: 15)
+        return UIFont(name: "Montserrat-Bold", size: 12)
     }
 }

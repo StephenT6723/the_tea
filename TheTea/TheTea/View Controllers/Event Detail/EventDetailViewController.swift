@@ -13,8 +13,8 @@ class EventDetailViewController: UIViewController {
     var event : Event
     
     private let topCarousel = EventDetailCarousel(frame: CGRect())
-    private let contentView = UIView()
-    private let topPanelView = TopPanelView()
+    private let pageControl = UIPageControl()
+    private let scrollView = UIScrollView()
     
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
@@ -31,6 +31,9 @@ class EventDetailViewController: UIViewController {
     
     private let locationTitleLabel = UILabel()
     private let locationLabel = UILabel()
+    
+    private let hostsTitleLabel = UILabel()
+    private var hostLabels = [EventDetailHostView]()
     
     private let reportButton = UIButton()
     
@@ -65,28 +68,37 @@ class EventDetailViewController: UIViewController {
             let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
             navigationItem.rightBarButtonItem = editButton
         } else {
-            let reportButton = UIBarButtonItem(title: "SHARE", style: .plain, target: self, action: #selector(shareButtonTouched))
+            let reportButton = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(shareButtonTouched))
             navigationItem.rightBarButtonItem = reportButton
         }
         
-        topCarousel.translatesAutoresizingMaskIntoConstraints = false
-        topCarousel.event = event
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .white
+        scrollView.alwaysBounceVertical = true
+        view.addSubview(scrollView)
         
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.backgroundColor = .white
+        topCarousel.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(topCarousel)
+        
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.numberOfPages = 4
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = UIColor.lightGray
+        pageControl.currentPageIndicatorTintColor = UIColor.primaryCTA()
+        scrollView.addSubview(pageControl)
         
         subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subTitleLabel.font = UIFont.headerTwo()
+        subTitleLabel.font = UIFont.sectionTitle()
         subTitleLabel.textColor = UIColor.lightCopy()
         subTitleLabel.text = "DRAG SHOW"
         subTitleLabel.numberOfLines = 0
-        contentView.addSubview(subTitleLabel)
+        scrollView.addSubview(subTitleLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.headerOne()
         titleLabel.textColor = UIColor.primaryCopy()
         titleLabel.numberOfLines = 0
-        contentView.addSubview(titleLabel)
+        scrollView.addSubview(titleLabel)
         
         favoriteButton.translatesAutoresizingMaskIntoConstraints = false
         favoriteButton.layer.borderWidth = 2
@@ -95,127 +107,172 @@ class EventDetailViewController: UIViewController {
         favoriteButton.setTitle("FAVORITE", for: .normal)
         favoriteButton.titleLabel?.font = UIFont.cta()
         favoriteButton.addTarget(self, action: #selector(favoriteButtonTouched), for: .touchUpInside)
-        contentView.addSubview(favoriteButton)
+        scrollView.addSubview(favoriteButton)
         
         favoriteActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(favoriteActivityIndicator)
+        scrollView.addSubview(favoriteActivityIndicator)
         
         aboutLabel.translatesAutoresizingMaskIntoConstraints = false
         aboutLabel.numberOfLines = 0
         aboutLabel.font = UIFont.body()
         aboutLabel.textColor = UIColor.primaryCopy()
-        contentView.addSubview(aboutLabel)
+        scrollView.addSubview(aboutLabel)
         
         timeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeTitleLabel.font = UIFont.body()
+        timeTitleLabel.font = UIFont.sectionTitle()
         timeTitleLabel.textColor = UIColor.lightCopy()
         timeTitleLabel.text = "DATE & TIME"
-        contentView.addSubview(timeTitleLabel)
+        scrollView.addSubview(timeTitleLabel)
         
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.font = UIFont.body()
+        timeLabel.font = UIFont.headerTwo()
         timeLabel.textColor = UIColor.primaryCopy()
         timeLabel.numberOfLines = 0
-        contentView.addSubview(timeLabel)
+        scrollView.addSubview(timeLabel)
         
         ticketTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        ticketTitleLabel.font = UIFont.body()
+        ticketTitleLabel.font = UIFont.sectionTitle()
         ticketTitleLabel.textColor = UIColor.lightCopy()
         ticketTitleLabel.text = "TICKETS"
-        contentView.addSubview(ticketTitleLabel)
+        scrollView.addSubview(ticketTitleLabel)
         
         ticketLabel.translatesAutoresizingMaskIntoConstraints = false
-        ticketLabel.font = UIFont.body()
+        ticketLabel.font = UIFont.headerTwo()
         ticketLabel.textColor = UIColor.primaryCopy()
-        ticketLabel.text = "FREE"
-        contentView.addSubview(ticketLabel)
+        ticketLabel.text = "Free"
+        scrollView.addSubview(ticketLabel)
         
         locationTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        locationTitleLabel.font = UIFont.body()
+        locationTitleLabel.font = UIFont.sectionTitle()
         locationTitleLabel.textColor = UIColor.lightCopy()
         locationTitleLabel.text = "LOCATION"
-        contentView.addSubview(locationTitleLabel)
+        scrollView.addSubview(locationTitleLabel)
         
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.numberOfLines = 0
-        locationLabel.font = UIFont.body()
+        locationLabel.font = UIFont.headerTwo()
         locationLabel.textColor = UIColor.primaryCopy()
-        contentView.addSubview(locationLabel)
+        scrollView.addSubview(locationLabel)
         
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.isUserInteractionEnabled = false
-        contentView.addSubview(mapView)
+        scrollView.addSubview(mapView)
+        
+        hostsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        hostsTitleLabel.font = UIFont.sectionTitle()
+        hostsTitleLabel.textColor = UIColor.lightCopy()
+        hostsTitleLabel.text = "HOSTS"
+        scrollView.addSubview(hostsTitleLabel)
         
         reportButton.translatesAutoresizingMaskIntoConstraints = false
         reportButton.setTitle("REPORT", for: .normal)
         reportButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
         reportButton.titleLabel?.font = UIFont.cta()
         reportButton.addTarget(self, action: #selector(reportButtonTouched), for: .touchUpInside)
-        contentView.addSubview(reportButton)
+        scrollView.addSubview(reportButton)
         
-        subTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        subTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        subTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        //TODO: Remove ! operator
+        let hostsArray = event.sortedHosts()
+        var previousHostView: EventDetailHostView?
+        for i in 0..<hostsArray.count {
+            let host = hostsArray[i]
+            
+            let hostView = EventDetailHostView(frame: CGRect())
+            hostView.translatesAutoresizingMaskIntoConstraints = false
+            hostView.label.text = host.name
+            hostView.imageView.image = UIImage(named: "placeholder_profile_image")
+            hostView.button.tag = i
+            hostView.button.addTarget(self, action: #selector(hostButtonTouched), for: .touchUpInside)
+            scrollView.addSubview(hostView)
+            
+            if previousHostView != nil {
+                hostView.topAnchor.constraint(equalTo: previousHostView!.bottomAnchor).isActive = true
+            } else {
+                hostView.topAnchor.constraint(equalTo: hostsTitleLabel.bottomAnchor, constant: 4).isActive = true
+            }
+            
+            hostView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+            hostView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+            hostView.heightAnchor.constraint(equalToConstant: EventDetailHostView.preferredHeight).isActive = true
+            
+            if i == hostsArray.count - 1 {
+                hostView.bottomAnchor.constraint(equalTo: reportButton.topAnchor, constant: -10).isActive = true
+            }
+            
+            previousHostView = hostView
+        }
         
-        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        topCarousel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        topCarousel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        topCarousel.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        topCarousel.heightAnchor.constraint(equalToConstant: EventDetailCarousel.preferedHeight).isActive = true
+        
+        pageControl.centerXAnchor.constraint(equalTo: topCarousel.centerXAnchor).isActive = true
+        pageControl.topAnchor.constraint(equalTo: topCarousel.bottomAnchor, constant: 0).isActive = true
+        
+        subTitleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        subTitleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        subTitleLabel.topAnchor.constraint(equalTo: topCarousel.bottomAnchor, constant: 38).isActive = true
+        
+        titleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -20).isActive = true
         titleLabel.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 4).isActive = true
         
         favoriteButton.widthAnchor.constraint(equalToConstant: 90).isActive = true
         favoriteButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        favoriteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        favoriteButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20).isActive = true
+        favoriteButton.topAnchor.constraint(equalTo: subTitleLabel.topAnchor).isActive = true
+        favoriteButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -20).isActive = true
         
         favoriteActivityIndicator.centerXAnchor.constraint(equalTo: favoriteButton.centerXAnchor).isActive = true
         favoriteActivityIndicator.topAnchor.constraint(equalTo: favoriteButton.bottomAnchor, constant: 10).isActive = true
         
-        aboutLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        aboutLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        aboutLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+        aboutLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        aboutLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        aboutLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40).isActive = true
+        aboutLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16).isActive = true
         
-        timeTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        timeTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        timeTitleLabel.topAnchor.constraint(equalTo: aboutLabel.bottomAnchor, constant: 20).isActive = true
+        timeTitleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        timeTitleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        timeTitleLabel.topAnchor.constraint(equalTo: aboutLabel.bottomAnchor, constant: 34).isActive = true
         
-        timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        timeLabel.topAnchor.constraint(equalTo: timeTitleLabel.bottomAnchor, constant: 4).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        timeLabel.topAnchor.constraint(equalTo: timeTitleLabel.bottomAnchor, constant: 8).isActive = true
         
-        ticketTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        ticketTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        ticketTitleLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 20).isActive = true
+        ticketTitleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        ticketTitleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        ticketTitleLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 34).isActive = true
         
-        ticketLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        ticketLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        ticketLabel.topAnchor.constraint(equalTo: ticketTitleLabel.bottomAnchor, constant: 4).isActive = true
+        ticketLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        ticketLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        ticketLabel.topAnchor.constraint(equalTo: ticketTitleLabel.bottomAnchor, constant: 8).isActive = true
         
-        locationTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        locationTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        locationTitleLabel.topAnchor.constraint(equalTo: ticketLabel.bottomAnchor, constant: 20).isActive = true
+        locationTitleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        locationTitleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        locationTitleLabel.topAnchor.constraint(equalTo: ticketLabel.bottomAnchor, constant: 34).isActive = true
         
-        locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        locationLabel.topAnchor.constraint(equalTo: locationTitleLabel.bottomAnchor, constant: 4).isActive = true
+        locationLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        locationLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        locationLabel.topAnchor.constraint(equalTo: locationTitleLabel.bottomAnchor, constant: 8).isActive = true
         
-        mapView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-        mapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        mapView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        mapView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         mapView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20).isActive = true
         mapView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
-        reportButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        reportButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 20).isActive = true
+        hostsTitleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        hostsTitleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        hostsTitleLabel.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 30).isActive = true
+        
+        reportButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         reportButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
         reportButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
-        reportButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
+        reportButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
-        topPanelView.translatesAutoresizingMaskIntoConstraints = false
-        topPanelView.updateContent(topPanel: topCarousel, scrollableView: contentView)
-        view.addSubview(topPanelView)
-        
-        topPanelView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        topPanelView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        topPanelView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        topPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -227,12 +284,21 @@ class EventDetailViewController: UIViewController {
     }
     
     func updateContent() {
-        titleLabel.text = event.name?.uppercased()
+        titleLabel.text = "RuPaul’s Drag Race Viewing Part"//event.name?.uppercased()
         updateFavoriteButton()
         if let date = event.startTime {
-            timeLabel.text = "\(DateStringHelper.fullDescription(of: date as Date).uppercased()) - \(event.repeatRules().rules(abreviated: false))"
+            timeLabel.text = "\(DateStringHelper.fullDescription(of: date as Date)) - \(event.repeatRules().rules(abreviated: false))"
         }
-        aboutLabel.text = event.about
+        let textContent = "Cras quis nulla commodo, aliquam lectus sed, blandit augue. Cras ullamcorper bibendum bibendum. Duis tincidunt urna non pretium porta. Nam condimentum vitae ligula vel ornare. Phasellus at semper turpis. Nunc eu tellus tortor. Etiam at condimentum nisl, vitae"
+        guard let font = UIFont.body() else {
+            return
+        }
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 2.5
+        let textString = NSMutableAttributedString(string: textContent, attributes: [
+            NSAttributedString.Key.font: font, NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ])
+        aboutLabel.attributedText = textString //event.about
         if let locationName = event.locationName {
             var locationString = locationName
             if let address = event.address {
@@ -251,8 +317,6 @@ class EventDetailViewController: UIViewController {
         
         let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001))
         mapView.region = region
-        
-        topCarousel.updateContent()
     }
     
     func updateFavoriteButton() {
@@ -292,49 +356,77 @@ class EventDetailViewController: UIViewController {
     @objc func shareButtonTouched() {
         print("SHARE")
     }
+    
+    @objc func hostButtonTouched(sender: UIButton) {
+        let hostsArray = event.sortedHosts()
+        let host = hostsArray[sender.tag]
+        //TODO: Present Host View.
+        print("Show Host: \(host.name!)")
+    }
 }
 
-class EventDetailCarousel : UIView {
-    let mapView = MKMapView()
-    let noLocationView = UIView()
-    var event: Event? = nil {
-        didSet {
-            updateContent()
-        }
-    }
+class EventDetailHostView : UIView {
+    let imageView = UIImageView()
+    let label = UILabel()
+    let button = UIButton()
+    static let preferredHeight: CGFloat = 40
+    private static let imageViewSize: CGFloat = 30
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        mapView.translatesAutoresizingMaskIntoConstraints = false
-        mapView.isUserInteractionEnabled = false
-        addSubview(mapView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = EventDetailHostView.imageViewSize / 2
+        imageView.clipsToBounds = true
+        addSubview(imageView)
         
-        mapView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        mapView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        mapView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        mapView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.headerTwo()
+        label.textColor = UIColor.primaryCopy()
+        addSubview(label)
         
-        noLocationView.translatesAutoresizingMaskIntoConstraints = false
-        noLocationView.isUserInteractionEnabled = false
-        noLocationView.backgroundColor = UIColor.primaryBrand()
-        addSubview(noLocationView)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(button)
         
-        noLocationView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        noLocationView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        noLocationView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        noLocationView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: EventDetailHostView.imageViewSize).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: EventDetailHostView.imageViewSize).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        let logoImageView = UIImageView(image: UIImage(named: "logo"))
-        logoImageView.contentMode = .scaleAspectFit
-        logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        logoImageView.isUserInteractionEnabled = false
-        noLocationView.addSubview(logoImageView)
+        label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
+        label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        logoImageView.topAnchor.constraint(equalTo: noLocationView.topAnchor).isActive = true
-        logoImageView.bottomAnchor.constraint(equalTo: noLocationView.bottomAnchor).isActive = true
-        logoImageView.leadingAnchor.constraint(equalTo: noLocationView.leadingAnchor).isActive = true
-        logoImageView.trailingAnchor.constraint(equalTo: noLocationView.trailingAnchor).isActive = true
+        button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        button.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        button.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        button.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+class EventDetailCarousel : UIView {
+    static let preferedHeight: CGFloat = 202.0
+    private var imageViews = [UIImageView]()
+    private let scrollView = UIScrollView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.alwaysBounceHorizontal = true
+        scrollView.isPagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
+        addSubview(scrollView)
+        
+        scrollView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        scrollView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        updateContent()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -342,22 +434,38 @@ class EventDetailCarousel : UIView {
     }
     
     func updateContent() {
-        if let event = self.event {
-            if event.latitude == 0 && event.longitude == 0 {
-                noLocationView.alpha = 1
+        for imageView in imageViews {
+            imageView.removeFromSuperview()
+        }
+        
+        imageViews.removeAll()
+        
+        var previousImageView: UIImageView?
+        
+        for i in 0..<4 {
+            let imageView = UIImageView()
+            imageView.image = UIImage(named: "eventPlaceholder\(i)")
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFill
+            scrollView.addSubview(imageView)
+            
+            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+            imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+            imageView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+            
+            if previousImageView != nil {
+                imageView.leadingAnchor.constraint(equalTo: previousImageView!.trailingAnchor).isActive = true
+                imageView.widthAnchor.constraint(equalTo: previousImageView!.widthAnchor).isActive = true
             } else {
-                noLocationView.alpha = 0
-                
-                let coordinate = CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude)
-                
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = event.locationName
-                mapView.addAnnotation(annotation)
-                
-                let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001))
-                mapView.region = region
+                imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+                imageView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
             }
+            
+            if i == 3 {
+                imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+            }
+            
+            previousImageView = imageView
         }
     }
 }
