@@ -217,6 +217,8 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 header.twitterButton.isEnabled = false
             }
             
+            header.addEventButton.addTarget(self, action: #selector(addEventTapped), for: .touchUpInside)
+            
             return header
         } else {
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: EventListHeaderView.self)) as? EventListHeaderView else {
@@ -348,6 +350,7 @@ class ProfileHeader: UITableViewHeaderFooterView {
     let facebookButton = UIButton()
     let instagramButton = UIButton()
     let twitterButton = UIButton()
+    let addEventButton = PrimaryCTA()
     
     let socialButtonSize: CGFloat = 20
     
@@ -392,7 +395,11 @@ class ProfileHeader: UITableViewHeaderFooterView {
         twitterButton.setImage(UIImage(named:"twitter"), for: .normal)
         contentView.addSubview(twitterButton)
         
-        backgroundStripe.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        addEventButton.translatesAutoresizingMaskIntoConstraints = false
+        addEventButton.setTitle("POST AN EVENT", for: .normal)
+        contentView.addSubview(addEventButton)
+        
+        backgroundStripe.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
         backgroundStripe.heightAnchor.constraint(equalToConstant: 70).isActive = true
         backgroundStripe.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         backgroundStripe.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
@@ -401,7 +408,7 @@ class ProfileHeader: UITableViewHeaderFooterView {
         profileImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         profileImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        profileImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
+        //profileImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         
         nameLabel.topAnchor.constraint(equalTo: backgroundStripe.topAnchor, constant: 7).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 20).isActive = true
@@ -421,6 +428,12 @@ class ProfileHeader: UITableViewHeaderFooterView {
         twitterButton.leadingAnchor.constraint(equalTo: instagramButton.trailingAnchor, constant: 20).isActive = true
         twitterButton.heightAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         twitterButton.widthAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
+        
+        addEventButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 20).isActive = true
+        addEventButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        addEventButton.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
+        addEventButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        addEventButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

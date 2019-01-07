@@ -514,7 +514,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                                                     startTime: startTimePicker.date,
                                                     endTime: isEndTimeVisible() ? endTimePicker.date : nil,
                                                     about: aboutText,
-                                                    location: selectedLocation, onSuccess: { (data) in
+                                                    location: selectedLocation,
+                                                    price: priceStepper.value,
+                                                    ticketURL: priceStepper.value > 0 ? ticketURLTextField.textField.text : "",
+                                                    repeats: selectedRepeats.dataString(),
+                                                    onSuccess: { (data) in
                                                         self.dismiss(animated: true, completion: nil)
                                                     }) { (error) in
                                                         if let error = error {

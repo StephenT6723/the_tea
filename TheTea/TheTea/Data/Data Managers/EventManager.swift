@@ -192,11 +192,11 @@ class EventManager {
     
     //MARK: Remote Data Updates
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?,
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String,
                            onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
-        TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location, onSuccess: { (data) in
-            self.updateLocalEvents(from: data)
+        TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, onSuccess: { () in
+
         }) { (error) in
             if let error = error {
                 print("EVENT FETCH FAILED: \(error.localizedDescription)")

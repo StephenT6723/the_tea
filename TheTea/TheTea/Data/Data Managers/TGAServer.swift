@@ -273,8 +273,8 @@ class TGAServer {
     
     //MARK: Event CRUD
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?,
-                           onSuccess success:@escaping (_ data: [[String: Any]]) -> Void,
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String,
+                           onSuccess success:@escaping () -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
@@ -288,38 +288,23 @@ class TGAServer {
         if let endTime = endTime {
             params[apiEndTimeKey] = dateFormatter.string(from: endTime)
         }
-        if let about = about {
-            params[apiAboutKey] = about
-        }
-        if let address = location?.address {
-            params[apiAddressKey] = address
-        }
-        if let locationName = location?.locationName {
-            params[apiLocationNameKey] = locationName
-        }
-        if let latitude = location?.latitude {
-            params[apiLatitudeKey] = "\(latitude)"
-        }
-        if let longitude = location?.longitude {
-            params[apiLongitudeKey] = "\(longitude)"
-        }
+        params[apiAboutKey] = about ?? ""
+        params[apiAddressKey] = location?.address ?? ""
+        params[apiLocationNameKey] = location?.locationName ?? ""
+        params[apiLatitudeKey] = "\(location?.latitude ?? 0)"
+        params[apiLongitudeKey] = "\(location?.longitude ?? 0)"
+        params[apiPriceKey] = "\(price)"
+        params[apiTicketURLKey] = ticketURL ?? ""
+        params[apiRepeatsKey] = repeats
+
+        let headers = self.headersForCurrentMember()
         
         Alamofire.request("\(domain)/events/",
             method: .post,
             parameters: params,
             encoding: URLEncoding(destination: .queryString),
-            headers: nil).responseJSON { response in
-                guard let data = response.data else {
-                    failure(response.error)
-                    return
-                }
-                do {
-                    let json = try JSON(data: data)
-                    let dict = eventDictFrom(json: json)
-                    success(dict)
-                } catch {
-                    failure(error)
-                }
+            headers: headers).responseJSON { response in
+                response.response?.statusCode == 200 ? success() : failure(response.error)
         }
     }
     
