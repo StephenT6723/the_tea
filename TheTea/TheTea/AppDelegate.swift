@@ -24,13 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let eventsFRC = EventManager.allFutureEvents()
         eventListVC.eventsFRC = eventsFRC
         let rootNav = UINavigationController(rootViewController: eventListVC)
-        rootNav.navigationBar.prefersLargeTitles = true
         rootNav.tabBarItem.image = UIImage(named: "rootViewIcon")
         
         if authEnabled {
             let myAccountVC = MyAccountViewController()
             let myAccountNav = UINavigationController(rootViewController: myAccountVC)
-            myAccountNav.navigationBar.prefersLargeTitles = true
             myAccountNav.navigationBar.isTranslucent = false
             myAccountVC.title = "MY PROFILE"
             myAccountNav.tabBarItem.image = UIImage(named: "myProfileIcon")

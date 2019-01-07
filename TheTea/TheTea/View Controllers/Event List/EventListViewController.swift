@@ -38,7 +38,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         weekdayFormatter.dateFormat = "EEEE"
         dateFormatter.dateFormat = "MMM d"
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navActivityIndicator)
+        navigationItem.titleView = UIImageView(image: UIImage(named: "navLogo"))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navActivityIndicator)
         
         //table view
         tableView.translatesAutoresizingMaskIntoConstraints = false

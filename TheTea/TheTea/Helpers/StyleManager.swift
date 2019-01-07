@@ -11,10 +11,8 @@ import UIKit
 class StyleManager {
     class func updateNavBarStyling() {
         let navigationBarAppearace = UINavigationBar.appearance()
-        navigationBarAppearace.titleTextAttributes = [NSAttributedString.Key.font:UIFont.headerTwo() as Any,
+        navigationBarAppearace.titleTextAttributes = [NSAttributedString.Key.font:UIFont.navTitle() as Any,
                                                       NSAttributedString.Key.foregroundColor:UIColor.primaryCopy()]
-        navigationBarAppearace.largeTitleTextAttributes = [NSAttributedString.Key.font:UIFont(name: "SourceSansPro-Bold", size: 30) as Any,
-                                                           NSAttributedString.Key.foregroundColor:UIColor.primaryCopy()]
         
         let barButtonAppearace = UIBarButtonItem.appearance()
         barButtonAppearace.tintColor = UIColor.primaryCTA()
