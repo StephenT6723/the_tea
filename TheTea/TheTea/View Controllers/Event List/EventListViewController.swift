@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCollectionCarouselDelegate {
+class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCollectionCarouselDelegate, CarouselDelegate {
     private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
     private let timeFormatter = DateFormatter()
     private let weekdayFormatter = DateFormatter()
@@ -30,7 +30,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
 
         title = "The Gay Agenda".uppercased()
-        view.backgroundColor = UIColor.lightBackground()
+        view.backgroundColor = .white
 
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
@@ -45,8 +45,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 50
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0.1))
-        tableView.backgroundColor = UIColor.lightBackground()
-        tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
+        tableView.backgroundColor = .white
+        tableView.register(EventCarouselTableViewCell.self, forCellReuseIdentifier: String(describing: EventCarouselTableViewCell.self))
         tableView.register(EventListHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventListHeaderView.self))
         tableView.delegate = self
         tableView.dataSource = self
@@ -140,17 +140,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = eventsFRC.sections else {
-            return 0
-        }
-        
-        guard section < sections.count else {
-            return 0
-        }
-    
-        let sectionInfo = sections[section]
-        let rowCount = sectionInfo.numberOfObjects > maxEventsPerDay ? maxEventsPerDay : sectionInfo.numberOfObjects
-        return rowCount
+        return 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -180,17 +170,28 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         header.seeAllButton.tag = section
         header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
         
+        guard let sections = eventsFRC.sections else {
+            return nil
+        }
+        
+        guard section < sections.count else {
+            return nil
+        }
+        
+        let sectionInfo = sections[section]
+        
+        header.seeAllButton.alpha = sectionInfo.numberOfObjects > maxEventsPerDay ? 1 : 0
+        
         return header
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventListTableViewCell.self), for: indexPath) as? EventListTableViewCell else {
-            return EventListTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventCarouselTableViewCell.self), for: indexPath) as? EventCarouselTableViewCell else {
+            return EventCarouselTableViewCell()
         }
         
-        let event = eventsFRC.object(at: indexPath)
-        cell.titleLabel.text = event.name
-        cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: event, timeFormatter: timeFormatter)
+        cell.carousel.tag = indexPath.section
+        cell.carousel.delegate = self
         
         return cell
     }
@@ -207,7 +208,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.reloadData()
     }
     
-    //MARK: Carousel Delegate
+    //MARK: Collection Carousel Delegate
     
     func numberOfCollectionsIn(carousel: EventCollectionCarousel) -> Int {
         return featuredCollections.count
@@ -237,6 +238,49 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
+    //MARK: Carousel Delegate
+    
+    func numberOfItemsIn(carousel: Carousel) -> Int {
+        let index = carousel.tag
+        
+        guard let sections = eventsFRC.sections else {
+            return 0
+        }
+        
+        guard index < sections.count else {
+            return 0
+        }
+        
+        let sectionInfo = sections[index]
+        let rowCount = sectionInfo.numberOfObjects > maxEventsPerDay ? maxEventsPerDay : sectionInfo.numberOfObjects
+        return rowCount
+    }
+    
+    func view(for carousel: Carousel, at index: Int) -> UIView? {
+        let section = carousel.tag
+        let indexPath = IndexPath(row: index, section: section)
+        
+        let event = eventsFRC.object(at: indexPath)
+        
+        let cellView = EventView(frame: CGRect())
+        cellView.image = UIImage(named: "eventPlaceholder1")
+        cellView.subtitleLabel.text = "DRAG SHOW"
+        cellView.titleLabel.text = event.name
+        cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
+        cellView.placeLabel.text = "Pieces Bar"
+        
+        return cellView
+    }
+    
+    func carousel(_ carousel: Carousel, didSelect index: Int) {
+        let section = carousel.tag
+        let indexPath = IndexPath(row: index, section: section)
+        
+        let event = eventsFRC.object(at: indexPath)
+        let detailVC = EventDetailViewController(event:event)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
     //MARK: Helpers
     
     func title(forHeader section: Int) -> String {
@@ -248,10 +292,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         guard let sectionDate = DateStringHelper.date(from: dataString) else { return "" }
         
         if todayString == dataString {
-            return "TODAY"
+            return "Today"
         }
         
-        return weekdayFormatter.string(from: sectionDate).uppercased()
+        return weekdayFormatter.string(from: sectionDate).capitalized
     }
     
     func subTitle(forHeader section: Int) -> String {

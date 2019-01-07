@@ -33,7 +33,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.backgroundColor = UIColor.lightBackground()
         tableView.register(ProfileAboutCell.self, forCellReuseIdentifier: String(describing: ProfileAboutCell.self))
         tableView.register(ProfileNoEventsCell.self, forCellReuseIdentifier: String(describing: ProfileNoEventsCell.self))
-        tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
+        tableView.register(EventCarouselTableViewCell.self, forCellReuseIdentifier: String(describing: EventCarouselTableViewCell.self))
         tableView.register(ProfileHeader.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileHeader.self))
         tableView.register(EventListHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventListHeaderView.self))
         tableView.register(ProfileAddEventFooter.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileAddEventFooter.self))
@@ -271,19 +271,16 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if indexPath.section == 1 {
             if MemberDataManager.loggedInMember()?.favorites?.count ?? 0 > 0 {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventListTableViewCell.self), for: indexPath) as? EventListTableViewCell else {
-                    return EventListTableViewCell()
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventCarouselTableViewCell.self), for: indexPath) as? EventCarouselTableViewCell else {
+                    return EventCarouselTableViewCell()
                 }
                 
                 guard let member = MemberDataManager.loggedInMember() else {
-                    return EventListTableViewCell()
+                    return EventCarouselTableViewCell()
                 }
                 
                 let favorites = member.hotFavorites()
                 let favorite = favorites[indexPath.row]
-                
-                cell.titleLabel.text = favorite.name
-                cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: favorite, timeFormatter: timeFormatter)
                 
                 return cell
             }
@@ -320,8 +317,8 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             return cell
         }
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventListTableViewCell.self), for: indexPath) as? EventListTableViewCell else {
-            return EventListTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventCarouselTableViewCell.self), for: indexPath) as? EventCarouselTableViewCell else {
+            return EventCarouselTableViewCell()
         }
         
         return cell

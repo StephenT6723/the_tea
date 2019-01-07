@@ -10,6 +10,9 @@
 		930E890621DD4D940013EC37 /* Montserrat-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890321DD4D940013EC37 /* Montserrat-Bold.otf */; };
 		930E890721DD4D940013EC37 /* Montserrat-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890421DD4D940013EC37 /* Montserrat-Regular.otf */; };
 		930E890821DD4D940013EC37 /* Montserrat-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */; };
+		930E890A21E169230013EC37 /* Montserrat-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890921E169230013EC37 /* Montserrat-Medium.otf */; };
+		930E890C21E16BA70013EC37 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930E890B21E16BA70013EC37 /* EventView.swift */; };
+		930E890E21E3E7C20013EC37 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930E890D21E3E7C20013EC37 /* Carousel.swift */; };
 		932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932991322073E295008C7A3B /* EventCollectionManager.swift */; };
 		9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7721F4F3BEA00230829 /* StyleManager.swift */; };
 		9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */; };
@@ -42,7 +45,7 @@
 		938906741F3E86D400BBB88C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 938906731F3E86D400BBB88C /* Assets.xcassets */; };
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
-		938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */; };
+		938906841F3E8C5100BBB88C /* EventCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906831F3E8C5100BBB88C /* EventCarouselTableViewCell.swift */; };
 		93E440AB21836DD2001E82E0 /* RepeatEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E440AA21836DD2001E82E0 /* RepeatEditViewController.swift */; };
 		93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E440AC21837201001E82E0 /* EventRepeatRules.swift */; };
 		93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */; };
@@ -71,6 +74,9 @@
 		930E890321DD4D940013EC37 /* Montserrat-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.otf"; path = "Misc/Montserrat/Montserrat-Bold.otf"; sourceTree = "<group>"; };
 		930E890421DD4D940013EC37 /* Montserrat-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Regular.otf"; path = "Misc/Montserrat/Montserrat-Regular.otf"; sourceTree = "<group>"; };
 		930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-SemiBold.otf"; path = "Misc/Montserrat/Montserrat-SemiBold.otf"; sourceTree = "<group>"; };
+		930E890921E169230013EC37 /* Montserrat-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Medium.otf"; path = "Misc/Montserrat/Montserrat-Medium.otf"; sourceTree = "<group>"; };
+		930E890B21E16BA70013EC37 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		930E890D21E3E7C20013EC37 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Carousel.swift; path = "UI Elements/Carousel.swift"; sourceTree = "<group>"; };
 		932991322073E295008C7A3B /* EventCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventCollectionManager.swift; path = "Data/Data Managers/EventCollectionManager.swift"; sourceTree = "<group>"; };
 		9337C7721F4F3BEA00230829 /* StyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleManager.swift; path = Helpers/StyleManager.swift; sourceTree = "<group>"; };
 		9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+TheTea.swift"; path = "Helpers/UIColor+TheTea.swift"; sourceTree = "<group>"; };
@@ -105,7 +111,7 @@
 		938906761F3E86D400BBB88C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
-		938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListTableViewCell.swift; sourceTree = "<group>"; };
+		938906831F3E8C5100BBB88C /* EventCarouselTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCarouselTableViewCell.swift; sourceTree = "<group>"; };
 		93E440AA21836DD2001E82E0 /* RepeatEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatEditViewController.swift; sourceTree = "<group>"; };
 		93E440AC21837201001E82E0 /* EventRepeatRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventRepeatRules.swift; path = Data/EventRepeatRules.swift; sourceTree = "<group>"; };
 		93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarousel.swift; sourceTree = "<group>"; };
@@ -156,6 +162,7 @@
 				930E890321DD4D940013EC37 /* Montserrat-Bold.otf */,
 				930E890421DD4D940013EC37 /* Montserrat-Regular.otf */,
 				930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */,
+				930E890921E169230013EC37 /* Montserrat-Medium.otf */,
 			);
 			name = Montserrat;
 			sourceTree = "<group>";
@@ -238,6 +245,7 @@
 				D7103DB71F85277D00399263 /* LoadingView.swift */,
 				D7103DB91F85278400399263 /* SegmentedControl.swift */,
 				D7103DBF1F85543200399263 /* InputField.swift */,
+				930E890D21E3E7C20013EC37 /* Carousel.swift */,
 			);
 			name = "UI Elements";
 			sourceTree = "<group>";
@@ -336,7 +344,8 @@
 			children = (
 				938906811F3E891900BBB88C /* EventListViewController.swift */,
 				9337C7911F4F459A00230829 /* EventListHeaderView.swift */,
-				938906831F3E8C5100BBB88C /* EventListTableViewCell.swift */,
+				938906831F3E8C5100BBB88C /* EventCarouselTableViewCell.swift */,
+				930E890B21E16BA70013EC37 /* EventView.swift */,
 				93EAF8E6206C3971008B213F /* Event Collection Carousel */,
 			);
 			path = "Event List";
@@ -452,6 +461,7 @@
 				9337C7891F4F40EE00230829 /* SourceSansPro-ExtraLightIt.otf in Resources */,
 				9337C7881F4F40EE00230829 /* SourceSansPro-ExtraLight.otf in Resources */,
 				938906741F3E86D400BBB88C /* Assets.xcassets in Resources */,
+				930E890A21E169230013EC37 /* Montserrat-Medium.otf in Resources */,
 				930E890721DD4D940013EC37 /* Montserrat-Regular.otf in Resources */,
 				9337C7841F4F40EE00230829 /* SourceSansPro-Black.otf in Resources */,
 				9337C78B1F4F40EE00230829 /* SourceSansPro-Light.otf in Resources */,
@@ -535,7 +545,7 @@
 				93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */,
-				938906841F3E8C5100BBB88C /* EventListTableViewCell.swift in Sources */,
+				938906841F3E8C5100BBB88C /* EventCarouselTableViewCell.swift in Sources */,
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
@@ -544,8 +554,10 @@
 				D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */,
 				93399AF01F40DC2300ED02E9 /* EventDetailViewController.swift in Sources */,
 				935D25C11F93CC1B007D25B8 /* Date+TheTea.swift in Sources */,
+				930E890E21E3E7C20013EC37 /* Carousel.swift in Sources */,
 				9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */,
 				933956E31F4400EB00F1AEE4 /* EventLocation.swift in Sources */,
+				930E890C21E16BA70013EC37 /* EventView.swift in Sources */,
 				93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */,
 				D70260D51FE97DE600D20BB8 /* RootViewController.swift in Sources */,
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,

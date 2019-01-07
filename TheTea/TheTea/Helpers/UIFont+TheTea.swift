@@ -25,8 +25,12 @@ extension UIFont {
         return UIFont(name: "SourceSansPro-Regular", size: 17)
     }
     
+    class func listTitle() -> UIFont? {
+        return UIFont(name: "Montserrat-Bold", size: 20)
+    }
+    
     class func listSubTitle() -> UIFont? {
-        return UIFont(name: "SourceSansPro-Regular", size: 18)
+        return UIFont(name: "Montserrat-Medium", size: 12)
     }
     
     class func body() -> UIFont? {

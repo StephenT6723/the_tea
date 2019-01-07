@@ -21,6 +21,10 @@ extension UIColor {
         return UIColor(red:0.09, green:0.08, blue:0.14, alpha:1)
     }
     
+    class func secondaryCopy() -> UIColor {
+        return UIColor(red:0.19, green:0.21, blue:0.27, alpha:1)
+    }
+    
     class func primaryCTA() -> UIColor {
         return UIColor(red:0.59, green:0.71, blue:1, alpha:1)
     }

@@ -38,7 +38,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         tableView.estimatedRowHeight = 50
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0.1))
         tableView.backgroundColor = UIColor.lightBackground()
-        tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: String(describing: EventListTableViewCell.self))
+        tableView.register(EventCarouselTableViewCell.self, forCellReuseIdentifier: String(describing: EventCarouselTableViewCell.self))
         tableView.register(EventCollectionHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventCollectionHeaderView.self))
         tableView.delegate = self
         tableView.dataSource = self
@@ -101,13 +101,11 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventListTableViewCell.self), for: indexPath) as? EventListTableViewCell else {
-            return EventListTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventCarouselTableViewCell.self), for: indexPath) as? EventCarouselTableViewCell else {
+            return EventCarouselTableViewCell()
         }
         
         let event = eventsFRC.object(at: indexPath)
-        cell.titleLabel.text = event.name
-        cell.subTitleLabel.text = EventListTableViewCell.subTitle(for: event, timeFormatter: timeFormatter)
         
         return cell
     }

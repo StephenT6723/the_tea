@@ -65,6 +65,7 @@
 		<string>Montserrat-Regular.otf</string>
 		<string>Montserrat-Bold.otf</string>
 		<string>Montserrat-SemiBold.otf</string>
+		<string>Montserrat-Medium.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
