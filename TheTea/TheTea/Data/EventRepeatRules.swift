@@ -163,27 +163,31 @@ class EventRepeatRules {
         let repeatingDays = self.repeatingDays()
         
         if repeatingDays.count == 0 {
-            rules = "NEVER"
+            rules = "Never"
         } else if repeatingDays.count == 1 {
-            rules = repeatingDays[0].plural().uppercased()
+            rules = repeatingDays[0].plural()
         } else if repeatingDays.count == 2 {
-            rules = repeatingDays[0].plural().uppercased() + " and " + repeatingDays[1].plural().uppercased()
+            rules = repeatingDays[0].plural() + " and " + repeatingDays[1].plural()
         } else {
             for index in 0 ..< repeatingDays.count {
                 let weekday = repeatingDays[index]
                 if index > 0 {
-                    rules += ", "
+                    if index == repeatingDays.count - 1 {
+                        rules += " and "
+                    } else {
+                        rules += ", "
+                    }
                 }
-                rules += abreviated ? weekday.abreviation().uppercased() : weekday.plural().uppercased()
+                rules += abreviated ? weekday.abreviation() : weekday.plural()
             }
         }
         
         if Set(repeatingDays) == Set([.monday, .tuesday, .wednesday, .thursday, .friday]) {
-            rules = "WEEKDAYS"
+            rules = "Weekdays"
         }
         
         if repeatingDays.count == 7 {
-            rules = "EVERYDAY"
+            rules = "Everyday"
         }
         
         return rules
