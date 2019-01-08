@@ -297,17 +297,28 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     func updateContent() {
         titleLabel.text = "RuPaul’s Drag Race Viewing Part"//event.name?.uppercased()
         updateFavoriteButton()
-        if let date = event.startTime {
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateStyle = .none
+        timeFormatter.timeStyle = .short
+        
+        var timeString = ""
+        
+        if let startTime = event.startTime {
             if event.repeatRules().repeatingDays().count == 0 {
-                timeLabel.text = DateStringHelper.fullDescription(of: date as Date)
+                timeString = DateStringHelper.fullDescription(of: startTime as Date)
             } else {
-                let timeFormatter = DateFormatter()
-                timeFormatter.dateStyle = .none
-                timeFormatter.timeStyle = .short
-                timeLabel.text = "\(event.repeatRules().rules(abreviated: false)) - \(timeFormatter.string(from: date))"
+                timeString = "\(event.repeatRules().rules(abreviated: false)) - \(timeFormatter.string(from: startTime))"
+               
             }
             
+            if let endTime = event.endTime {
+                timeString += " - \(timeFormatter.string(from: endTime))"
+            }
         }
+        
+        timeLabel.text = timeString
+
         let textContent = "Cras quis nulla commodo, aliquam lectus sed, blandit augue. Cras ullamcorper bibendum bibendum. Duis tincidunt urna non pretium porta. Nam condimentum vitae ligula vel ornare. Phasellus at semper turpis. Nunc eu tellus tortor. Etiam at condimentum nisl, vitae" //event.about
         guard let font = UIFont.body() else {
             return
