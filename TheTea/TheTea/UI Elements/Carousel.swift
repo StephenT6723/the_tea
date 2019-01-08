@@ -48,6 +48,8 @@ class Carousel: UIView {
             view.removeFromSuperview()
         }
         
+        scrollView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
+        
         guard let delegate = self.delegate else {
             return
         }

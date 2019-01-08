@@ -26,8 +26,9 @@ extension Event {
     static let publishedKey = "published"
     static let hostsKey = "hosts"
     static let repeatsKey = "repeats"
+    static let imageURLKey = "imageURL"
     
-    func update(name: String, hosts: [Member], hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool, repeats: String) {
+    func update(name: String, hosts: [Member], hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool, repeats: String, imageURL: String?) {
         if hosts.count == 0 {
             print("UNABLE TO UPDATE EVENT WITH NO HOSTS")
             return
@@ -53,6 +54,7 @@ extension Event {
         self.daySectionIdentifier = DateStringHelper.dataString(from: startTime)
         self.canceled = canceled
         self.published = published
+        self.imageURL = imageURL
         let repeatRules = EventRepeatRules(dataString: repeats)
         self.updateWithRules(rules: repeatRules)
     }

@@ -1,3 +1,5 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
 # Uncomment the next line to define a global platform for your project
 platform :ios, '11.0'
 
@@ -10,8 +12,8 @@ pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
 pod 'FBSDKShareKit'
 pod 'FBSDKPlacesKit'
-pod 'FBSDKMessengerShareKit'
 pod 'Alamofire', '~> 4.7'
 pod 'SwiftyJSON', '~> 4.0'
+pod 'Kingfisher', '~> 5.0'
 
 end

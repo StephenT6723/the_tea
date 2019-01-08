@@ -26,6 +26,8 @@ class TGAServer {
     static let apiHotnessKey = "hotness"
     static let apiHostsKey = "hosts"
     static let apiRepeatsKey = "repeats"
+    static let apiImagesKey = "images"
+    static let apiURLKey = "url"
     
     static let apiMemberNameKey = "name"
     static let apiMemberAboutKey = "about"
@@ -77,6 +79,10 @@ class TGAServer {
                     return
                 }
                 do {
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                        return
+                    }
                     //TODO: Handle errors when name missing or email taken.
                     let json = try JSON(data: data)
                     let dict = memberDictFrom(json: json)
@@ -108,6 +114,10 @@ class TGAServer {
                     return
                 }
                 do {
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                        return
+                    }
                     let json = try JSON(data: data)
                     let dict = memberDictFrom(json: json)
                     success(dict)
@@ -181,6 +191,10 @@ class TGAServer {
                 return
             }
             do {
+                if response.response?.statusCode != 200 {
+                    failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                    return
+                }
                 let json = try JSON(data: data)
                 let data = eventDictFrom(json: json)
                 success(data)
@@ -252,6 +266,14 @@ class TGAServer {
             if let repeats = jsonData[apiRepeatsKey].string {
                 eventDict[Event.repeatsKey] = repeats
             }
+            if let imageData = jsonData[apiImagesKey].array {
+                if imageData.count > 0 {
+                    guard let firstImageURL = imageData[0][apiURLKey].string else {
+                        continue
+                    }
+                    eventDict[Event.imageURLKey] = firstImageURL
+                }
+            }
             cleanedData.append(eventDict)
         }
         return cleanedData
@@ -304,7 +326,11 @@ class TGAServer {
             parameters: params,
             encoding: URLEncoding(destination: .queryString),
             headers: headers).responseJSON { response in
-                response.response?.statusCode == 200 ? success() : failure(response.error)
+                if response.response?.statusCode != 200 {
+                    failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                    return
+                }
+                success()
         }
     }
     

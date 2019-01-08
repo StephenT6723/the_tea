@@ -167,6 +167,8 @@ class EventManager {
         
         let repeatRules = data[Event.repeatsKey] as? String ?? "0000000"
         
+        let imageURL = data[Event.imageURLKey] as? String ?? "https://static1.squarespace.com/static/54fce1d5e4b00126ca69156f/550dab8fe4b0bc81227af963/56057e99e4b0252146bcec37/1443200722881/russell_dauterman_hercules_2_cover.jpg"
+        
         var hostObjects = [Member]()
         for hostData in hosts {
             guard let id = hostData[Member.tgaIDKey], let name = hostData[Member.nameKey] else {
@@ -178,7 +180,7 @@ class EventManager {
         }
         
         //update event object
-        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules)
+        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules, imageURL: imageURL)
         return event
     }
     

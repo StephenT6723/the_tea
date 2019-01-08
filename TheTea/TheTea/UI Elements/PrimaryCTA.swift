@@ -9,7 +9,7 @@
 import UIKit
 
 class PrimaryCTA: UIButton {
-    static let preferedHeight: CGFloat = 40.0
+    static let preferedHeight: CGFloat = 34.0
     
     override var isEnabled: Bool {
         didSet {
@@ -20,10 +20,18 @@ class PrimaryCTA: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        contentHorizontalAlignment = .left
+        contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        
         backgroundColor = UIColor.primaryCTA()
-        layer.cornerRadius = 8
+        layer.cornerRadius = 6
         setTitleColor(.white, for: .normal)
-        titleLabel?.font = UIFont.cta()
+        titleLabel?.font = UIFont.headerTwo()
+        
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowColor = UIColor(red:0, green:0, blue:0, alpha:0.16).cgColor
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 6
     }
     
     required init?(coder aDecoder: NSCoder) {

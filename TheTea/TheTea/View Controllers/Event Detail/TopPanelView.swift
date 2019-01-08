@@ -62,9 +62,9 @@ class TopPanelView: UIView, UIScrollViewDelegate {
         shadowView.translatesAutoresizingMaskIntoConstraints = false
         shadowView.layer.masksToBounds = false
         shadowView.layer.shadowColor = UIColor.black.cgColor
-        shadowView.layer.shadowOpacity = 0.4
-        shadowView.layer.shadowOffset = CGSize(width: 1, height: -4)
-        shadowView.layer.shadowRadius = 4
+        shadowView.layer.shadowOpacity = 0.5
+        shadowView.layer.shadowOffset = CGSize(width: 1, height: -6)
+        shadowView.layer.shadowRadius = 6
         shadowView.layer.shouldRasterize = true
         shadowView.layer.rasterizationScale = UIScreen.main.scale
         shadowView.backgroundColor = .white
@@ -73,9 +73,9 @@ class TopPanelView: UIView, UIScrollViewDelegate {
         scrollableView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(scrollableView)
         
-        topPanel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        topPanel.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        topPanel.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        topPanel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        topPanel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        topPanel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         topPanelheightConstraint = NSLayoutConstraint(item: topPanel,
                                                       attribute: .height,
                                                       relatedBy: .equal,
@@ -119,7 +119,7 @@ class TopPanelScrollView: UIScrollView {
     var topPanelHeight: CGFloat = 200
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let frame = CGRect(x: 0, y: topPanelHeight, width: self.bounds.width, height: self.bounds.height - topPanelHeight)
+        let frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.contentSize.height - 0)
         return frame.contains(point)
     }
 }

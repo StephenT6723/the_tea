@@ -7,12 +7,23 @@
 //
 
 import UIKit
+import Kingfisher
 
 class EventView: UIView {
-    var image: UIImage? {
+    var imageURL: String? {
         didSet {
-            imageView.image = image
-            setNeedsLayout()
+            guard let imageURL = self.imageURL else {
+                return
+            }
+            let url = URL(string: imageURL)
+            imageView.kf.setImage(with: url) { result in
+                switch result {
+                case .success(_):
+                    self.updateImageView()
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
     private var imageView = UIImageView()
@@ -20,10 +31,10 @@ class EventView: UIView {
     let subtitleLabel = UILabel()
     let titleLabel = UILabel()
     
-    let timeImageView = UIImageView()
+    let timeImageView = UIImageView(image: UIImage(named: "timeIcon"))
     let timeLabel = UILabel()
     
-    let placeImageView = UIImageView()
+    let placeImageView = UIImageView(image: UIImage(named: "placeIcon"))
     let placeLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -60,7 +71,6 @@ class EventView: UIView {
         overlay.addSubview(titleLabel)
         
         timeImageView.translatesAutoresizingMaskIntoConstraints = false
-        timeImageView.image = UIImage(named: "priceIcon")
         timeImageView.contentMode = .scaleAspectFit
         overlay.addSubview(timeImageView)
         
@@ -70,7 +80,6 @@ class EventView: UIView {
         overlay.addSubview(timeLabel)
         
         placeImageView.translatesAutoresizingMaskIntoConstraints = false
-        placeImageView.image = UIImage(named: "priceIcon")
         placeImageView.contentMode = .scaleAspectFit
         overlay.addSubview(placeImageView)
         
@@ -119,7 +128,7 @@ class EventView: UIView {
     }
     
     private func updateImageView() {
-        guard let image = self.image else {
+        guard let image = imageView.image else {
             return
         }
         
