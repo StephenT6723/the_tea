@@ -39,7 +39,8 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     
     private let reportButton = UIButton()
     
-    let mapView = MKMapView()
+    private let mapView = MKMapView()
+    private let mapButton = UIButton()
     
     convenience init(event: Event) {
         self.init()
@@ -147,6 +148,10 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
         contentView.addSubview(mapView)
         
+        mapButton.translatesAutoresizingMaskIntoConstraints = false
+        mapButton.addTarget(self, action: #selector(mapButtonTouched), for: .touchUpInside)
+        contentView.addSubview(mapButton)
+        
         hostsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         hostsTitleLabel.font = UIFont.sectionTitle()
         hostsTitleLabel.textColor = UIColor.lightCopy()
@@ -245,6 +250,11 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         mapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         mapView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20).isActive = true
         mapView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        
+        mapButton.leadingAnchor.constraint(equalTo: mapView.leadingAnchor).isActive = true
+        mapButton.trailingAnchor.constraint(equalTo: mapView.trailingAnchor).isActive = true
+        mapButton.topAnchor.constraint(equalTo: mapView.topAnchor).isActive = true
+        mapButton.bottomAnchor.constraint(equalTo: mapView.bottomAnchor).isActive = true
         
         hostsTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         hostsTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
@@ -412,6 +422,23 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     @objc func ticketButtonTouched() {
         guard let url = URL(string: event.ticketURL ?? "") else { return }
         UIApplication.shared.open(url)
+    }
+    
+    @objc func mapButtonTouched() {
+        let latitude: CLLocationDegrees = event.latitude
+        let longitude: CLLocationDegrees = event.longitude
+        
+        let regionDistance:CLLocationDistance = 10000
+        let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
+        let options = [
+            MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
+            MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
+        ]
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = event.locationName
+        mapItem.openInMaps(launchOptions: options)
     }
 }
 
