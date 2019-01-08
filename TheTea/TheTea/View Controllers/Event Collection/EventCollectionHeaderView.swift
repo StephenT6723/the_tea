@@ -44,28 +44,19 @@ class EventCollectionHeaderView: UITableViewHeaderFooterView {
             updateSortString()
         }
     }
+    let segmentedControl = SegmentedControl()
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.lightBackground()
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.items = ["Hot", "Newest", "Closest"]
+        contentView.addSubview(segmentedControl)
         
-        sortLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(sortLabel)
-        
-        sortButton.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(sortButton)
-        
-        sortLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -17.0).isActive = true
-        sortLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4).isActive = true
-        sortLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        
-        sortButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        sortButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4).isActive = true
-        sortButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        sortButton.widthAnchor.constraint(equalToConstant: 122).isActive = true
-        
-        updateSortString()
+        segmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        segmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        segmentedControl.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        segmentedControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

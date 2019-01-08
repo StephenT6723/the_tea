@@ -27,7 +27,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.lightBackground()
+        view.backgroundColor = .white
         
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
@@ -37,8 +37,8 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 50
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0.1))
-        tableView.backgroundColor = UIColor.lightBackground()
-        tableView.register(EventCarouselTableViewCell.self, forCellReuseIdentifier: String(describing: EventCarouselTableViewCell.self))
+        tableView.backgroundColor = .white
+        tableView.register(EventTableViewCell.self, forCellReuseIdentifier: String(describing: EventTableViewCell.self))
         tableView.register(EventCollectionHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventCollectionHeaderView.self))
         tableView.delegate = self
         tableView.dataSource = self
@@ -101,11 +101,17 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventCarouselTableViewCell.self), for: indexPath) as? EventCarouselTableViewCell else {
-            return EventCarouselTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventTableViewCell.self), for: indexPath) as? EventTableViewCell else {
+            return EventTableViewCell()
         }
         
         let event = eventsFRC.object(at: indexPath)
+        
+        cell.eventView.imageURL = event.imageURL
+        cell.eventView.subtitleLabel.text = "DRAG SHOW"
+        cell.eventView.titleLabel.text = event.name
+        cell.eventView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
+        cell.eventView.placeLabel.text = event.locationName
         
         return cell
     }

@@ -9,10 +9,11 @@
 import UIKit
 
 class SegmentedControl: UIControl {
-    private let dividerColor = UIColor.white
-    private let selectedColor = UIColor.white
-    private let deselectedColor = UIColor.lightBrandCopy()
-    private let font = UIFont.cta()
+    private let maxAlpha: CGFloat = 0.9
+    private let minAlpha: CGFloat = 0.5
+    private let font = UIFont.navTitle()
+    private let selector = UIView()
+    private var selectorCenterContraint = NSLayoutConstraint()
     
     var items = [String]() {
         didSet {
@@ -30,6 +31,13 @@ class SegmentedControl: UIControl {
     }
     
     private func updateContent() {
+        backgroundColor = .white
+        
+        layer.shadowOffset = CGSize(width: 0, height: 3)
+        layer.shadowColor = UIColor(red:0.74, green:0.74, blue:0.74, alpha:0.16).cgColor
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 6
+        
         for view in subviews {
             view.removeFromSuperview()
         }
@@ -43,28 +51,20 @@ class SegmentedControl: UIControl {
             button.translatesAutoresizingMaskIntoConstraints = false
             button.titleLabel?.font = font
             button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
+            button.backgroundColor = .white
+            button.setTitleColor(UIColor.primaryCopy(), for: .normal)
             addSubview(button)
             
             if buttons.count == 0 {
                 button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-                
-                button.setTitleColor(selectedColor, for: .normal)
+                button.alpha = maxAlpha
             } else {
-                let divider = UIView()
-                divider.translatesAutoresizingMaskIntoConstraints = false
-                divider.backgroundColor = dividerColor
-                addSubview(divider)
                 
                 let previousButton = buttons[currentIndex - 1]
-                divider.leadingAnchor.constraint(equalTo: previousButton.trailingAnchor).isActive = true
-                divider.topAnchor.constraint(equalTo: topAnchor).isActive = true
-                divider.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-                divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
                 
-                button.leadingAnchor.constraint(equalTo: divider.trailingAnchor).isActive = true
+                button.leadingAnchor.constraint(equalTo: previousButton.trailingAnchor).isActive = true
                 button.widthAnchor.constraint(equalTo: previousButton.widthAnchor).isActive = true
-                
-                button.setTitleColor(deselectedColor, for: .normal)
+                button.alpha = minAlpha
             }
             
             button.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -78,14 +78,44 @@ class SegmentedControl: UIControl {
             
             buttons.append(button)
         }
+        
+        let firstButton = buttons[0]
+        
+        selector.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(selector)
+        
+        selector.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        selector.widthAnchor.constraint(equalTo: firstButton.widthAnchor, constant: -30).isActive = true
+        selectorCenterContraint = selector.centerXAnchor.constraint(equalTo: firstButton.centerXAnchor)
+        selectorCenterContraint.isActive = true
+        selector.bottomAnchor.constraint(equalTo: firstButton.bottomAnchor).isActive = true
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = selector.bounds
+        gradientLayer.colors = [
+            UIColor(red:0.94, green:0.53, blue:1, alpha:1).cgColor,
+            UIColor(red:0.47, green:0.77, blue:1, alpha:1).cgColor
+        ]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        selector.layer.addSublayer(gradientLayer)
     }
     
     @objc func buttonTapped(sender: UIButton) {
-        for button in buttons {
-            button.setTitleColor(deselectedColor, for: .normal)
-        }
+        selectorCenterContraint.isActive = false
+        selectorCenterContraint = selector.centerXAnchor.constraint(equalTo: sender.centerXAnchor)
+        selectorCenterContraint.isActive = true
         
-        sender.setTitleColor(selectedColor, for: .normal)
+        UIView.animate(withDuration: 0.3) {
+            for button in self.buttons {
+                button.alpha = button == sender ? self.maxAlpha : self.minAlpha
+            }
+            self.layoutIfNeeded()
+        }
         
         if let buttonIndex = buttons.index(of: sender) {
             if selectedIndex != buttonIndex {
