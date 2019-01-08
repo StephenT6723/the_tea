@@ -24,11 +24,11 @@ class EventCollectionCarouselCell: UIView {
         layer.shadowRadius = 4
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
-        layer.cornerRadius = 4
+        layer.cornerRadius = 16
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 4
+        imageView.layer.cornerRadius = 16
         imageView.clipsToBounds = true
         addSubview(imageView)
         

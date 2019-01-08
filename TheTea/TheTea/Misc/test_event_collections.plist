@@ -75,7 +75,7 @@
 	</dict>
 	<dict>
 		<key>title</key>
-		<string>Happy Hour</string>
+		<string>Manhattan</string>
 		<key>subtitle</key>
 		<string>May it last all night</string>
 		<key>gayID</key>
@@ -148,7 +148,7 @@
 		<key>userUpdated</key>
 		<true/>
 		<key>title</key>
-		<string>Drag Shows</string>
+		<string>Brooklyn</string>
 		<key>subtitle</key>
 		<string>Category is...</string>
 		<key>gayID</key>
@@ -219,7 +219,7 @@
 		<key>userUpdated</key>
 		<false/>
 		<key>title</key>
-		<string>St.Patty&apos;s</string>
+		<string>Queens</string>
 		<key>subtitle</key>
 		<string>Lucky You</string>
 		<key>gayID</key>
