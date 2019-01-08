@@ -112,6 +112,10 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         cell.eventView.titleLabel.text = event.name
         cell.eventView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
         cell.eventView.placeLabel.text = event.locationName
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        let priceString = event.price == 0 ? "Free" : numberFormatter.string(from: NSNumber(value: event.price))
+        cell.eventView.priceLabel.text = priceString
         
         return cell
     }

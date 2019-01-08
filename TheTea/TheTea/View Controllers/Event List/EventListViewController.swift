@@ -270,6 +270,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         cellView.titleLabel.text = event.name
         cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
         cellView.placeLabel.text = event.locationName
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        let priceString = event.price == 0 ? "Free" : numberFormatter.string(from: NSNumber(value: event.price))
+        cellView.priceLabel.text = priceString
         
         return cellView
     }
