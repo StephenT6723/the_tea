@@ -106,8 +106,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         let event = eventsFRC.object(at: indexPath)
-        
-        cell.eventView.imageURL = event.imageURL
+        cell.eventView.imageURL = event.fullImageURL()
         cell.eventView.subtitleLabel.text = "DRAG SHOW"
         cell.eventView.titleLabel.text = event.name
         cell.eventView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())

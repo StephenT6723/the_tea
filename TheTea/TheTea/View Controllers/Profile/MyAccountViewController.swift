@@ -144,7 +144,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         if MemberDataManager.loggedInMember() == nil {
             return 0
         }
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -197,25 +197,11 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 return header
             }
             
-            header.nameLabel.text = currentMember.name?.uppercased() ?? "MY PROFILE"
-            header.facebookButton.alpha = 1
+            header.nameLabel.text = currentMember.name?.capitalized ?? "My Profile"
+            
             header.facebookButton.isEnabled = true
-            
-            header.instagramButton.alpha = 1
-            header.instagramButton.isEnabled = true
-            
-            if currentMember.instagram?.count == 0 {
-                header.instagramButton.alpha = 0.3
-                header.instagramButton.isEnabled = false
-            }
-            
-            header.twitterButton.alpha = 1
-            header.twitterButton.isEnabled = true
-            
-            if currentMember.twitter?.count == 0 {
-                header.twitterButton.alpha = 0.3
-                header.twitterButton.isEnabled = false
-            }
+            header.instagramButton.isEnabled = true//currentMember.instagram?.count ?? 0 > 0
+            header.twitterButton.isEnabled = currentMember.twitter?.count ?? 0 > 0
             
             header.addEventButton.addTarget(self, action: #selector(addEventTapped), for: .touchUpInside)
             
@@ -226,7 +212,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             if section == 1 {
-                header.titleLabel.text = "FAVORITES"
+                header.titleLabel.text = "Favorites"
                 let favoriteCount = MemberDataManager.loggedInMember()?.favorites?.count
                 header.seeAllButton.alpha = 0
                 if favoriteCount ?? 0 > 3 {
@@ -235,10 +221,10 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                     header.seeAllButton.tag = 1
                 }
             } else if section == 2 {
-                header.titleLabel.text = "HOSTED EVENTS"
+                header.titleLabel.text = "Hosted Events"
                 header.seeAllButton.alpha = 0
             } else if section == 3 {
-                header.titleLabel.text = "PAST EVENTS"
+                header.titleLabel.text = "Past Events"
                 header.seeAllButton.alpha = 0
             }
             
@@ -346,57 +332,60 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
 class ProfileHeader: UITableViewHeaderFooterView {
     let nameLabel = UILabel()
     let profileImageView = UIImageView()
+    let imageViewContainer = UIView()
     let backgroundStripe = UIView()
-    let facebookButton = UIButton()
-    let instagramButton = UIButton()
-    let twitterButton = UIButton()
+    let facebookButton = ProfileSocialButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    let instagramButton = ProfileSocialButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    let twitterButton = ProfileSocialButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
     let addEventButton = PrimaryCTA()
     
-    let socialButtonSize: CGFloat = 20
+    let socialButtonSize: CGFloat = 30
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.lightBackground()
+        contentView.backgroundColor = .white
         
         backgroundStripe.translatesAutoresizingMaskIntoConstraints = false
         backgroundStripe.backgroundColor = .clear
         contentView.addSubview(backgroundStripe)
         
+        imageViewContainer.translatesAutoresizingMaskIntoConstraints = false
+        imageViewContainer.layer.cornerRadius = 35
+        imageViewContainer.layer.borderWidth = 1
+        imageViewContainer.layer.borderColor = UIColor.white.cgColor
+        imageViewContainer.layer.shadowOffset = CGSize(width: 0, height: 2)
+        imageViewContainer.layer.shadowColor = UIColor(red:0, green:0, blue:0, alpha:0.16).cgColor
+        imageViewContainer.layer.shadowOpacity = 1
+        imageViewContainer.layer.shadowRadius = 5
+        contentView.addSubview(imageViewContainer)
+        
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        profileImageView.contentMode = .scaleAspectFill
-        profileImageView.layer.borderColor = UIColor.primaryCTA().cgColor
-        profileImageView.layer.borderWidth = 3
+        profileImageView.layer.cornerRadius = 35
         profileImageView.clipsToBounds = true
-        profileImageView.layer.cornerRadius = 8
+        profileImageView.contentMode = .scaleAspectFill
         profileImageView.image = UIImage(named: "placeholder_profile_image")
-        contentView.addSubview(profileImageView)
+        imageViewContainer.addSubview(profileImageView)
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = UIFont.headerOne()
+        nameLabel.font = UIFont.profileTitle()
         nameLabel.textColor = UIColor.primaryCopy()
         contentView.addSubview(nameLabel)
         
         facebookButton.translatesAutoresizingMaskIntoConstraints = false
-        facebookButton.layer.cornerRadius = 2
-        facebookButton.clipsToBounds = true
         facebookButton.setImage(UIImage(named:"facebook"), for: .normal)
         contentView.addSubview(facebookButton)
         
         instagramButton.translatesAutoresizingMaskIntoConstraints = false
-        instagramButton.layer.cornerRadius = 2
-        instagramButton.clipsToBounds = true
         instagramButton.setImage(UIImage(named:"insta"), for: .normal)
         contentView.addSubview(instagramButton)
         
         twitterButton.translatesAutoresizingMaskIntoConstraints = false
-        twitterButton.layer.cornerRadius = 2
-        twitterButton.clipsToBounds = true
         twitterButton.setImage(UIImage(named:"twitter"), for: .normal)
         contentView.addSubview(twitterButton)
         
         addEventButton.translatesAutoresizingMaskIntoConstraints = false
-        addEventButton.setTitle("POST AN EVENT", for: .normal)
+        addEventButton.setTitle("Post an Event", for: .normal)
         contentView.addSubview(addEventButton)
         
         backgroundStripe.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
@@ -404,36 +393,71 @@ class ProfileHeader: UITableViewHeaderFooterView {
         backgroundStripe.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         backgroundStripe.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         
-        profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        //profileImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
+        imageViewContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        imageViewContainer.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        imageViewContainer.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        imageViewContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         
-        nameLabel.topAnchor.constraint(equalTo: backgroundStripe.topAnchor, constant: 7).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 20).isActive = true
+        profileImageView.topAnchor.constraint(equalTo: imageViewContainer.topAnchor).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        profileImageView.leadingAnchor.constraint(equalTo: imageViewContainer.leadingAnchor).isActive = true
+        
+        nameLabel.topAnchor.constraint(equalTo: profileImageView.topAnchor, constant: 2).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16).isActive = true
         nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         
-        facebookButton.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6).isActive = true
-        facebookButton.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 20).isActive = true
+        facebookButton.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: -6).isActive = true
+        facebookButton.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16).isActive = true
         facebookButton.heightAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         facebookButton.widthAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         
-        instagramButton.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6).isActive = true
-        instagramButton.leadingAnchor.constraint(equalTo: facebookButton.trailingAnchor, constant: 20).isActive = true
+        instagramButton.bottomAnchor.constraint(equalTo: facebookButton.bottomAnchor).isActive = true
+        instagramButton.leadingAnchor.constraint(equalTo: facebookButton.trailingAnchor, constant: 10).isActive = true
         instagramButton.heightAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         instagramButton.widthAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         
-        twitterButton.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6).isActive = true
-        twitterButton.leadingAnchor.constraint(equalTo: instagramButton.trailingAnchor, constant: 20).isActive = true
+        twitterButton.bottomAnchor.constraint(equalTo: facebookButton.bottomAnchor).isActive = true
+        twitterButton.leadingAnchor.constraint(equalTo: instagramButton.trailingAnchor, constant: 10).isActive = true
         twitterButton.heightAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         twitterButton.widthAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         
         addEventButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 20).isActive = true
-        addEventButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        addEventButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         addEventButton.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
         addEventButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         addEventButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+class ProfileSocialButton: UIButton {
+    override var isEnabled: Bool {
+        didSet {
+            if isEnabled {
+                clipsToBounds = false
+            } else {
+                clipsToBounds = true
+            }
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        layer.cornerRadius = 5
+        backgroundColor = UIColor.white
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowColor = UIColor(red:0, green:0, blue:0, alpha:0.16).cgColor
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 6
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
+        layer.masksToBounds = false
+        layer.shadowPath = UIBezierPath(rect: frame).cgPath
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -140,7 +140,7 @@ class TGAServer {
         memberDict[Member.aboutKey] = about
         let deadlineTime = DispatchTime.now() + .seconds(3)
         DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-            success(memberDict)
+            failure(nil)
         }
     }
     

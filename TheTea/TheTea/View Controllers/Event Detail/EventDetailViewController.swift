@@ -15,6 +15,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     let contentView = UIView()
     let topPanelView = TopPanelView()
     let imageView = UIImageView()
+    let scrollView = UIScrollView()
     
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
@@ -70,6 +71,9 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
             let reportButton = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(shareButtonTouched))
             navigationItem.rightBarButtonItem = reportButton
         }
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
         
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.backgroundColor = .white
@@ -196,6 +200,11 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
             previousHostView = hostView
         }
         
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 88).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
         subTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         subTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         subTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
@@ -265,9 +274,29 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         reportButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
         reportButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         
+        scrollView.addSubview(contentView)
+        
+        contentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.event.managedObjectContext == nil {
+            self.navigationController?.popViewController(animated: false)
+        }
+        updateContent()
+    }
+    
+    func updateImageView() {
         guard let image = imageView.image else {
             return
         }
+        
+        contentView.removeFromSuperview()
         
         let imageSize = image.size
         let ratio = imageSize.height / imageSize.width
@@ -286,16 +315,19 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         topPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if self.event.managedObjectContext == nil {
-            self.navigationController?.popViewController(animated: false)
-        }
-        updateContent()
-    }
-    
     func updateContent() {
-        titleLabel.text = "RuPaul’s Drag Race Viewing Part"//event.name?.uppercased()
+        let imageURL = event.fullImageURL()
+        let url = URL(string: imageURL)
+        imageView.kf.setImage(with: url) { result in
+            switch result {
+            case .success(_):
+                self.updateImageView()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        titleLabel.text = event.name?.capitalized
         updateFavoriteButton()
         
         let timeFormatter = DateFormatter()
@@ -319,7 +351,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         
         timeLabel.text = timeString
 
-        let textContent = "Cras quis nulla commodo, aliquam lectus sed, blandit augue. Cras ullamcorper bibendum bibendum. Duis tincidunt urna non pretium porta. Nam condimentum vitae ligula vel ornare. Phasellus at semper turpis. Nunc eu tellus tortor. Etiam at condimentum nisl, vitae" //event.about
+        let textContent = event.about ?? ""
         guard let font = UIFont.body() else {
             return
         }

@@ -265,7 +265,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let event = eventsFRC.object(at: indexPath)
         
         let cellView = EventView(frame: CGRect())
-        cellView.imageURL = event.imageURL
+        cellView.imageURL = event.fullImageURL()
         cellView.subtitleLabel.text = "DRAG SHOW"
         cellView.titleLabel.text = event.name
         cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())

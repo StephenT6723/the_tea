@@ -29,6 +29,10 @@ extension UIFont {
         return UIFont(name: "Montserrat-Bold", size: 16)
     }
     
+    class func profileTitle() -> UIFont? {
+        return UIFont(name: "Montserrat-SemiBold", size: 20)
+    }
+    
     class func listTitle() -> UIFont? {
         return UIFont(name: "Montserrat-Bold", size: 20)
     }

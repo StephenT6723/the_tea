@@ -90,6 +90,10 @@ extension Event {
         return currentMember.favorites?.contains(self) ?? false
     }
     
+    func fullImageURL() -> String {
+        return TGAServer.domain + "/\(imageURL ?? "")"
+    }
+    
     func sortedHosts() -> [Member] {
         guard let hosts = self.hosts else {
             return [Member]()

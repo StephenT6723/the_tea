@@ -17,7 +17,7 @@ class EventManager {
     class func allFutureEvents() -> NSFetchedResultsController<Event> {
         let request = NSFetchRequest<Event>(entityName:"Event")
         let todayString = DateStringHelper.dataString(from: Date())
-        let predicate = NSPredicate(format: "daySectionIdentifier >= %@", todayString)
+        let predicate = NSPredicate(format: "daySectionIdentifier >= %@ AND canceled == false", todayString)
         request.predicate = predicate
         let startTimeSort = NSSortDescriptor(key: "daySectionIdentifier", ascending: true)
         let hotnessSort = NSSortDescriptor(key: "hotness", ascending: true)
@@ -37,7 +37,7 @@ class EventManager {
     
     class func events(with sectionIdentifier: String) -> NSFetchedResultsController<Event> {
         let request = NSFetchRequest<Event>(entityName:"Event")
-        let predicate = NSPredicate(format: "daySectionIdentifier == %@", sectionIdentifier)
+        let predicate = NSPredicate(format: "daySectionIdentifier == %@ AND canceled == false", sectionIdentifier)
         request.predicate = predicate
         let startTimeSort = NSSortDescriptor(key: "hotness", ascending: true)
         request.sortDescriptors = [startTimeSort]
