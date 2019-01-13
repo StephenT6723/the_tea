@@ -14,7 +14,7 @@ enum InputFieldType {
     case button
 }
 
-class InputField: UIView {
+class LegacyInputField: UIView {
     static let textFieldHeight: CGFloat = 48.0
     var type = InputFieldType.textField {
         didSet {

@@ -12,11 +12,11 @@ import UIKit
 
 class EditMyAccountViewController: UIViewController, UITextViewDelegate {
     private let scrollView = UIScrollView()
-    private let nameTextField = InputField()
-    private let facebookTextField = InputField()
-    private let instagramTextField = InputField()
-    private let twitterTextField = InputField()
-    private let aboutTextView = InputField()
+    private let nameTextField = LegacyInputField()
+    private let facebookTextField = LegacyInputField()
+    private let instagramTextField = LegacyInputField()
+    private let twitterTextField = LegacyInputField()
+    private let aboutTextView = LegacyInputField()
     private let logoutButton = AlertCTA()
     
     private let submitContainer = UIView()
@@ -103,27 +103,27 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         nameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         nameTextField.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         nameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        nameTextField.heightAnchor.constraint(equalToConstant: InputField.textFieldHeight).isActive = true
+        nameTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
         
         facebookTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         facebookTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         facebookTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
-        facebookTextField.heightAnchor.constraint(equalToConstant: InputField.textFieldHeight).isActive = true
+        facebookTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
         
         instagramTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         instagramTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         instagramTextField.topAnchor.constraint(equalTo: facebookTextField.bottomAnchor).isActive = true
-        instagramTextField.heightAnchor.constraint(equalToConstant: InputField.textFieldHeight).isActive = true
+        instagramTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
         
         twitterTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         twitterTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         twitterTextField.topAnchor.constraint(equalTo: instagramTextField.bottomAnchor).isActive = true
-        twitterTextField.heightAnchor.constraint(equalToConstant: InputField.textFieldHeight).isActive = true
+        twitterTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
         
         aboutTextView.topAnchor.constraint(equalTo: twitterTextField.bottomAnchor, constant: 20).isActive = true
         aboutTextView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         aboutTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: InputField.textFieldHeight).isActive = true
+        aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: LegacyInputField.textFieldHeight).isActive = true
         
         logoutButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
         logoutButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true

@@ -17,10 +17,10 @@ enum AuthType: Int {
 class LoginViewController: UIViewController, UITextFieldDelegate {
     private let modeSelectSegmentedControl = UISegmentedControl()
     private let emailErrorLabel = UILabel()
-    private let emailInputField = InputField()
-    private let usernameInputField = InputField()
-    private let passwordInputField = InputField()
-    private let confirmPasswordInputField = InputField()
+    private let emailInputField = LegacyInputField()
+    private let usernameInputField = LegacyInputField()
+    private let passwordInputField = LegacyInputField()
+    private let confirmPasswordInputField = LegacyInputField()
     private let usernameErrorLabel = UILabel()
     private let passwordErrorLabel = UILabel()
     

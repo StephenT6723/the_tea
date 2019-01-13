@@ -63,7 +63,7 @@
 		D7103DB81F85277D00399263 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB71F85277D00399263 /* LoadingView.swift */; };
 		D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB91F85278400399263 /* SegmentedControl.swift */; };
 		D7103DBE1F8552AD00399263 /* EditMyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DBD1F8552AD00399263 /* EditMyAccountViewController.swift */; };
-		D7103DC01F85543200399263 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DBF1F85543200399263 /* InputField.swift */; };
+		D7103DC01F85543200399263 /* LegacyInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DBF1F85543200399263 /* LegacyInputField.swift */; };
 		D7103DC21F85599300399263 /* AlertCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DC11F85599300399263 /* AlertCTA.swift */; };
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
@@ -129,7 +129,7 @@
 		D7103DB71F85277D00399263 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingView.swift; path = "UI Elements/LoadingView.swift"; sourceTree = "<group>"; };
 		D7103DB91F85278400399263 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedControl.swift; path = "UI Elements/SegmentedControl.swift"; sourceTree = "<group>"; };
 		D7103DBD1F8552AD00399263 /* EditMyAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMyAccountViewController.swift; sourceTree = "<group>"; };
-		D7103DBF1F85543200399263 /* InputField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputField.swift; path = "UI Elements/InputField.swift"; sourceTree = "<group>"; };
+		D7103DBF1F85543200399263 /* LegacyInputField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LegacyInputField.swift; path = "UI Elements/LegacyInputField.swift"; sourceTree = "<group>"; };
 		D7103DC11F85599300399263 /* AlertCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertCTA.swift; path = "UI Elements/AlertCTA.swift"; sourceTree = "<group>"; };
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 				D7103DC11F85599300399263 /* AlertCTA.swift */,
 				D7103DB71F85277D00399263 /* LoadingView.swift */,
 				D7103DB91F85278400399263 /* SegmentedControl.swift */,
-				D7103DBF1F85543200399263 /* InputField.swift */,
+				D7103DBF1F85543200399263 /* LegacyInputField.swift */,
 				930E890D21E3E7C20013EC37 /* Carousel.swift */,
 				93CF651621E52C4700090B65 /* Event Cells */,
 			);
@@ -547,7 +547,7 @@
 				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
 				D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */,
 				93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */,
-				D7103DC01F85543200399263 /* InputField.swift in Sources */,
+				D7103DC01F85543200399263 /* LegacyInputField.swift in Sources */,
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
 				D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */,

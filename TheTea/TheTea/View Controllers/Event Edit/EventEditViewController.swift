@@ -13,33 +13,33 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     var event: Event?
     private let scrollView = UIScrollView()
     
-    private let nameTextField = InputField()
-    private let hostTextField = InputField()
+    private let nameTextField = LegacyInputField()
+    private let hostTextField = LegacyInputField()
     private var hostHeightConstraint = NSLayoutConstraint()
     private let loginView = EventEditLoginView(frame: CGRect())
     
-    private let startTimeTextField = InputField()
+    private let startTimeTextField = LegacyInputField()
     private let startTimePicker = UIDatePicker()
     private let addEndTimeButton = UIButton()
     private var endTimeTopConstraint = NSLayoutConstraint()
-    private let endTimeTextField = InputField()
+    private let endTimeTextField = LegacyInputField()
     private let endTimePicker = UIDatePicker()
     private let hideEndTimeButton = UIButton()
-    private let repeatsInputView = InputField()
+    private let repeatsInputView = LegacyInputField()
     private let repeatsLabel = UILabel()
     
-    private let locationLabel = InputField()
-    private let aboutTextView = InputField()
+    private let locationLabel = LegacyInputField()
+    private let aboutTextView = LegacyInputField()
     private let deleteButton = AlertCTA()
     
     private let collectionsLabel = UILabel()
-    private var collectionInputFields = [InputField]()
+    private var collectionInputFields = [LegacyInputField]()
     private var selectedCollections = [EventCollection]()
     
-    private let priceInputField = InputField()
+    private let priceInputField = LegacyInputField()
     private let priceStepper = UIStepper()
     private var ticketURLTopConstraint = NSLayoutConstraint()
-    private let ticketURLTextField = InputField()
+    private let ticketURLTextField = LegacyInputField()
     
     private let createContainer = UIView()
     private let createButton = PrimaryCTA(frame: CGRect())
@@ -173,11 +173,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         scrollView.addSubview(collectionsLabel)
         
         let collections = EventCollectionManager.userUpdatedEventCollections()
-        var previousCollectionInputField: InputField? = nil
+        var previousCollectionInputField: LegacyInputField? = nil
         for collection in collections {
             let currentIndex = collections.index(of: collection) ?? 0
             
-            let inputField = InputField()
+            let inputField = LegacyInputField()
             inputField.translatesAutoresizingMaskIntoConstraints = false
             inputField.type = .button
             inputField.label.text = collection.title?.uppercased()
