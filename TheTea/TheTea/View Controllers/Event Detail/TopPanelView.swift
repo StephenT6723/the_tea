@@ -15,6 +15,7 @@ class TopPanelView: UIView, UIScrollViewDelegate {
     private let scrollView = TopPanelScrollView()
     private var topPanelheightConstraint = NSLayoutConstraint()
     private var shadowView = UIView()
+    private let backgroundView = UIView()
     var topPanelHeight: CGFloat = 200.0 {
         didSet {
             scrollView.topPanelHeight = topPanelHeight
@@ -22,9 +23,10 @@ class TopPanelView: UIView, UIScrollViewDelegate {
     }
     
     func updateContent(topPanel: UIView, scrollableView: UIView) {
-        self.topPanel.removeFromSuperview()
-        self.scrollableView.removeFromSuperview()
-        self.shadowView.removeFromSuperview()
+        topPanel.removeFromSuperview()
+        scrollableView.removeFromSuperview()
+        shadowView.removeFromSuperview()
+        backgroundView.removeFromSuperview()
         
         if topPanelMask.superview == nil {
             topPanelMask.translatesAutoresizingMaskIntoConstraints = false
@@ -95,6 +97,15 @@ class TopPanelView: UIView, UIScrollViewDelegate {
         shadowView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         shadowView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         shadowView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.backgroundColor = .white
+        scrollView.addSubview(backgroundView)
+        
+        backgroundView.topAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        backgroundView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        backgroundView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        backgroundView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -47,6 +47,7 @@
 		93CF651921E52C7100090B65 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651721E52C7100090B65 /* EventView.swift */; };
 		93CF651A21E52C7100090B65 /* EventCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651821E52C7100090B65 /* EventCarouselTableViewCell.swift */; };
 		93CF651C21E52CA000090B65 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651B21E52CA000090B65 /* EventTableViewCell.swift */; };
+		93CF653C21EB0CF200090B65 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF653B21EB0CF200090B65 /* InputField.swift */; };
 		93E440AB21836DD2001E82E0 /* RepeatEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E440AA21836DD2001E82E0 /* RepeatEditViewController.swift */; };
 		93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E440AC21837201001E82E0 /* EventRepeatRules.swift */; };
 		93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */; };
@@ -114,6 +115,7 @@
 		93CF651721E52C7100090B65 /* EventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventView.swift; path = "UI Elements/Event Cells/EventView.swift"; sourceTree = "<group>"; };
 		93CF651821E52C7100090B65 /* EventCarouselTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventCarouselTableViewCell.swift; path = "UI Elements/Event Cells/EventCarouselTableViewCell.swift"; sourceTree = "<group>"; };
 		93CF651B21E52CA000090B65 /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventTableViewCell.swift; path = "UI Elements/Event Cells/EventTableViewCell.swift"; sourceTree = "<group>"; };
+		93CF653B21EB0CF200090B65 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InputField.swift; path = "UI Elements/InputField.swift"; sourceTree = "<group>"; };
 		93E440AA21836DD2001E82E0 /* RepeatEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatEditViewController.swift; sourceTree = "<group>"; };
 		93E440AC21837201001E82E0 /* EventRepeatRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventRepeatRules.swift; path = Data/EventRepeatRules.swift; sourceTree = "<group>"; };
 		93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarousel.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				D7103DB71F85277D00399263 /* LoadingView.swift */,
 				D7103DB91F85278400399263 /* SegmentedControl.swift */,
 				D7103DBF1F85543200399263 /* LegacyInputField.swift */,
+				93CF653B21EB0CF200090B65 /* InputField.swift */,
 				930E890D21E3E7C20013EC37 /* Carousel.swift */,
 				93CF651621E52C4700090B65 /* Event Cells */,
 			);
@@ -559,6 +562,7 @@
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
+				93CF653C21EB0CF200090B65 /* InputField.swift in Sources */,
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
 				D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */,
 				D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */,

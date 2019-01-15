@@ -21,13 +21,14 @@ class TGAServer {
     static let apiLongitudeKey = "longitude"
     static let apiCanceledKey = "canceled"
     static let apiPublishedKey = "published"
-    static let apiPriceKey = "ticketPrice"
+    static let apiPriceKey = "price"
     static let apiTicketURLKey = "ticketURL"
     static let apiHotnessKey = "hotness"
     static let apiHostsKey = "hosts"
     static let apiRepeatsKey = "repeats"
     static let apiImagesKey = "images"
     static let apiURLKey = "url"
+    static let apiTimeZoneKey = "timeZone"
     
     static let apiMemberNameKey = "name"
     static let apiMemberAboutKey = "about"
@@ -192,7 +193,7 @@ class TGAServer {
             }
             do {
                 if response.response?.statusCode != 200 {
-                    failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                    failure(NSError(domain:"", code:response.response?.statusCode ?? 500, userInfo:nil))
                     return
                 }
                 let json = try JSON(data: data)
@@ -242,7 +243,7 @@ class TGAServer {
             if let published = jsonData[apiPublishedKey].bool {
                 eventDict[Event.publishedKey] = "\(published)"
             }
-            if let price = jsonData[apiPriceKey].string {
+            if let price = jsonData["ticketPrice"].string { //TODO: Fix this on the API side
                 eventDict[Event.priceKey] = price
             }
             if let ticketURL = jsonData[apiTicketURLKey].string {
@@ -295,7 +296,7 @@ class TGAServer {
     
     //MARK: Event CRUD
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String,
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
                            onSuccess success:@escaping () -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         let dateFormatter = DateFormatter()
@@ -303,7 +304,7 @@ class TGAServer {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         
-        var params = [String: String]()
+        var params = [String: Any]()
         params["format"] = "json"
         params[apiEventNameKey] = name
         params[apiStartTimeKey] = dateFormatter.string(from: startTime)
@@ -318,7 +319,15 @@ class TGAServer {
         params[apiPriceKey] = "\(price)"
         params[apiTicketURLKey] = ticketURL ?? ""
         params[apiRepeatsKey] = repeats
-
+        params[apiTimeZoneKey] = "\(TimeZone.current.secondsFromGMT())"
+        if let imageData = image?.pngData() {
+            let dataString = imageData.base64EncodedString()
+            var dataDict = [String:String]()
+            dataDict["extension"] = "png"
+            dataDict["base64"] = dataString
+            params["images"] = [dataDict, dataDict]
+        }
+        
         let headers = self.headersForCurrentMember()
         
         Alamofire.request("\(domain)/events/",

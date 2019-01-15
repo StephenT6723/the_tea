@@ -8,17 +8,13 @@
 
 import UIKit
 
-enum InputFieldType {
-    case textField
-    case textView
-    case button
-}
-
 class LegacyInputField: UIView {
     static let textFieldHeight: CGFloat = 48.0
     var type = InputFieldType.textField {
         didSet {
             switch type {
+            case.price:
+                textField.alpha = 1
             case .textField:
                 textField.alpha = 1
                 label.alpha = 0

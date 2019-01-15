@@ -167,7 +167,7 @@ class EventManager {
         
         let repeatRules = data[Event.repeatsKey] as? String ?? "0000000"
         
-        let imageURL = data[Event.imageURLKey] as? String ?? "https://static1.squarespace.com/static/54fce1d5e4b00126ca69156f/550dab8fe4b0bc81227af963/56057e99e4b0252146bcec37/1443200722881/russell_dauterman_hercules_2_cover.jpg"
+        let imageURL = data[Event.imageURLKey] as? String ?? ""
         
         var hostObjects = [Member]()
         for hostData in hosts {
@@ -194,14 +194,14 @@ class EventManager {
     
     //MARK: Remote Data Updates
     
-    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String,
+    class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
                            onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
-        TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, onSuccess: { () in
+        TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, image: image, onSuccess: { () in
 
         }) { (error) in
             if let error = error {
-                print("EVENT FETCH FAILED: \(error.localizedDescription)")
+                print("EVENT CREATION FAILED: \(error.localizedDescription)")
             }
             //TODO: Post notification
         }

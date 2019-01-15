@@ -49,6 +49,14 @@ extension UIFont {
         return UIFont(name: "Montserrat-SemiBold", size: 14)
     }
     
+    class func inputFieldTitle() -> UIFont? {
+        return UIFont(name: "Montserrat-SemiBold", size: 12)
+    }
+    
+    class func inputField() -> UIFont? {
+        return UIFont(name: "Montserrat-SemiBold", size: 16)
+    }
+    
     class func cta() -> UIFont? {
         return UIFont(name: "Montserrat-Bold", size: 12)
     }

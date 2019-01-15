@@ -16,7 +16,7 @@ class StyleManager {
         
         let barButtonAppearace = UIBarButtonItem.appearance()
         barButtonAppearace.tintColor = UIColor.primaryCTA()
-        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.barButtonTitle() as Any,
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
                                                    NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .normal)
     }
 }
