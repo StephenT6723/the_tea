@@ -29,7 +29,6 @@ class EventView: UIView {
     private var imageViewContainer = UIView()
     private var imageView = UIImageView()
     private let overlay = UIView()
-    let subtitleLabel = UILabel()
     let titleLabel = UILabel()
     
     let timeImageView = UIImageView(image: UIImage(named: "timeIcon"))
@@ -72,14 +71,10 @@ class EventView: UIView {
         overlay.backgroundColor = UIColor(white: 1, alpha: 0.9)
         addSubview(overlay)
         
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subtitleLabel.font = UIFont.sectionTitle()
-        subtitleLabel.textColor = UIColor.lightCopy()
-        overlay.addSubview(subtitleLabel)
-        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.listTitle()
         titleLabel.textColor = UIColor.primaryCopy()
+        titleLabel.numberOfLines = 0
         overlay.addSubview(titleLabel)
         
         timeImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -119,19 +114,17 @@ class EventView: UIView {
         overlay.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         overlay.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         overlay.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        overlay.heightAnchor.constraint(equalToConstant: 110.0).isActive = true
-        
-        subtitleLabel.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 20).isActive = true
-        subtitleLabel.topAnchor.constraint(equalTo: overlay.topAnchor, constant: 16).isActive = true
+        overlay.heightAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive = true
         
         titleLabel.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 20).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: overlay.trailingAnchor, constant: -20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 6).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: overlay.topAnchor, constant: 12).isActive = true
         
         timeImageView.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 20).isActive = true
         timeImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12).isActive = true
         timeImageView.heightAnchor.constraint(equalToConstant: 16).isActive = true
         timeImageView.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        timeImageView.bottomAnchor.constraint(equalTo: overlay.bottomAnchor, constant: -16).isActive = true
         
         timeLabel.centerYAnchor.constraint(equalTo: timeImageView.centerYAnchor).isActive = true
         timeLabel.leadingAnchor.constraint(equalTo: timeImageView.trailingAnchor, constant: 6).isActive = true
@@ -143,7 +136,7 @@ class EventView: UIView {
         leftSpacer.widthAnchor.constraint(greaterThanOrEqualToConstant: 6).isActive = true
         leftSpacer.trailingAnchor.constraint(equalTo: placeImageView.leadingAnchor).isActive = true
         
-        placeImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12).isActive = true
+        placeImageView.centerYAnchor.constraint(equalTo: timeImageView.centerYAnchor).isActive = true
         placeImageView.heightAnchor.constraint(equalToConstant: 16).isActive = true
         placeImageView.widthAnchor.constraint(equalToConstant: 16).isActive = true
         
@@ -159,7 +152,7 @@ class EventView: UIView {
         rightSpacer.trailingAnchor.constraint(equalTo: priceImageView.leadingAnchor).isActive = true
         
         priceImageView.trailingAnchor.constraint(equalTo: priceLabel.leadingAnchor, constant: -6).isActive = true
-        priceImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12).isActive = true
+        priceImageView.centerYAnchor.constraint(equalTo: placeImageView.centerYAnchor).isActive = true
         priceImageView.heightAnchor.constraint(equalToConstant: 16).isActive = true
         priceImageView.widthAnchor.constraint(equalToConstant: 16).isActive = true
         

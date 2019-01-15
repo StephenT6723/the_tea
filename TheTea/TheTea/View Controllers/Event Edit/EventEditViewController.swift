@@ -38,7 +38,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let deleteButton = AlertCTA()
     
     private let collectionsLabel = UILabel()
-    private var collectionInputFields = [LegacyInputField]()
+    private var collectionInputFields = [InputField]()
     private var selectedCollections = [EventCollection]()
     
     private let priceInputField = InputField()
