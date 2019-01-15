@@ -28,6 +28,17 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
     let textField = UITextField()
     let button = UIButton()
     let textView = UITextView()
+    var selectedColor = UIColor.primaryCTA() {
+        didSet {
+            selectedTitleLabel.textColor = selectedColor
+        }
+    }
+    var deSelectedColor = UIColor.lightCopy() {
+        didSet {
+            titleLabel.textColor = deSelectedColor
+            divider.backgroundColor = deSelectedColor
+        }
+    }
     private let divider = UIView()
     private var dividerHeightConstraint = NSLayoutConstraint()
     private var priceWidthConstraint = NSLayoutConstraint()
@@ -125,7 +136,7 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         button.topAnchor.constraint(equalTo: topAnchor).isActive = true
         button.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        setSelected(false, animated: true)
+        setSelected(false, animated: false)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -136,7 +147,7 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         dividerHeightConstraint.constant = selected ? 2 : 1
         UIView.animate(withDuration: animated ? 0.3: 0) {
             self.selectedTitleLabel.alpha = selected ? 1 : 0
-            self.divider.backgroundColor = selected ? UIColor.primaryCTA() : UIColor.lightCopy()
+            self.divider.backgroundColor = selected ? self.selectedColor : self.deSelectedColor
             self.layoutIfNeeded()
         }
     }

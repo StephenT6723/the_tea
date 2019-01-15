@@ -45,7 +45,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 50
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0.1))
         tableView.backgroundColor = .white
         tableView.register(EventCarouselTableViewCell.self, forCellReuseIdentifier: String(describing: EventCarouselTableViewCell.self))
         tableView.register(EventListHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventListHeaderView.self))
@@ -57,7 +56,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         //carousel
         carouselHeader.carousel.delegate = self
-        tableView.tableHeaderView = carouselHeader
+        tableView.tableHeaderView = EventListTableViewHeader(frame: CGRect(x: 0, y: 0, width: 300, height: 208))
         
         noEventsView.translatesAutoresizingMaskIntoConstraints = false
         noEventsView.button.addTarget(self, action: #selector(retryEventFetch), for: .touchUpInside)

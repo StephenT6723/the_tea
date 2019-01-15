@@ -15,170 +15,114 @@ enum AuthType: Int {
 }
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
-    private var selectedType:AuthType?
+    private var selectedType:AuthType? = .signIn
     
     private let backgroundImageView = UIImageView(image: UIImage(named: "jdfj"))
     
-    private let modeSelectSegmentedControl = UISegmentedControl()
     private let emailErrorLabel = UILabel()
-    private let emailInputField = LegacyInputField()
-    private let usernameInputField = LegacyInputField()
-    private let passwordInputField = LegacyInputField()
-    private let confirmPasswordInputField = LegacyInputField()
+    private let emailInputField = InputField(frame: CGRect(x: 0, y: 0, width: 0, height: 500))
+    private let usernameInputField = InputField(frame: CGRect())
+    private let passwordInputField = InputField(frame: CGRect(x: 0, y: 0, width: 300, height: 56))
+    private let confirmPasswordInputField = InputField(frame: CGRect())
     private let usernameErrorLabel = UILabel()
     private let passwordErrorLabel = UILabel()
     
-    private let submitContainer = UIView()
-    private let submitButton = UIButton()
-    private let activityIndicator = UIActivityIndicatorView(style: .gray)
+    private let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     
-    private let textFieldHeight: CGFloat = 48.0
+    private let textFieldHeight: CGFloat = 56.0
     private var emailTopConstraint = NSLayoutConstraint()
     private var usernameTopConstraint = NSLayoutConstraint()
     private var passwordTopConstraint = NSLayoutConstraint()
     private var confirmPasswordTopConstraint = NSLayoutConstraint()
     
+    private let termsRadioButton = RadioButton(frame: CGRect())
+    private let termsLabel = UILabel()
+    private let submitButton = UIButton()
     private let modeChangeButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "WELCOME"
-        view.backgroundColor = .blue
+        view.backgroundColor = UIColor(red: 200.0/255.0, green: 125.0/255.0, blue: 237.0/255.0, alpha: 1)
         
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.contentMode = .scaleAspectFill
         view.addSubview(backgroundImageView)
         
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
-        navigationItem.leftBarButtonItem = cancelButton
-        
-        modeSelectSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        modeSelectSegmentedControl.insertSegment(withTitle: "ENLIST", at: 0, animated: false)
-        modeSelectSegmentedControl.insertSegment(withTitle: "SIGN IN", at: 1, animated: false)
-        modeSelectSegmentedControl.selectedSegmentIndex = 0
-        modeSelectSegmentedControl.addTarget(self, action: #selector(modeChanged), for: .valueChanged)
-        modeSelectSegmentedControl.tintColor = UIColor.primaryCTA()
-        modeSelectSegmentedControl.setTitleTextAttributes([.font :UIFont.cta() as Any], for: .normal)
-        view.addSubview(modeSelectSegmentedControl)
-        
         emailErrorLabel.translatesAutoresizingMaskIntoConstraints = false
         emailErrorLabel.numberOfLines = 0
         emailErrorLabel.font = UIFont.body()
         emailErrorLabel.textColor = .red
-        view.addSubview(emailErrorLabel)
+        //view.addSubview(emailErrorLabel)
         
         emailInputField.translatesAutoresizingMaskIntoConstraints = false
-        emailInputField.textField.placeholder = "EMAIL"
+        emailInputField.title = "EMAIL ADDRESS"
         emailInputField.textField.autocapitalizationType = .none
         emailInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
-        emailInputField.textField.delegate = self
+        emailInputField.selectedColor = .white
+        emailInputField.deSelectedColor = .white
+        emailInputField.textField.textColor = .white
+        emailInputField.textField.tintColor = .white
         view.addSubview(emailInputField)
         
         usernameInputField.translatesAutoresizingMaskIntoConstraints = false
-        usernameInputField.textField.placeholder = "USERNAME"
+        usernameInputField.title = "USERNAME"
         usernameInputField.textField.autocapitalizationType = .words
         usernameInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
-        usernameInputField.showDivider = false
-        usernameInputField.textField.delegate = self
+        usernameInputField.selectedColor = .white
+        usernameInputField.deSelectedColor = .white
+        usernameInputField.textField.textColor = .white
+        usernameInputField.textField.textColor = .white
         view.insertSubview(usernameInputField, belowSubview: emailInputField)
         
         usernameErrorLabel.translatesAutoresizingMaskIntoConstraints = false
         usernameErrorLabel.numberOfLines = 0
         usernameErrorLabel.font = UIFont.body()
         usernameErrorLabel.textColor = .red
-        view.addSubview(usernameErrorLabel)
+        //view.addSubview(usernameErrorLabel)
         
         passwordInputField.translatesAutoresizingMaskIntoConstraints = false
-        passwordInputField.textField.placeholder = "PASSWORD"
+        passwordInputField.title = "PASSWORD"
         passwordInputField.textField.isSecureTextEntry = true
         passwordInputField.textField.autocapitalizationType = .none
         passwordInputField.textField.delegate = self
         passwordInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
+        passwordInputField.selectedColor = .white
+        passwordInputField.deSelectedColor = .white
+        passwordInputField.textField.textColor = .white
+        passwordInputField.textField.textColor = .white
         view.addSubview(passwordInputField)
         
         confirmPasswordInputField.translatesAutoresizingMaskIntoConstraints = false
-        confirmPasswordInputField.textField.placeholder = "CONFIRM PASSWORD"
+        confirmPasswordInputField.title = "CONFIRM PASSWORD"
         confirmPasswordInputField.textField.autocapitalizationType = .none
         confirmPasswordInputField.textField.isSecureTextEntry = true
-        confirmPasswordInputField.textField.delegate = self
         confirmPasswordInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
-        confirmPasswordInputField.showDivider = false
+        confirmPasswordInputField.selectedColor = .white
+        confirmPasswordInputField.deSelectedColor = .white
+        confirmPasswordInputField.textField.textColor = .white
+        confirmPasswordInputField.textField.textColor = .white
         view.insertSubview(confirmPasswordInputField, belowSubview: passwordInputField)
         
         passwordErrorLabel.translatesAutoresizingMaskIntoConstraints = false
         passwordErrorLabel.numberOfLines = 0
         passwordErrorLabel.font = UIFont.body()
         passwordErrorLabel.textColor = .red
-        view.addSubview(passwordErrorLabel)
+        //view.addSubview(passwordErrorLabel)
         
-        modeSelectSegmentedControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-        modeSelectSegmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        termsRadioButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(termsRadioButton)
         
-        emailErrorLabel.topAnchor.constraint(equalTo: modeSelectSegmentedControl.bottomAnchor, constant: 20).isActive = true
-        emailErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        emailErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        
-        emailTopConstraint = emailInputField.topAnchor.constraint(equalTo: emailErrorLabel.bottomAnchor, constant: 10)
-        emailTopConstraint.isActive = true
-        emailInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        emailInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        emailInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        usernameTopConstraint = usernameInputField.topAnchor.constraint(equalTo: emailInputField.bottomAnchor)
-        usernameTopConstraint.isActive = true
-        usernameInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        usernameInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        usernameInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        usernameErrorLabel.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 10).isActive = true
-        usernameErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        usernameErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        
-        passwordTopConstraint = passwordInputField.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 40)
-        passwordTopConstraint.isActive = true
-        passwordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        passwordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        passwordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        confirmPasswordTopConstraint = confirmPasswordInputField.topAnchor.constraint(equalTo: passwordInputField.bottomAnchor)
-        confirmPasswordTopConstraint.isActive = true
-        confirmPasswordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        confirmPasswordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        confirmPasswordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        passwordErrorLabel.topAnchor.constraint(equalTo: confirmPasswordInputField.bottomAnchor, constant: 10).isActive = true
-        passwordErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        passwordErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        
-        //SUBMIT
-        
-        submitContainer.translatesAutoresizingMaskIntoConstraints = false
-        submitContainer.backgroundColor = .white
-        submitContainer.layer.masksToBounds = false
-        submitContainer.layer.shadowColor = UIColor.black.cgColor
-        submitContainer.layer.shadowOpacity = 0.1
-        submitContainer.layer.shadowRadius = 5
-        submitContainer.layer.shouldRasterize = true
-        submitContainer.layer.rasterizationScale = UIScreen.main.scale
-        submitContainer.alpha = 0
-        view.addSubview(submitContainer)
+        termsLabel.translatesAutoresizingMaskIntoConstraints = false
+        termsLabel.text = "I agree with terms & conditions"
+        termsLabel.textColor = .white
+        termsLabel.font = UIFont.listSubTitle()
+        view.addSubview(termsLabel)
         
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.startAnimating()
-        submitContainer.addSubview(activityIndicator)
-        
-        
-        
-        submitContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        submitContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        submitContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        submitContainer.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        
-        
-        
-        activityIndicator.centerXAnchor.constraint(equalTo: submitContainer.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: submitContainer.centerYAnchor).isActive = true
+        view.addSubview(activityIndicator)
         
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.backgroundColor = .white
@@ -195,8 +139,57 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         modeChangeButton.addTarget(self, action: #selector(modeChangeButtonTouched), for: .touchUpInside)
         view.addSubview(modeChangeButton)
         
-        submitButton.leadingAnchor.constraint(equalTo: submitContainer.leadingAnchor, constant: 40).isActive = true
-        submitButton.trailingAnchor.constraint(equalTo: submitContainer.trailingAnchor, constant: -40).isActive = true
+//        emailErrorLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
+//        emailErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+//        emailErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        
+        let yOffset = -1 * (26.0 + 4 * textFieldHeight + 24 * 3)
+        emailInputField.topAnchor.constraint(equalTo: termsRadioButton.topAnchor, constant: yOffset).isActive = true
+        emailInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        emailInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        emailInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        usernameTopConstraint = usernameInputField.topAnchor.constraint(equalTo: emailInputField.bottomAnchor, constant: 24)
+        usernameTopConstraint.isActive = true
+        usernameInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        usernameInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        usernameInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+//        usernameErrorLabel.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 10).isActive = true
+//        usernameErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+//        usernameErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        
+        passwordTopConstraint = passwordInputField.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 24)
+        passwordTopConstraint.isActive = true
+        passwordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        passwordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        passwordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        confirmPasswordTopConstraint = confirmPasswordInputField.topAnchor.constraint(equalTo: passwordInputField.bottomAnchor, constant: 24)
+        confirmPasswordTopConstraint.isActive = true
+        confirmPasswordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        confirmPasswordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        confirmPasswordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        //passwordErrorLabel.topAnchor.constraint(equalTo: confirmPasswordInputField.bottomAnchor, constant: 10).isActive = true
+        //passwordErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        //passwordErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        
+        
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: submitButton.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor).isActive = true
+        
+        termsRadioButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        termsRadioButton.heightAnchor.constraint(equalToConstant: RadioButton.preferedSize).isActive = true
+        termsRadioButton.widthAnchor.constraint(equalToConstant: RadioButton.preferedSize).isActive = true
+        termsRadioButton.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -32).isActive = true
+        
+        termsLabel.centerYAnchor.constraint(equalTo: termsRadioButton.centerYAnchor).isActive = true
+        termsLabel.leadingAnchor.constraint(equalTo: termsRadioButton.trailingAnchor, constant: 8).isActive = true
+        
+        submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
         submitButton.bottomAnchor.constraint(equalTo: modeChangeButton.topAnchor, constant: -20).isActive = true
         submitButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
@@ -211,14 +204,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordInputField.textField.text = "abc12345678"
         confirmPasswordInputField.textField.text = "abc12345678"
         
-        
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
         //SETUP
         
-        updateEmailError(text: "", animated: false)
-        updateUsernameError(text: "", animated: false)
-        updatePasswordError(text: "", animated: false)
+        //updateEmailError(text: "", animated: false)
+        //updateUsernameError(text: "", animated: false)
+        //updatePasswordError(text: "", animated: false)
         updateSubmitButton()
-        self.updateLoader(visible: false, animated: false)
+        updateLoader(visible: false, animated: false)
+        modeChanged(animated: false)
     }
     
     //MARK: Actions
@@ -226,51 +221,50 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func modeChangeButtonTouched() {
         guard let previousType = selectedType else {
             selectedType = .signIn
-            modeChanged()
+            modeChanged(animated: true)
             return
         }
         
         selectedType = previousType == .signIn ? .register : .signIn
-        modeChanged()
+        modeChanged(animated: true)
     }
     
-    @objc func cancelButtonTouched() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func modeChanged() {
+    @objc func modeChanged(animated: Bool) {
         updateEmailError(text: "", animated: true)
         updateUsernameError(text: "", animated: true)
         updatePasswordError(text: "", animated: true)
         if selectedType == .register {
-            confirmPasswordTopConstraint.constant = 0
-            confirmPasswordInputField.alpha = 1
-            passwordInputField.showDivider = true
-            
-            usernameTopConstraint.constant = 0
-            usernameInputField.alpha = 1
-            emailInputField.showDivider = true
-            
             submitButton.setTitle("SIGN UP", for: .normal)
             modeChangeButton.setTitle("Already have an account? Log In", for: .normal)
+            view.layoutIfNeeded()
             
-            UIView.animate(withDuration: 0.3, animations: {
+            confirmPasswordTopConstraint.constant = 24
+            confirmPasswordInputField.alpha = 1
+            
+            usernameTopConstraint.constant = 24
+            usernameInputField.alpha = 1
+            
+            UIView.animate(withDuration: animated ? 0.3 : 0, animations: {
+                self.termsLabel.alpha = 1
+                self.termsRadioButton.alpha = 1
                 self.view.layoutIfNeeded()
             })
         } else {
+            submitButton.setTitle("LOG IN", for: .normal)
+            modeChangeButton.setTitle("Dont have an account? Sign Up", for: .normal)
+            view.layoutIfNeeded()
+            
             confirmPasswordTopConstraint.constant = -1 * textFieldHeight
             usernameTopConstraint.constant = -1 * textFieldHeight
             
-            submitButton.setTitle("LOG IN", for: .normal)
-            modeChangeButton.setTitle("Dont have an account? Sign Up", for: .normal)
-            
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: animated ? 0.3 : 0, animations: {
                 self.confirmPasswordInputField.alpha = 0
                 self.usernameInputField.alpha = 0
                 self.view.layoutIfNeeded()
+                self.termsLabel.alpha = 0
+                self.termsRadioButton.alpha = 0
             }) { (complete: Bool) in
-                self.passwordInputField.showDivider = false
-                self.emailInputField.showDivider = false
+                
             }
         }
         updateSubmitButton()
@@ -315,9 +309,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             passwordError = "Your password must be at least \(MemberDataManager.minPasswordLength) characters"
         }
         
-        updateEmailError(text: emailError, animated: true)
-        updateUsernameError(text: usernameError, animated: true)
-        updatePasswordError(text: passwordError, animated: true)
+        //updateEmailError(text: emailError, animated: true)
+        //updateUsernameError(text: usernameError, animated: true)
+        //updatePasswordError(text: passwordError, animated: true)
         
         if emailValid && usernameValid && passwordsMatch && passwordValid {
             updateLoader(visible: true, animated: true)
@@ -386,7 +380,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.view.layoutIfNeeded()
             })
         } else {
-            passwordTopConstraint.constant =  40
+            passwordTopConstraint.constant =  24
             UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
                 self.usernameErrorLabel.alpha = 0
                 
@@ -410,11 +404,5 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.passwordErrorLabel.text = ""
             }
         }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        submitButtonTouched()
-        return true
     }
 }

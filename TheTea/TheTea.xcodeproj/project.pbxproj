@@ -12,6 +12,7 @@
 		930E890821DD4D940013EC37 /* Montserrat-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */; };
 		930E890A21E169230013EC37 /* Montserrat-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890921E169230013EC37 /* Montserrat-Medium.otf */; };
 		930E890E21E3E7C20013EC37 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930E890D21E3E7C20013EC37 /* Carousel.swift */; };
+		93262AA321ED9F5D00210A9F /* EventListTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93262AA221ED9F5D00210A9F /* EventListTableViewHeader.swift */; };
 		932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932991322073E295008C7A3B /* EventCollectionManager.swift */; };
 		9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7721F4F3BEA00230829 /* StyleManager.swift */; };
 		9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */; };
@@ -79,6 +80,7 @@
 		930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-SemiBold.otf"; path = "Misc/Montserrat/Montserrat-SemiBold.otf"; sourceTree = "<group>"; };
 		930E890921E169230013EC37 /* Montserrat-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Medium.otf"; path = "Misc/Montserrat/Montserrat-Medium.otf"; sourceTree = "<group>"; };
 		930E890D21E3E7C20013EC37 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Carousel.swift; path = "UI Elements/Carousel.swift"; sourceTree = "<group>"; };
+		93262AA221ED9F5D00210A9F /* EventListTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListTableViewHeader.swift; sourceTree = "<group>"; };
 		932991322073E295008C7A3B /* EventCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventCollectionManager.swift; path = "Data/Data Managers/EventCollectionManager.swift"; sourceTree = "<group>"; };
 		9337C7721F4F3BEA00230829 /* StyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleManager.swift; path = Helpers/StyleManager.swift; sourceTree = "<group>"; };
 		9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+TheTea.swift"; path = "Helpers/UIColor+TheTea.swift"; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 			children = (
 				938906811F3E891900BBB88C /* EventListViewController.swift */,
 				9337C7911F4F459A00230829 /* EventListHeaderView.swift */,
+				93262AA221ED9F5D00210A9F /* EventListTableViewHeader.swift */,
 				93EAF8E6206C3971008B213F /* Event Collection Carousel */,
 			);
 			path = "Event List";
@@ -587,6 +590,7 @@
 				933956EB1F440EF600F1AEE4 /* LoginViewController.swift in Sources */,
 				93EAF8EF206D72D7008B213F /* EventCollectionHeaderView.swift in Sources */,
 				9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */,
+				93262AA321ED9F5D00210A9F /* EventListTableViewHeader.swift in Sources */,
 				93399AF21F40E0A100ED02E9 /* MemberDataManager.swift in Sources */,
 				D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */,
 				93CF651C21E52CA000090B65 /* EventTableViewCell.swift in Sources */,
