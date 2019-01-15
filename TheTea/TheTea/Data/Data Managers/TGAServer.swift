@@ -325,21 +325,27 @@ class TGAServer {
             var dataDict = [String:String]()
             dataDict["extension"] = "png"
             dataDict["base64"] = dataString
-            params["images"] = [dataDict, dataDict]
+            params["images"] = [dataDict]
         }
         
         let headers = self.headersForCurrentMember()
         
-        Alamofire.request("\(domain)/events/",
-            method: .post,
-            parameters: params,
-            encoding: URLEncoding(destination: .queryString),
-            headers: headers).responseJSON { response in
-                if response.response?.statusCode != 200 {
-                    failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
-                    return
-                }
-                success()
+        if let theJSONData = try? JSONSerialization.data(
+            withJSONObject: params,
+            options: []) {
+            let theJSONText = String(data: theJSONData,
+                                     encoding: .ascii) ?? ""
+            Alamofire.request("\(domain)/events/",
+                method: .post,
+                parameters: [:],
+                encoding: JSONStringArrayEncoding.init(string: theJSONText),
+                headers: headers).responseJSON { response in
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                        return
+                    }
+                    success()
+            }
         }
     }
     
@@ -415,5 +421,27 @@ class TGAServer {
                 
                 success()
         }
+    }
+}
+
+struct JSONStringArrayEncoding: ParameterEncoding {
+    private let myString: String
+    
+    init(string: String) {
+        self.myString = string
+    }
+    
+    func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+        var urlRequest = urlRequest.urlRequest
+        
+        let data = myString.data(using: .utf8)!
+        
+        if urlRequest?.value(forHTTPHeaderField: "Content-Type") == nil {
+            urlRequest?.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        
+        urlRequest?.httpBody = data
+        
+        return urlRequest!
     }
 }

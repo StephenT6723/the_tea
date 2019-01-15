@@ -20,7 +20,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let authEnabled = MemberDataManager.authEnabled
         
         StyleManager.updateNavBarStyling()
+        /*
+        let root = RootViewController()
         
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window!.rootViewController = root
+        window!.makeKeyAndVisible()
+        
+        EventCollectionManager.updateFeaturedEventCollections()
+        return true
+        */
         let eventListVC = EventListViewController()
         let eventsFRC = EventManager.allFutureEvents()
         eventListVC.eventsFRC = eventsFRC

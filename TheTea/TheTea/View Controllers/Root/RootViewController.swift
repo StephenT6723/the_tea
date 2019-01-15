@@ -14,6 +14,15 @@ class RootViewController: UIViewController {
         super.viewDidLoad()
 
         title = "TGA 0.2"
-        view.backgroundColor = .white
+        view.backgroundColor = .purple
+        
+        let authView = LoginViewController()
+        self.addChild(authView)
+        view.addSubview(authView.view)
+        authView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        authView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        authView.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        authView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        authView.didMove(toParent: self)
     }
 }
