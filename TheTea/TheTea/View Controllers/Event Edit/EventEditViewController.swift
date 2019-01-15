@@ -510,7 +510,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 return true
             }
         } else  {
-            if let name = nameTextField.textField.text {
+            if let name = nameTextField.textField.text, let _ = selectedLocation {
                 if name.count > 0 {
                     return true
                 }
