@@ -9,10 +9,9 @@
 import UIKit
 
 enum CollectionSortType: String, CaseIterable {
-    case hot = "HOT"
-    case name = "NAME"
-    case time = "TIME"
-    case place = "PLACE"
+    case hot = "Hot"
+    case time = "Now"
+    case new = "New"
     
     func sortDecriptors() -> [NSSortDescriptor] {
         var descriptors = [NSSortDescriptor]()
@@ -21,14 +20,11 @@ enum CollectionSortType: String, CaseIterable {
         case .hot:
             let hotnessSort = NSSortDescriptor(key: "hotness", ascending: true)
             descriptors.append(hotnessSort)
-        case .name:
-            let nameSort = NSSortDescriptor(key: "name", ascending: true)
-            descriptors.append(nameSort)
         case .time:
             let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
             descriptors.append(startTimeSort)
         default:
-            let locationSort = NSSortDescriptor(key: "locationName", ascending: true)
+            let locationSort = NSSortDescriptor(key: "dateCreated", ascending: true)
             descriptors.append(locationSort)
         }
         
@@ -37,11 +33,13 @@ enum CollectionSortType: String, CaseIterable {
 }
 
 class EventCollectionHeaderView: UITableViewHeaderFooterView {
-    let sortLabel = UILabel()
-    let sortButton = UIButton()
-    var selectedSort = CollectionSortType.hot {
-        didSet {
-            updateSortString()
+    var selectedSort: CollectionSortType {
+        get {
+            let cases = CollectionSortType.allCases
+            return cases[segmentedControl.selectedIndex]
+        } set {
+            let cases = CollectionSortType.allCases
+            segmentedControl.selectedIndex = cases.firstIndex(of: newValue) ?? 0
         }
     }
     let segmentedControl = SegmentedControl()
@@ -50,7 +48,11 @@ class EventCollectionHeaderView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.items = ["Hot", "Newest", "Closest"]
+        var items = [String]()
+        for sortType in CollectionSortType.allCases {
+            items.append(sortType.rawValue)
+        }
+        segmentedControl.items = items
         contentView.addSubview(segmentedControl)
         
         segmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
@@ -61,18 +63,5 @@ class EventCollectionHeaderView: UITableViewHeaderFooterView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    func updateSortString() {
-        let sortString = "SORT BY: \(selectedSort.rawValue)"
-        guard let font = UIFont.cta() else {
-            sortLabel.text = ""
-            return
-        }
-        let attributes = [ NSAttributedString.Key.foregroundColor: UIColor.primaryCTA(), NSAttributedString.Key.font: font ] as [NSAttributedString.Key : Any]
-        let attrString = NSMutableAttributedString(string: sortString, attributes: attributes)
-        attrString.setAttributes([ NSAttributedString.Key.foregroundColor: UIColor.lightCopy(), NSAttributedString.Key.font: font ] as [NSAttributedString.Key : Any], range: NSMakeRange(0, 8))
-        
-        sortLabel.attributedText = attrString
     }
 }

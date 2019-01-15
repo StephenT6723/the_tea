@@ -23,6 +23,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
             tableView.reloadData()
         }
     }
+    private var header: EventCollectionHeaderView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,7 +96,8 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         header.selectedSort = selectedSort
-        header.sortButton.addTarget(self, action: #selector(sortTapped), for: .touchUpInside)
+        header.segmentedControl.addTarget(self, action: #selector(sortTapped), for: .valueChanged)
+        self.header = header
         
         return header
     }
@@ -163,20 +165,8 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: Actions
     
     @objc func sortTapped() {
-        let sortMenu = UIAlertController(title: nil, message: "Sort By", preferredStyle: .actionSheet)
-        
-        for sortType in CollectionSortType.allCases {
-            let action =  UIAlertAction(title: sortType.rawValue.capitalized, style: .default) { _ in
-                self.selectedSort = sortType
-            }
-            sortMenu.addAction(action)
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        
-        sortMenu.addAction(cancelAction)
-        
-        self.present(sortMenu, animated: true, completion: nil)
+        self.selectedSort = header?.selectedSort ?? .hot
+        updateData()
     }
     
     func updateData() {

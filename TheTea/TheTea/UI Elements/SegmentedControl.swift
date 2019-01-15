@@ -106,6 +106,14 @@ class SegmentedControl: UIControl {
     }
     
     @objc func buttonTapped(sender: UIButton) {
+        guard let buttonIndex = buttons.index(of: sender) else {
+            return
+        }
+        
+        if selectedIndex == buttonIndex {
+            return
+        }
+        
         selectorCenterContraint.isActive = false
         selectorCenterContraint = selector.centerXAnchor.constraint(equalTo: sender.centerXAnchor)
         selectorCenterContraint.isActive = true
@@ -117,11 +125,7 @@ class SegmentedControl: UIControl {
             self.layoutIfNeeded()
         }
         
-        if let buttonIndex = buttons.index(of: sender) {
-            if selectedIndex != buttonIndex {
-                selectedIndex = buttonIndex
-                sendActions(for: .valueChanged)
-            }
-        }
+        selectedIndex = buttonIndex
+        sendActions(for: .valueChanged)
     }
 }
