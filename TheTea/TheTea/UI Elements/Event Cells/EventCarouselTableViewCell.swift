@@ -9,7 +9,7 @@
 import UIKit
 
 class EventCarouselTableViewCell: UITableViewCell {
-    static let preferedHeight: CGFloat = 412.0
+    static let preferedHeight: CGFloat = 428.0
     let carousel = Carousel(frame: CGRect(x:0, y:0, width:300, height: EventCarouselTableViewCell.preferedHeight))
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

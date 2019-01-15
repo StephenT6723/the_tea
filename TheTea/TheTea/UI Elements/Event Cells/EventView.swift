@@ -49,9 +49,9 @@ class EventView: UIView {
         backgroundColor = UIColor.primaryCTA()
         
         layer.cornerRadius = 16
-        //layer.shadowOffset = CGSize(width: 1, height: 2)
-        //layer.shadowColor = UIColor.orange.cgColor
-        //layer.shadowOpacity = 1
+        layer.shadowOffset = CGSize(width: 1, height: 2)
+        layer.shadowColor = UIColor(red:0, green:0, blue:0, alpha:0.16).cgColor
+        layer.shadowOpacity = 1
         layer.shadowRadius = 4
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
@@ -69,7 +69,7 @@ class EventView: UIView {
         
         overlay.translatesAutoresizingMaskIntoConstraints = false
         overlay.backgroundColor = UIColor(white: 1, alpha: 0.9)
-        addSubview(overlay)
+        imageViewContainer.addSubview(overlay)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.listTitle()
@@ -166,8 +166,6 @@ class EventView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        layer.shadowPath = UIBezierPath(rect: frame).cgPath
         updateImageView()
     }
     

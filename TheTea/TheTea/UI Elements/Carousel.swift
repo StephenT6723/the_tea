@@ -74,9 +74,9 @@ class Carousel: UIView {
             button.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
             button.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             
-            view.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-            view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-            view.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+            view.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 4).isActive = true
+            view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -12).isActive = true
+            view.heightAnchor.constraint(equalTo: scrollView.heightAnchor, constant: -16).isActive = true
             
             if let previousView = previousView {
                 view.widthAnchor.constraint(equalTo: previousView.widthAnchor).isActive = true
