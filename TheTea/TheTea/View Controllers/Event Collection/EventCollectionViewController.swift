@@ -17,12 +17,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
             updateData()
         }
     }
-    var eventsFRC = NSFetchedResultsController<Event>() {
-        didSet {
-            eventsFRC.delegate = self
-            tableView.reloadData()
-        }
-    }
+    var eventsFRC = NSFetchedResultsController<Event>()
     private var header: EventCollectionHeaderView?
     
     override func viewDidLoad() {
@@ -127,7 +122,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     //MARK: FRC Delegate
-    
+    /*
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
@@ -160,7 +155,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
-    }
+    } */
     
     //MARK: Actions
     
@@ -175,7 +170,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         request.sortDescriptors = selectedSort.sortDecriptors()
         
         let context = CoreDataManager.sharedInstance.viewContext()
-        let newFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
+        let newFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
             try newFRC.performFetch()
@@ -183,6 +178,6 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
             fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
         eventsFRC = newFRC
-        tableView.reloadData()
+        tableView.reloadRows(at: tableView.indexPathsForVisibleRows ?? [], with: .none)
     }
 }

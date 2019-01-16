@@ -43,7 +43,7 @@ class EventManager {
         request.sortDescriptors = [startTimeSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()
-        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "daySectionIdentifier", cacheName: nil)
+        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
             try eventsFRC.performFetch()
@@ -61,6 +61,29 @@ class EventManager {
         
         let request = NSFetchRequest<Event>(entityName:"Event")
         let predicate = NSPredicate(format: "favoritedBy contains %@", member)
+        request.predicate = predicate
+        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: true)
+        request.sortDescriptors = [startTimeSort]
+        
+        let context = CoreDataManager.sharedInstance.viewContext()
+        let eventsFRC = NSFetchedResultsController<Event>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try eventsFRC.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+        
+        return eventsFRC
+    }
+    
+    class func hostedEvents() -> NSFetchedResultsController<Event> {
+        guard let member = MemberDataManager.loggedInMember() else {
+            return NSFetchedResultsController<Event>()
+        }
+        
+        let request = NSFetchRequest<Event>(entityName:"Event")
+        let predicate = NSPredicate(format: "hosts contains %@", member)
         request.predicate = predicate
         let startTimeSort = NSSortDescriptor(key: "hotness", ascending: true)
         request.sortDescriptors = [startTimeSort]

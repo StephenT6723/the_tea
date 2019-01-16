@@ -47,4 +47,15 @@ extension Member {
         
         return favoritesArray.sorted(by: { $0.hotness > $1.hotness })
     }
+    
+    func hotHosting() -> [Event] {
+        guard let hosting = self.hosting else {
+            return [Event]()
+        }
+        guard let hostingArray = Array(hosting) as? [Event] else {
+            return [Event]()
+        }
+        
+        return hostingArray.sorted(by: { $0.hotness > $1.hotness })
+    }
 }

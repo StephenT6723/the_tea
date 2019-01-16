@@ -30,13 +30,12 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 0.01))
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor.lightBackground()
+        tableView.backgroundColor = .white
         tableView.register(ProfileAboutCell.self, forCellReuseIdentifier: String(describing: ProfileAboutCell.self))
         tableView.register(ProfileNoEventsCell.self, forCellReuseIdentifier: String(describing: ProfileNoEventsCell.self))
         tableView.register(EventCarouselTableViewCell.self, forCellReuseIdentifier: String(describing: EventCarouselTableViewCell.self))
         tableView.register(ProfileHeader.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileHeader.self))
         tableView.register(EventListHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventListHeaderView.self))
-        tableView.register(ProfileAddEventFooter.self, forHeaderFooterViewReuseIdentifier: String(describing: ProfileAddEventFooter.self))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44
@@ -126,14 +125,17 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     @objc func seeAllTapped(sender: UIButton) {
         let section = sender.tag
         
-        //guard let sectionInfo = eventsFRC.sections?[section] else { return }
-        
-        //let sectionName = sectionInfo.name
         if section == 1 {
             let eventCollectionVC = EventCollectionViewController()
             let selectedEventsFRC = EventManager.favoritedEvents()
             eventCollectionVC.eventsFRC = selectedEventsFRC
             eventCollectionVC.title = "FAVORITES"
+            navigationController?.pushViewController(eventCollectionVC, animated: true)
+        } else if section == 2 {
+            let eventCollectionVC = EventCollectionViewController()
+            let selectedEventsFRC = EventManager.hostedEvents()
+            eventCollectionVC.eventsFRC = selectedEventsFRC
+            eventCollectionVC.title = "HOSTED EVENTS"
             navigationController?.pushViewController(eventCollectionVC, animated: true)
         }
     }
@@ -144,7 +146,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         if MemberDataManager.loggedInMember() == nil {
             return 0
         }
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,15 +156,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         
-        if section == 1 {
-            let favoriteCount = MemberDataManager.loggedInMember()?.favorites?.count
-            if favoriteCount ?? 0 > 0 {
-                return 1
-            }
-            return 1
-        }
-        
-        if section == 2 {
+        if section == 1 || section == 2 {
             return 1
         }
         
@@ -219,7 +213,13 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 }
             } else if section == 2 {
                 header.titleLabel.text = "Hosted Events"
+                let hostingCount = MemberDataManager.loggedInMember()?.hosting?.count
                 header.seeAllButton.alpha = 0
+                if hostingCount ?? 0 > 3 {
+                    header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
+                    header.seeAllButton.alpha = 1
+                    header.seeAllButton.tag = 2
+                }
             } else if section == 3 {
                 header.titleLabel.text = "Past Events"
                 header.seeAllButton.alpha = 0
@@ -229,18 +229,6 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             
             return header
         }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 2 {
-            guard let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ProfileAddEventFooter.self)) as? ProfileAddEventFooter else {
-                return ProfileAddEventFooter()
-            }
-            footer.addEventButton.addTarget(self, action: #selector(addEventTapped), for: .touchUpInside) //self, action: #selector(addEventTapped))
-            return footer
-        }
-        
-        return nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -271,6 +259,8 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 return ProfileNoEventsCell()
             }
             
+            
+            
             cell.label.text = "You don't have any favorite events yet"
             cell.label.textAlignment = .center
             
@@ -278,6 +268,18 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         if indexPath.section == 2 {
+            if MemberDataManager.loggedInMember()?.hosting?.count ?? 0 > 0 {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EventCarouselTableViewCell.self), for: indexPath) as? EventCarouselTableViewCell else {
+                    return EventCarouselTableViewCell()
+                }
+                
+                cell.carousel.tag = indexPath.section
+                cell.carousel.delegate = self
+                cell.carousel.updateContent()
+                
+                return cell
+            }
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ProfileNoEventsCell.self), for: indexPath) as? ProfileNoEventsCell else {
                 return ProfileNoEventsCell()
             }
@@ -307,42 +309,43 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
-            guard let member = MemberDataManager.loggedInMember() else {
-                return
-            }
-            
-            if member.favorites?.count ?? 0 > 0 {
-                let favorites = member.hotFavorites()
-                let favorite = favorites[indexPath.row]
-                
-                let detailVC = EventDetailViewController(event:favorite)
-                navigationController?.pushViewController(detailVC, animated: true)
-            }
-        }
+        
     }
     
     //MARK: Carousel Delegate
     
     func numberOfItemsIn(carousel: Carousel) -> Int {
+        let tag = carousel.tag
+        
         guard let member = MemberDataManager.loggedInMember() else {
             return 0
         }
         
-        let favorites = member.hotFavorites()
+        if tag == 1 {
+            let favorites = member.hotFavorites()
         
-        return favorites.count > 3 ? 3 : favorites.count
+            return favorites.count > 3 ? 3 : favorites.count
+        } else {
+            let hosting = member.hotHosting()
+            
+            return hosting.count > 3 ? 3 : hosting.count
+        }
     }
     
     func view(for carousel: Carousel, at index: Int) -> UIView? {
-        let index = carousel.tag
+        let carouselIndex = carousel.tag
         
         guard let member = MemberDataManager.loggedInMember() else {
             return nil
         }
         
         let favorites = member.hotFavorites()
-        let event = favorites[index]
+        var event = favorites[index]
+        
+        if carouselIndex == 2 {
+            let hosting = member.hotHosting()
+            event = hosting[index]
+        }
         
         let cellView = EventView(frame: CGRect())
         cellView.imageURL = event.fullImageURL()
@@ -358,14 +361,20 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func carousel(_ carousel: Carousel, didSelect index: Int) {
-        let index = carousel.tag
+        let carouselIndex = carousel.tag
         
         guard let member = MemberDataManager.loggedInMember() else {
             return
         }
         
         let favorites = member.hotFavorites()
-        let event = favorites[index]
+        var event = favorites[index]
+        
+        if carouselIndex == 2 {
+            let hosting = member.hotHosting()
+            event = hosting[index]
+        }
+        
         let detailVC = EventDetailViewController(event:event)
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -513,7 +522,7 @@ class ProfileAboutCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.lightBackground()
+        contentView.backgroundColor = .white
         selectionStyle = .none
         clipsToBounds = false
         
@@ -540,7 +549,7 @@ class ProfileNoEventsCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.lightBackground()
+        contentView.backgroundColor = .white
         selectionStyle = .none
         clipsToBounds = false
         
@@ -554,30 +563,6 @@ class ProfileNoEventsCell: UITableViewCell {
         label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30).isActive = true
         label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-}
-
-class ProfileAddEventFooter: UITableViewHeaderFooterView {
-    let addEventButton = PrimaryCTA()
-    
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        
-        contentView.backgroundColor = UIColor.lightBackground()
-        
-        addEventButton.translatesAutoresizingMaskIntoConstraints = false
-        addEventButton.setTitle("POST AN EVENT", for: .normal)
-        contentView.addSubview(addEventButton)
-        
-        addEventButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
-        addEventButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
-        addEventButton.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
-        addEventButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        addEventButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
