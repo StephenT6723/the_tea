@@ -196,20 +196,17 @@ class EventManager {
     //MARK: Remote Data Updates
     
     class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
-                           onSuccess success:@escaping (_ data: [[String: String]]) -> Void,
+                           onSuccess success:@escaping () -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, image: image, onSuccess: { () in
-
+            success()
         }) { (error) in
-            if let error = error {
-                print("EVENT CREATION FAILED: \(error.localizedDescription)")
-            }
-            //TODO: Post notification
+            failure(error)
         }
     }
     
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
-        return TGAServer.updateEvent(event: event, name: name, startTime: startTime, endTime: endTime, about: about, location: location)
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
+        TGAServer.updateEvent(event: event, name: name, startTime: startTime, endTime: endTime, about: about, location: location)
     }
     
     class func delete(event:Event) -> Bool {

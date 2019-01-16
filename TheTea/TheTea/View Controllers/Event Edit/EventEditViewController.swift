@@ -47,6 +47,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let ticketURLTextField = InputField()
     
     private let createContainer = UIView()
+    private let activityIndicator = UIActivityIndicatorView(style: .gray)
     private let createButton = PrimaryCTA(frame: CGRect())
     
     private let aboutTextViewPlaceholder = "MORE INFO"
@@ -289,6 +290,9 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             createContainer.layer.rasterizationScale = UIScreen.main.scale
             view.addSubview(createContainer)
             
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            createContainer.addSubview(activityIndicator)
+            
             createButton.translatesAutoresizingMaskIntoConstraints = false
             createButton.setTitle("Create Event", for: .normal)
             createButton.addTarget(self, action: #selector(createButtonTouched), for: .touchUpInside)
@@ -298,6 +302,9 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             createContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             createContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             createContainer.heightAnchor.constraint(equalToConstant: 80).isActive = true
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: createButton.centerXAnchor).isActive = true
+            activityIndicator.centerYAnchor.constraint(equalTo: createButton.centerYAnchor).isActive = true
             
             createButton.leadingAnchor.constraint(equalTo: createContainer.leadingAnchor, constant: 20).isActive = true
             createButton.trailingAnchor.constraint(equalTo: createContainer.trailingAnchor, constant: -20).isActive = true
@@ -520,10 +527,14 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         return false
     }
     
-    func saveEvent() -> Bool {
+    func saveEvent() {
         if isCreatingNew() {
             if let name = nameTextField.textField.text {
                 if name.count > 0 {
+                    activityIndicator.startAnimating()
+                    UIView.animate(withDuration: 0.3) {
+                        self.createButton.alpha = 0
+                    }
                     EventManager.createEvent(name: name,
                                                     startTime: selectedStartTime(),
                                                     endTime: selectedEndTime(),
@@ -533,22 +544,38 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                                                     ticketURL: ticketURLTextField.textField.text,
                                                     repeats: selectedRepeats.dataString(),
                                                     image: selectedImage,
-                                                    onSuccess: { (data) in
-                                                        self.dismiss(animated: true, completion: nil)
-                                                    }) { (error) in
-                                                        if let error = error {
-                                                            print("EVENT FETCH FAILED: \(error.localizedDescription)")
+                                                    onSuccess: { () in
+                                                        let alert = UIAlertController(title: "Success!", message: "Your event as been added. It will appear in The Gay Agenda once approved.", preferredStyle: .alert)
+                                                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                                                            self.dismiss(animated: true, completion: nil)
+                                                        }))
+                                                        self.present(alert, animated: true, completion: nil)
+                                                        self.activityIndicator.stopAnimating()
+                                                        UIView.animate(withDuration: 0.3) {
+                                                            self.createButton.alpha = 1
                                                         }
-                                                        //TODO: Post notification
+                                                    }) { (error) in
+                                                        guard let error = error else {
+                                                            return
+                                                        }
+                                                        print("EVENT CREATION FAILED: \(error.localizedDescription)")
+                                                        let alert = UIAlertController(title: "Error", message: "We were unable to creat your event. Please try again.", preferredStyle: .alert)
+                                                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                                                            
+                                                        }))
+                                                        self.present(alert, animated: true, completion: nil)
+                                                        self.activityIndicator.stopAnimating()
+                                                        UIView.animate(withDuration: 0.3) {
+                                                            self.createButton.alpha = 1
+                                                        }
                                                     }
-                    return true
                 }
             }
         } else {
             if let event = self.event {
                 if let name = nameTextField.textField.text {
                     if name.count > 0 {
-                        return EventManager.updateEvent(event: event,
+                        EventManager.updateEvent(event: event,
                                                         name: name,
                                                         startTime: selectedStartTime(),
                                                         endTime: isEndTimeVisible() ? endTimePicker.date : nil,
@@ -558,7 +585,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 }
             }
         }
-        return false
     }
     
     func selectedStartTime() -> Date {
@@ -606,19 +632,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     @objc func doneButtonTouched() {
-        if saveEvent() {
-            dismiss(animated: true, completion: nil)
-        } else {
-            print("SAVE FAILED")
-        }
+        saveEvent()
     }
     
     @objc func createButtonTouched() {
-        if saveEvent() {
-            dismiss(animated: true, completion: nil)
-        } else {
-            print("SAVE FAILED")
-        }
+        saveEvent()
     }
     
     @objc func datePickerChanged(picker: UIDatePicker) {

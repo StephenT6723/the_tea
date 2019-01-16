@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKLoginKit
 
-class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CarouselDelegate {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
     var upcomingEvents = EventCollection()
     var currentMember = MemberDataManager.loggedInMember()
@@ -157,10 +157,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         if section == 1 {
             let favoriteCount = MemberDataManager.loggedInMember()?.favorites?.count
             if favoriteCount ?? 0 > 0 {
-                if favoriteCount ?? 0 > 3 {
-                    return 3
-                }
-                return favoriteCount ?? 0
+                return 1
             }
             return 1
         }
@@ -263,12 +260,9 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                     return EventCarouselTableViewCell()
                 }
                 
-                guard let member = MemberDataManager.loggedInMember() else {
-                    return EventCarouselTableViewCell()
-                }
-                
-                let favorites = member.hotFavorites()
-                let favorite = favorites[indexPath.row]
+                cell.carousel.tag = indexPath.section
+                cell.carousel.delegate = self
+                cell.carousel.updateContent()
                 
                 return cell
             }
@@ -326,6 +320,54 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
                 navigationController?.pushViewController(detailVC, animated: true)
             }
         }
+    }
+    
+    //MARK: Carousel Delegate
+    
+    func numberOfItemsIn(carousel: Carousel) -> Int {
+        guard let member = MemberDataManager.loggedInMember() else {
+            return 0
+        }
+        
+        let favorites = member.hotFavorites()
+        
+        return favorites.count > 3 ? 3 : favorites.count
+    }
+    
+    func view(for carousel: Carousel, at index: Int) -> UIView? {
+        let index = carousel.tag
+        
+        guard let member = MemberDataManager.loggedInMember() else {
+            return nil
+        }
+        
+        let favorites = member.hotFavorites()
+        let event = favorites[index]
+        
+        let cellView = EventView(frame: CGRect())
+        cellView.imageURL = event.fullImageURL()
+        cellView.titleLabel.text = event.name
+        cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
+        cellView.placeLabel.text = event.locationName
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        let priceString = event.price == 0 ? "Free" : numberFormatter.string(from: NSNumber(value: event.price))
+        cellView.priceLabel.text = priceString
+        
+        return cellView
+    }
+    
+    func carousel(_ carousel: Carousel, didSelect index: Int) {
+        let index = carousel.tag
+        
+        guard let member = MemberDataManager.loggedInMember() else {
+            return
+        }
+        
+        let favorites = member.hotFavorites()
+        let event = favorites[index]
+        let detailVC = EventDetailViewController(event:event)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 

@@ -353,13 +353,12 @@ class TGAServer {
         return [String: String]()
     }
     
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) -> Bool {
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
         /*
          event.update(name: name, hotness: nil, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
          CoreDataManager.sharedInstance.saveContext() */
         
         //PUSH TO SERVER AND WAIT FOR RESPONSE
-        return true
     }
     
     class func delete(event:Event) -> Bool {

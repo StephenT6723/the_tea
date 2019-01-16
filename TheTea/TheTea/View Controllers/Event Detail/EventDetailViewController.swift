@@ -18,7 +18,6 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     let scrollView = UIScrollView()
     
     private let titleLabel = UILabel()
-    private let subTitleLabel = UILabel()
     private let favoriteButton = UIButton()
     private let favoriteButtonSize: CGFloat = 50
     private let favoriteActivityIndicator = UIActivityIndicatorView(style: .gray)
@@ -81,13 +80,6 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "eventPlaceholder18")
         imageView.contentMode = .scaleAspectFill
-        
-        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subTitleLabel.font = UIFont.sectionTitle()
-        subTitleLabel.textColor = UIColor.lightCopy()
-        subTitleLabel.text = "DRAG SHOW"
-        subTitleLabel.numberOfLines = 0
-        contentView.addSubview(subTitleLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.headerOne()
@@ -205,17 +197,13 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        subTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        subTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        subTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 4).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
         
         favoriteButton.widthAnchor.constraint(equalToConstant: 47).isActive = true
         favoriteButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        favoriteButton.topAnchor.constraint(equalTo: subTitleLabel.topAnchor, constant: -6).isActive = true
+        favoriteButton.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -6).isActive = true
         favoriteButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -14).isActive = true
         
         favoriteActivityIndicator.centerXAnchor.constraint(equalTo: favoriteButton.centerXAnchor).isActive = true
