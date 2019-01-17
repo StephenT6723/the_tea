@@ -132,16 +132,37 @@ class TGAServer {
                            onSuccess success:@escaping (_ data: [String: String]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         var memberDict = [String:String]()
-        memberDict[Member.tgaIDKey] = "1"
         memberDict[Member.nameKey] = name
         memberDict[Member.emailKey] = email
         memberDict[Member.facebookIDKey] = facebookID
         memberDict[Member.instagramKey] = instagram
         memberDict[Member.twitterKey] = twitter
         memberDict[Member.aboutKey] = about
-        let deadlineTime = DispatchTime.now() + .seconds(3)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-            failure(nil)
+        
+        let id = MemberDataManager.loggedInMember()?.tgaID ?? ""
+        let headers = self.headersForCurrentMember()
+        
+        Alamofire.request("\(domain)/user/\(id)",
+            method: .put,
+            parameters: nil,
+            encoding: URLEncoding(destination: .queryString),
+            headers: headers).responseJSON { response in
+                guard let data = response.data else {
+                    failure(response.error)
+                    return
+                }
+                do {
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                        return
+                    }
+                    //TODO: Handle errors when name missing or email taken.
+                    let json = try JSON(data: data)
+                    let dict = memberDictFrom(json: json)
+                    success(dict)
+                } catch {
+                    failure(error)
+                }
         }
     }
     

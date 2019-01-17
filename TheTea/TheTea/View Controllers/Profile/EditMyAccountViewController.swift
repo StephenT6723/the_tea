@@ -12,16 +12,17 @@ import UIKit
 
 class EditMyAccountViewController: UIViewController, UITextViewDelegate {
     private let scrollView = UIScrollView()
-    private let nameTextField = LegacyInputField()
-    private let facebookTextField = LegacyInputField()
-    private let instagramTextField = LegacyInputField()
-    private let twitterTextField = LegacyInputField()
-    private let aboutTextView = LegacyInputField()
-    private let logoutButton = AlertCTA()
+    private let nameTextField = InputField()
+    private let facebookTextField = InputField()
+    private let instagramTextField = InputField()
+    private let twitterTextField = InputField()
+    private let aboutTextView = InputField()
+    private let logoutButton = UIButton()
     
     private let submitContainer = UIView()
     private let submitButton = PrimaryCTA(frame: CGRect())
     private let activityIndicator = UIActivityIndicatorView(style: .gray)
+    private let textFieldHeight: CGFloat = 56.0
     
     private let aboutTextViewPlaceholder = "ABOUT ME"
     
@@ -29,7 +30,7 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
 
         title = "EDIT PROFILE"
-        view.backgroundColor = UIColor.lightBackground()
+        view.backgroundColor = UIColor.white
         edgesForExtendedLayout = UIRectEdge()
         
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
@@ -45,52 +46,43 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         //TODO: Update placeholder colors
-        nameTextField.textField.placeholder = "NAME"
+        nameTextField.title = "NAME"
         nameTextField.textField.autocapitalizationType = .words
         nameTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         nameTextField.textField.text = member.name
-        nameTextField.showDivider = false
         scrollView.addSubview(nameTextField)
         
         facebookTextField.translatesAutoresizingMaskIntoConstraints = false
-        facebookTextField.textField.placeholder = "FACEBOOK"
+        facebookTextField.title = "FACEBOOK"
         facebookTextField.textField.autocapitalizationType = .none
         facebookTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         facebookTextField.textField.text = member.facebookID
         scrollView.addSubview(facebookTextField)
         
         instagramTextField.translatesAutoresizingMaskIntoConstraints = false
-        instagramTextField.textField.placeholder = "INSTAGRAM"
+        instagramTextField.title = "INSTAGRAM"
         instagramTextField.textField.autocapitalizationType = .none
         instagramTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         instagramTextField.textField.text = member.instagram
         scrollView.addSubview(instagramTextField)
         
         twitterTextField.translatesAutoresizingMaskIntoConstraints = false
-        twitterTextField.textField.placeholder = "TWITTER"
+        twitterTextField.title = "TWITTER"
         twitterTextField.textField.autocapitalizationType = .none
         twitterTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
-        twitterTextField.showDivider = false
         twitterTextField.textField.text = member.twitter
         scrollView.addSubview(twitterTextField)
         
         aboutTextView.translatesAutoresizingMaskIntoConstraints = false
-        
-        aboutTextView.textView.delegate = self
+        aboutTextView.title = "ABOUT ME"
         aboutTextView.type = .textView
-        aboutTextView.showDivider = false
-        let about = member.about
-        if about?.count ?? 0 > 0 {
-            aboutTextView.textView.text = member.about
-            aboutTextView.textView.textColor = UIColor.primaryCopy()
-        } else {
-            aboutTextView.textView.text = aboutTextViewPlaceholder
-            aboutTextView.textView.textColor = UIColor.lightCopy()            
-        }
+        aboutTextView.textView.text = member.about
         scrollView.addSubview(aboutTextView)
         
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         logoutButton.setTitle("LOG OUT", for: .normal)
+        logoutButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
+        logoutButton.titleLabel?.font = UIFont.cta()
         logoutButton.addTarget(self, action: #selector(logoutButtonTouched), for: .touchUpInside)
         scrollView.addSubview(logoutButton)
         
@@ -99,37 +91,37 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        nameTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        nameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        nameTextField.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        nameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        nameTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
+        nameTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        nameTextField.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20).isActive = true
+        nameTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        facebookTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        facebookTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        facebookTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20).isActive = true
-        facebookTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
+        facebookTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        facebookTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        facebookTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24).isActive = true
+        facebookTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        instagramTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        instagramTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        instagramTextField.topAnchor.constraint(equalTo: facebookTextField.bottomAnchor).isActive = true
-        instagramTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
+        instagramTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        instagramTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        instagramTextField.topAnchor.constraint(equalTo: facebookTextField.bottomAnchor, constant: 24).isActive = true
+        instagramTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        twitterTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        twitterTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        twitterTextField.topAnchor.constraint(equalTo: instagramTextField.bottomAnchor).isActive = true
-        twitterTextField.heightAnchor.constraint(equalToConstant: LegacyInputField.textFieldHeight).isActive = true
+        twitterTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        twitterTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        twitterTextField.topAnchor.constraint(equalTo: instagramTextField.bottomAnchor, constant: 24).isActive = true
+        twitterTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        aboutTextView.topAnchor.constraint(equalTo: twitterTextField.bottomAnchor, constant: 20).isActive = true
-        aboutTextView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        aboutTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: LegacyInputField.textFieldHeight).isActive = true
+        aboutTextView.topAnchor.constraint(equalTo: twitterTextField.bottomAnchor, constant: 24).isActive = true
+        aboutTextView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        aboutTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
         
-        logoutButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        logoutButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        logoutButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        logoutButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
         logoutButton.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor, constant: 20).isActive = true
-        logoutButton.heightAnchor.constraint(equalToConstant: AlertCTA.preferedHeight).isActive = true
-        logoutButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
+        logoutButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        logoutButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
         
         //SUBMIT
         
@@ -144,7 +136,6 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         view.addSubview(submitContainer)
         
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.startAnimating()
         submitContainer.addSubview(activityIndicator)
         
         submitButton.translatesAutoresizingMaskIntoConstraints = false
@@ -159,11 +150,11 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         
         submitButton.leadingAnchor.constraint(equalTo: submitContainer.leadingAnchor, constant: 20).isActive = true
         submitButton.trailingAnchor.constraint(equalTo: submitContainer.trailingAnchor, constant: -20).isActive = true
-        submitButton.bottomAnchor.constraint(equalTo: submitContainer.bottomAnchor, constant: -20).isActive = true
+        submitButton.topAnchor.constraint(equalTo: submitContainer.topAnchor, constant: 14).isActive = true
         submitButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight)).isActive = true
         
-        activityIndicator.centerXAnchor.constraint(equalTo: submitContainer.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: submitContainer.centerYAnchor).isActive = true
+        activityIndicator.centerXAnchor.constraint(equalTo: submitButton.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor).isActive = true
         
         updateSaveButtons()
     }
@@ -230,9 +221,13 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
     }
     
     func updateLoader(visible: Bool, animated: Bool) {
-        UIView.animate(withDuration: animated ? 0.5 : 0) {
+        UIView.animate(withDuration: animated ? 0.3 : 0) {
             self.submitButton.alpha = visible ? 0 : 1
-            self.activityIndicator.alpha = visible ? 1 : 0
+            if visible {
+                self.activityIndicator.startAnimating()
+            } else {
+                self.activityIndicator.stopAnimating()
+            }
         }
     }
     
