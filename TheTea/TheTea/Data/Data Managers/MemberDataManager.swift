@@ -75,6 +75,28 @@ class MemberDataManager {
         }
     }
     
+    class func fetchLoggedInMember(onSuccess success:@escaping () -> Void,
+                                   onFailure failure: @escaping (_ error: Error?) -> Void) {
+        self.fetchMember(id: loggedInMember()?.tgaID ?? "", onSuccess: {
+            success()
+        }) { (error) in
+            failure(error)
+        }
+    }
+    
+    class func fetchMember(id: String,
+                           onSuccess success:@escaping () -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        TGAServer.fetchMember(id: id, onSuccess: { (data) in
+            let member = self.member(tgaID: id) ?? createLocalMember(tgaID: id)
+            member.updateWithData(data: data)
+            CoreDataManager.sharedInstance.saveContext()
+            success()
+        }) { (error) in
+            failure(error)
+        }
+    }
+    
     class func logoutMember() {
         if let currentMember = self.loggedInMember() {
             currentMember.authToken = nil

@@ -147,8 +147,29 @@ class TGAServer {
     
     class func fetchMember(id: String,
                            onSuccess success:@escaping (_ data: [String: String]) -> Void,
-                           onFailure failure: @escaping (_ error: Error?) -> Void){
-        failure(NSError(domain: "", code: 404, userInfo: nil))
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        Alamofire.request("\(domain)/user/\(id)",
+            method: .get,
+            parameters: nil,
+            encoding: URLEncoding(destination: .queryString),
+            headers: nil).responseJSON { response in
+                guard let data = response.data else {
+                    failure(response.error)
+                    return
+                }
+                do {
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                        return
+                    }
+                    //TODO: Handle errors when name missing or email taken.
+                    let json = try JSON(data: data)
+                    let dict = memberDictFrom(json: json)
+                    success(dict)
+                } catch {
+                    failure(error)
+                }
+        }
     }
     
     private class func memberDictFrom(json: JSON) -> [String: String] {

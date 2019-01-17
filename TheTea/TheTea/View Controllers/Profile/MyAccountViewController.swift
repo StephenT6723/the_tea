@@ -95,6 +95,12 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             tableView.reloadData()
             let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
             navigationItem.rightBarButtonItem = editButton
+            
+            MemberDataManager.fetchLoggedInMember(onSuccess: {
+                self.tableView.reloadData()
+            }) { (error) in
+                print("ERROR UPDATING LOGGED IN MEMBER: \(error?.localizedDescription ?? "")")
+            }
         }
     }
     
@@ -152,7 +158,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let aboutText = currentMember?.about {
             if section == 0 && aboutText.count > 0 {
-                return 1
+                return 0
             }
         }
         
@@ -193,6 +199,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             header.facebookButton.isEnabled = true
             header.instagramButton.isEnabled = true//currentMember.instagram?.count ?? 0 > 0
             header.twitterButton.isEnabled = currentMember.twitter?.count ?? 0 > 0
+            header.aboutText = currentMember.about
             
             header.addEventButton.addTarget(self, action: #selector(addEventTapped), for: .touchUpInside)
             
@@ -388,7 +395,16 @@ class ProfileHeader: UITableViewHeaderFooterView {
     let facebookButton = ProfileSocialButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
     let instagramButton = ProfileSocialButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
     let twitterButton = ProfileSocialButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    var aboutText: String? {
+        didSet {
+            aboutLabel.text = aboutText
+            addButtonTopConstraint.constant = aboutText?.count ?? 0 > 0 ? 20 : 0
+        }
+    }
+    private let aboutLabel = UILabel()
     let addEventButton = PrimaryCTA()
+    
+    var addButtonTopConstraint = NSLayoutConstraint()
     
     let socialButtonSize: CGFloat = 30
     
@@ -435,6 +451,12 @@ class ProfileHeader: UITableViewHeaderFooterView {
         twitterButton.setImage(UIImage(named:"twitter"), for: .normal)
         contentView.addSubview(twitterButton)
         
+        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
+        aboutLabel.font = UIFont.body()
+        aboutLabel.textColor = UIColor.primaryCopy()
+        aboutLabel.numberOfLines = 0
+        contentView.addSubview(aboutLabel)
+        
         addEventButton.translatesAutoresizingMaskIntoConstraints = false
         addEventButton.setTitle("Post an Event", for: .normal)
         contentView.addSubview(addEventButton)
@@ -473,7 +495,12 @@ class ProfileHeader: UITableViewHeaderFooterView {
         twitterButton.heightAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         twitterButton.widthAnchor.constraint(equalToConstant: socialButtonSize).isActive = true
         
-        addEventButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 20).isActive = true
+        aboutLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 20).isActive = true
+        aboutLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        aboutLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        
+        addButtonTopConstraint =  addEventButton.topAnchor.constraint(equalTo: aboutLabel.bottomAnchor, constant: 20)
+        addButtonTopConstraint.isActive = true
         addEventButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         addEventButton.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
         addEventButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
