@@ -17,13 +17,15 @@ class RootViewController: UIViewController {
         view.backgroundColor = .purple
         
         if !MemberDataManager.isLoggedIn() {
+            let margins = view.layoutMarginsGuide
+            
             let authVC = LoginViewController()
             self.addChild(authVC)
             view.addSubview(authVC.view)
             authVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             authVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             authVC.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-            authVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            authVC.view.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
             authVC.didMove(toParent: self)
         } else {
             let listVC = EventListViewController()

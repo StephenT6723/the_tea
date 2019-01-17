@@ -28,11 +28,11 @@ class MemberDataManager {
                 //TODO: Fail
                 return
             }
-            guard let newMember = self.addNewMember(tgaID: id) else {
-                return
-            }
-            newMember.updateWithData(data: data)
-            newMember.authToken = Member.createToken(email: email, password: password)
+            //find or create member object
+            let member = self.member(tgaID: id) ?? addNewMember(tgaID: id)
+            
+            member.updateWithData(data: data)
+            member.authToken = Member.createToken(email: email, password: password)
             CoreDataManager.sharedInstance.saveContext()
             success()
         }) { (error) in
@@ -49,11 +49,11 @@ class MemberDataManager {
                 //TODO: Fail
                 return
             }
-            guard let newMember = self.addNewMember(tgaID: id) else {
-                return
-            }
-            newMember.updateWithData(data: data)
-            newMember.authToken = Member.createToken(email: email, password: password)
+            //find or create member object
+            let member = self.member(tgaID: id) ?? addNewMember(tgaID: id)
+            
+            member.updateWithData(data: data)
+            member.authToken = Member.createToken(email: email, password: password)
             CoreDataManager.sharedInstance.saveContext()
             success()
         }) { (error) in
@@ -77,6 +77,10 @@ class MemberDataManager {
     
     class func fetchLoggedInMember(onSuccess success:@escaping () -> Void,
                                    onFailure failure: @escaping (_ error: Error?) -> Void) {
+        if !MemberDataManager.isLoggedIn() {
+            failure(nil)
+            return
+        }
         self.fetchMember(id: loggedInMember()?.tgaID ?? "", onSuccess: {
             success()
         }) { (error) in
@@ -137,11 +141,7 @@ class MemberDataManager {
         return member
     }
     
-    class func addNewMember(tgaID: String) -> Member? {
-        if isLoggedIn() {
-            return nil
-        }
-        
+    class func addNewMember(tgaID: String) -> Member {
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let member = Member(context: context)
         member.tgaID = tgaID

@@ -9,14 +9,13 @@
 import UIKit
 import FBSDKLoginKit
 
-class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CarouselDelegate {
+class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CarouselDelegate, LoginViewDelegate {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
     var upcomingEvents = EventCollection()
     var currentMember = MemberDataManager.loggedInMember()
     var hasShownLogin = false
-    let signUpPrompt = UIView()
-    let signUpLabel = UILabel()
-    let signUpCTA = PrimaryCTA(frame: CGRect())
+    private let loginVC = LoginViewController()
+    private let loginContainer = UIView()
     private let timeFormatter = DateFormatter()
     
     override func viewDidLoad() {
@@ -42,57 +41,33 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.estimatedSectionHeaderHeight = 130
         view.addSubview(tableView)
         
-        signUpPrompt.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(signUpPrompt)
-        
-        signUpLabel.translatesAutoresizingMaskIntoConstraints = false
-        signUpLabel.text = "Sign up to access your profile"
-        signUpLabel.textColor = UIColor.primaryCopy()
-        signUpLabel.font = UIFont.headerTwo()
-        signUpLabel.textAlignment = .center
-        signUpPrompt.addSubview(signUpLabel)
-        
-        signUpCTA.translatesAutoresizingMaskIntoConstraints = false
-        signUpCTA.setTitle("SIGN UP", for: .normal)
-        signUpCTA.addTarget(self, action: #selector(presentLoginView), for: .touchUpInside)
-        signUpPrompt.addSubview(signUpCTA)
-        
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        signUpPrompt.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        signUpPrompt.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        signUpPrompt.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        signUpPrompt.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        let margins = view.safeAreaLayoutGuide
         
-        signUpLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        signUpLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        signUpLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -90).isActive = true
+        loginVC.delegate = self
+        loginVC.view.alpha = 0
+        self.addChild(loginVC)
         
-        signUpCTA.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        signUpCTA.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        signUpCTA.topAnchor.constraint(equalTo: signUpLabel.bottomAnchor, constant: 40).isActive = true
-        signUpCTA.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
+        view.addSubview(loginVC.view)
+        loginVC.view.translatesAutoresizingMaskIntoConstraints = false
+        loginVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        loginVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        loginVC.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        loginVC.view.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        loginVC.didMove(toParent: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if !MemberDataManager.isLoggedIn() {
-            if !hasShownLogin {
-                presentLoginView()
-                hasShownLogin = true
-            }
-            tableView.alpha = 0
-            signUpPrompt.alpha = 1
+            presentLoginView()
             navigationItem.rightBarButtonItem = nil
         } else {
-            hasShownLogin = false
-            tableView.alpha = 1
-            signUpPrompt.alpha = 0
-            tableView.reloadData()
             let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
             navigationItem.rightBarButtonItem = editButton
             
@@ -114,11 +89,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func presentLoginView() {
-        let loginVC = LoginViewController()
-        let loginNav = UINavigationController(rootViewController: loginVC)
-        loginNav.navigationBar.prefersLargeTitles = true
-        loginNav.navigationBar.isTranslucent = false
-        present(loginNav, animated: true, completion: nil)
+        self.loginVC.view.alpha = 1
     }
     
     @objc func addEventTapped() {
@@ -318,6 +289,19 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
+    //MARK: Login View Delegate
+    
+    func loginSucceeded() {
+        self.currentMember = MemberDataManager.loggedInMember()
+        tableView.reloadData()
+        UIView.animate(withDuration: 0.3, animations: {
+            self.loginVC.view.alpha = 0
+        }) { (_) in
+            self.loginVC.reset()
+        }
+        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
+        navigationItem.rightBarButtonItem = editButton
+    }
     
     //MARK: Carousel Delegate
     
@@ -346,22 +330,28 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             return nil
         }
         
-        let favorites = member.hotFavorites()
-        var event = favorites[index]
+        var event: Event?
+        
+        if carouselIndex == 1 {
+            let favorites = member.hotFavorites()
+            event = favorites[index]
+        }
         
         if carouselIndex == 2 {
             let hosting = member.hotHosting()
             event = hosting[index]
         }
         
+        guard let selectedEvent = event else { return nil }
+        
         let cellView = EventView(frame: CGRect())
-        cellView.imageURL = event.fullImageURL()
-        cellView.titleLabel.text = event.name
-        cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
-        cellView.placeLabel.text = event.locationName
+        cellView.imageURL = selectedEvent.fullImageURL()
+        cellView.titleLabel.text = selectedEvent.name
+        cellView.timeLabel.text = timeFormatter.string(from: selectedEvent.startTime ?? Date())
+        cellView.placeLabel.text = selectedEvent.locationName
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency
-        let priceString = event.price == 0 ? "Free" : numberFormatter.string(from: NSNumber(value: event.price))
+        let priceString = selectedEvent.price == 0 ? "Free" : numberFormatter.string(from: NSNumber(value: selectedEvent.price))
         cellView.priceLabel.text = priceString
         
         return cellView

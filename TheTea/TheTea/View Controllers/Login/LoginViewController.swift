@@ -14,10 +14,22 @@ enum AuthType: Int {
     case signIn
 }
 
+protocol LoginViewDelegate {
+    func loginSucceeded()
+}
+
 class LoginViewController: UIViewController, UITextFieldDelegate {
+    var delegate: LoginViewDelegate?
+    
     private var selectedType:AuthType? = .signIn
     
-    private let backgroundImageView = UIImageView(image: UIImage(named: "jdfj"))
+    private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground"))
+    private let gradientLayer = CAGradientLayer()
+    
+    private let logoTopSpacer = UIView()
+    private let logoIconImageView = UIImageView(image: UIImage(named: "logoIcon"))
+    private let logoImageView = UIImageView(image: UIImage(named: "logoWhite"))
+    private let logoBottomSpacer = UIView()
     
     private let emailErrorLabel = UILabel()
     private let emailInputField = InputField(frame: CGRect(x: 0, y: 0, width: 0, height: 500))
@@ -49,6 +61,30 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.contentMode = .scaleAspectFill
         view.addSubview(backgroundImageView)
+        
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
+        gradientLayer.colors = [
+            UIColor(red:0.94, green:0.53, blue:1, alpha:0.9).cgColor,
+            UIColor(red:0.47, green:0.77, blue:1, alpha:0.9).cgColor
+        ]
+        gradientLayer.locations = [0, 1]
+        gradientLayer.startPoint = CGPoint.zero
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        backgroundImageView.layer.addSublayer(gradientLayer)
+        
+        logoTopSpacer.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(logoTopSpacer)
+        
+        logoIconImageView.translatesAutoresizingMaskIntoConstraints = false
+        logoIconImageView.contentMode = .scaleAspectFill
+        view.addSubview(logoIconImageView)
+        
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        logoImageView.contentMode = .scaleAspectFill
+        view.addSubview(logoImageView)
+        
+        logoBottomSpacer.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(logoBottomSpacer)
         
         emailErrorLabel.translatesAutoresizingMaskIntoConstraints = false
         emailErrorLabel.numberOfLines = 0
@@ -143,6 +179,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 //        emailErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
 //        emailErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
+        backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        logoTopSpacer.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        logoTopSpacer.bottomAnchor.constraint(equalTo: logoIconImageView.topAnchor).isActive = true
+        
+        logoIconImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        logoImageView.topAnchor.constraint(equalTo: logoIconImageView.bottomAnchor, constant: 24).isActive = true
+        logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        logoBottomSpacer.topAnchor.constraint(equalTo: logoImageView.bottomAnchor).isActive = true
+        logoBottomSpacer.heightAnchor.constraint(equalTo: logoTopSpacer.heightAnchor).isActive = true
+        logoBottomSpacer.bottomAnchor.constraint(equalTo: emailInputField.topAnchor).isActive = true
+        
         let yOffset = -1 * (26.0 + 4 * textFieldHeight + 24 * 3)
         emailInputField.topAnchor.constraint(equalTo: termsRadioButton.topAnchor, constant: yOffset).isActive = true
         emailInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
@@ -199,11 +252,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         modeChangeButton.heightAnchor.constraint(equalToConstant: 15).isActive = true
         
         //DEBUG
-        
-        emailInputField.textField.text = "slt6723@gmail.com"
-        passwordInputField.textField.text = "abc12345678"
-        confirmPasswordInputField.textField.text = "abc12345678"
-        
         view.setNeedsLayout()
         view.layoutIfNeeded()
         //SETUP
@@ -216,6 +264,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         modeChanged(animated: false)
     }
     
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        gradientLayer.frame = view.frame
+    }
     //MARK: Actions
     
     @objc func modeChangeButtonTouched() {
@@ -317,7 +371,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             updateLoader(visible: true, animated: true)
             if selectedType == .signIn {
                 MemberDataManager.loginMember(email: email, password: password, onSuccess: {
-                    self.dismiss(animated: true, completion: nil)
+                    self.delegate?.loginSucceeded()
+                    self.updateLoader(visible: false, animated: true)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
                     guard let description = error?.localizedDescription else {
@@ -327,7 +382,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 }
             } else {
                 MemberDataManager.createMember(email: email, username: username, password: password, onSuccess: {
-                    self.dismiss(animated: true, completion: nil)
+                    self.delegate?.loginSucceeded()
+                    self.updateLoader(visible: false, animated: true)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
                     guard let description = error?.localizedDescription else {
@@ -340,7 +396,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateLoader(visible: Bool, animated: Bool) {
-        UIView.animate(withDuration: animated ? 0.5 : 0) {
+        UIView.animate(withDuration: animated ? 0.3 : 0) {
             self.submitButton.alpha = visible ? 0 : 1
             self.activityIndicator.alpha = visible ? 1 : 0
         }
@@ -404,5 +460,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.passwordErrorLabel.text = ""
             }
         }
+    }
+    
+    func reset() {
+        selectedType = .signIn
+        emailInputField.textField.text = ""
+        usernameInputField.textField.text = ""
+        passwordInputField.textField.text = ""
+        confirmPasswordInputField.textField.text = ""
     }
 }
