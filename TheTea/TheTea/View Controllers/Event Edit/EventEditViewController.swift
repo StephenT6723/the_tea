@@ -25,11 +25,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     private let startTimeTextField = InputField()
     private let startTimePicker = UIDatePicker()
-    private let addEndTimeButton = UIButton()
+    
     private var endTimeTopConstraint = NSLayoutConstraint()
     private let endTimeTextField = InputField()
     private let endTimePicker = UIDatePicker()
-    private let hideEndTimeButton = UIButton()
+    
     private let repeatsInputView = InputField()
     private let repeatsLabel = UILabel()
     
@@ -111,6 +111,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         startTimeTextField.title = "START TIME"
+        startTimeTextField.cta = "Add end time"
+        startTimeTextField.ctaButton.addTarget(self, action: #selector(addEndTimeTouched), for: .touchUpInside)
         startTimeTextField.textField.tintColor = UIColor.white
         startTimePicker.datePickerMode = .time
         startTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
@@ -122,19 +124,15 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         endTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         endTimeTextField.title = "END TIME"
         endTimeTextField.textField.tintColor = UIColor.white
+        endTimeTextField.alpha = 0
+        endTimeTextField.xIcon.alpha = 1
+        endTimeTextField.xIcon.addTarget(self, action: #selector(hideEndTimeTouched), for: .touchUpInside)
         endTimePicker.datePickerMode = .time
         endTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         endTimePicker.minuteInterval = 15
         endTimePicker.date = Calendar.current.date(bySettingHour: 22, minute: 00, second: 0, of: Date()) ?? Date()
         endTimeTextField.textField.inputView = endTimePicker
         scrollView.addSubview(endTimeTextField)
-        
-        hideEndTimeButton.translatesAutoresizingMaskIntoConstraints = false
-        hideEndTimeButton.setTitle("X", for: .normal)
-        hideEndTimeButton.titleLabel?.font = UIFont.cta()
-        hideEndTimeButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
-        hideEndTimeButton.addTarget(self, action: #selector(hideEndTimeTouched), for: .touchUpInside)
-        hideEndTimeButton.contentHorizontalAlignment = .right
         
         repeatsInputView.translatesAutoresizingMaskIntoConstraints = false
         repeatsInputView.title = "REPEATS"
@@ -240,7 +238,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         //addEndTimeButton.widthAnchor.constraint(equalToConstant: 90).isActive = true
         
-        endTimeTopConstraint = endTimeTextField.topAnchor.constraint(equalTo: startTimeTextField.bottomAnchor, constant: 24)
+        endTimeTopConstraint = endTimeTextField.topAnchor.constraint(equalTo: startTimeTextField.topAnchor, constant: 0)
         endTimeTopConstraint.isActive = true
         endTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
         endTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
@@ -593,16 +591,17 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         return Calendar.current.date(bySettingHour: hours, minute: minutes, second: 0, of: datePicker.date) ?? Date()
     }
     
-    func selectedEndTime() -> Date {
+    func selectedEndTime() -> Date? {
+        if endTimeTextField.alpha == 0 {
+            return nil
+        }
         let hours = Calendar.current.component(.hour, from: endTimePicker.date)
         let minutes = Calendar.current.component(.minute, from: endTimePicker.date)
         var endTime = Calendar.current.date(bySettingHour: hours, minute: minutes, second: 0, of: datePicker.date) ?? Date()
         let startTime = selectedStartTime()
         if endTime < startTime {
-            print("WRONG END TIME: \(endTime)")
             let newEndTime = Calendar.current.date(byAdding: .day, value: 1, to: startTime)
             endTime = Calendar.current.date(bySettingHour: hours, minute: minutes, second: 0, of: newEndTime ?? Date()) ?? Date()
-            print("Fixed: \(startTime) |TO| \(endTime)")
         }
         return endTime
     }
@@ -677,39 +676,18 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func updateEndTime(visible: Bool, animated: Bool) {
         if visible {
-            endTimeTopConstraint.constant = textFieldHeight
-            endTimeTextField.alpha = 1
+            endTimeTopConstraint.constant = textFieldHeight + 24
             UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.addEndTimeButton.alpha = 0
+                self.endTimeTextField.alpha = 1
                 self.view.layoutIfNeeded()
             })
         } else {
             endTimeTopConstraint.constant = 0
             UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.addEndTimeButton.alpha = 1
-                self.view.layoutIfNeeded()
-            }) { (complete: Bool) in
                 self.endTimeTextField.alpha = 0
-            }
-        }
-    }
-    
-    func updateTicketURL(visible: Bool, animated: Bool) {
-        /*
-        if visible {
-            ticketURLTopConstraint.constant = textFieldHeight
-            self.priceInputField.showDivider = true
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
                 self.view.layoutIfNeeded()
             })
-        } else {
-            ticketURLTopConstraint.constant = 0
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.view.layoutIfNeeded()
-            })  { (complete: Bool) in
-                self.priceInputField.showDivider = false
-            }
-        } */
+        }
     }
     
     @objc func locationButtonTouched() {

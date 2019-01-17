@@ -22,7 +22,14 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
             selectedTitleLabel.text = title
         }
     }
+    var cta = "" {
+        didSet {
+            ctaButton.setTitle(cta, for: .normal)
+        }
+    }
     private let titleLabel = UILabel()
+    let ctaButton = UIButton()
+    let xIcon = UIButton()
     private let selectedTitleLabel = UILabel()
     private let priceLabel = UILabel()
     let textField = UITextField()
@@ -36,6 +43,7 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
     var deSelectedColor = UIColor.lightCopy() {
         didSet {
             titleLabel.textColor = deSelectedColor
+            ctaButton.setTitleColor(deSelectedColor, for: .normal)
             divider.backgroundColor = deSelectedColor
         }
     }
@@ -75,6 +83,11 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         titleLabel.textColor = UIColor.lightCopy()
         addSubview(titleLabel)
         
+        ctaButton.translatesAutoresizingMaskIntoConstraints = false
+        ctaButton.titleLabel?.font = UIFont.cta()
+        ctaButton.setTitleColor(UIColor.lightCopy(), for: .normal)
+        addSubview(ctaButton)
+        
         selectedTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         selectedTitleLabel.font = UIFont.inputFieldTitle()
         selectedTitleLabel.textColor = UIColor.primaryCTA()
@@ -101,6 +114,12 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         textView.delegate = self
         addSubview(textView)
         
+        xIcon.translatesAutoresizingMaskIntoConstraints = false
+        xIcon.setImage(UIImage(named: "xIcon"), for: .normal)
+        xIcon.backgroundColor = UIColor.primaryCTA()
+        xIcon.alpha = 0
+        addSubview(xIcon)
+        
         divider.translatesAutoresizingMaskIntoConstraints = false
         addSubview(divider)
         
@@ -110,6 +129,12 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         
         titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         titleLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        
+        ctaButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        ctaButton.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        
+        xIcon.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        xIcon.bottomAnchor.constraint(equalTo: textField.bottomAnchor).isActive = true
         
         textField.leadingAnchor.constraint(equalTo: priceLabel.trailingAnchor).isActive = true
         textField.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
