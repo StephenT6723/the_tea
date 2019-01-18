@@ -428,6 +428,12 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         }) { (error) in
             //TODO: Display this error to the user
             print("Error setting favorite")
+            let alert = UIAlertController(title: "Error", message: "We were unable to favorite this event. Please try again.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                
+            }))
+            self.present(alert, animated: true, completion: nil)
+            
             self.favoriteActivityIndicator.stopAnimating()
             self.favoriteButton.isUserInteractionEnabled = true
         }

@@ -519,7 +519,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                                                             return
                                                         }
                                                         print("EVENT CREATION FAILED: \(error.localizedDescription)")
-                                                        let alert = UIAlertController(title: "Error", message: "We were unable to creat your event. Please try again.", preferredStyle: .alert)
+                                                        let alert = UIAlertController(title: "Error", message: "We were unable to create your event. Please try again.", preferredStyle: .alert)
                                                         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
                                                             
                                                         }))

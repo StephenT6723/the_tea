@@ -531,16 +531,15 @@ class TGAServer {
         var params = [String: String]()
         params["format"] = "json"
         
-        Alamofire.request("\(domain)/user/\(currentMember.tgaID!)/favorite/\(event.gayID!)",
+        Alamofire.request("\(domain)/user/\(currentMember.tgaID!)/favorite/\(event.repeatingEventId!)",
             method: .post,
             parameters: params,
             encoding: URLEncoding(destination: .queryString),
             headers: headers).responseJSON { response in
-                if response.error != nil {
-                    failure(response.error)
+                if response.response?.statusCode != 200 {
+                    failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
                     return
                 }
-                
                 success()
         }
     }
@@ -556,16 +555,15 @@ class TGAServer {
         var params = [String: String]()
         params["format"] = "json"
         
-        Alamofire.request("\(domain)/user/\(currentMember.tgaID!)/favorite/\(event.gayID!)",
+        Alamofire.request("\(domain)/user/\(currentMember.tgaID!)/favorite/\(event.repeatingEventId!)",
             method: .delete,
             parameters: params,
             encoding: URLEncoding(destination: .queryString),
             headers: headers).responseJSON { response in
-                if response.error != nil {
-                    failure(response.error)
+                if response.response?.statusCode != 200 {
+                    failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
                     return
                 }
-                
                 success()
         }
     }
