@@ -148,10 +148,13 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         mapButton.addTarget(self, action: #selector(mapButtonTouched), for: .touchUpInside)
         contentView.addSubview(mapButton)
         
+        let hostsArray = event.sortedHosts()
+        
         hostsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         hostsTitleLabel.font = UIFont.sectionTitle()
         hostsTitleLabel.textColor = UIColor.lightCopy()
         hostsTitleLabel.text = "HOSTS"
+        hostsTitleLabel.alpha = hostsArray.count > 0 ? 1 : 0
         contentView.addSubview(hostsTitleLabel)
         
         reportButton.translatesAutoresizingMaskIntoConstraints = false
@@ -161,8 +164,6 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         reportButton.addTarget(self, action: #selector(reportButtonTouched), for: .touchUpInside)
         contentView.addSubview(reportButton)
         
-        //TODO: Remove ! operator
-        let hostsArray = event.sortedHosts()
         var previousHostView: EventDetailHostView?
         for i in 0..<hostsArray.count {
             let host = hostsArray[i]
@@ -257,6 +258,9 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         hostsTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         hostsTitleLabel.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 30).isActive = true
         
+        if hostsArray.count == 0 {
+            reportButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 20).isActive = true
+        }
         reportButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         reportButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
         reportButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
