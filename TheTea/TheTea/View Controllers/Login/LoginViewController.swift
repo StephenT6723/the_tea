@@ -375,10 +375,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     self.updateLoader(visible: false, animated: true)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
-                    guard let description = error?.localizedDescription else {
-                        return
-                    }
-                    self.updateEmailError(text: description, animated: true)
+                    let alert = UIAlertController(title: "Error", message: "\(error?.localizedDescription ?? "We were unable to log you in. Please try again.")", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                        
+                    }))
+                    self.present(alert, animated: true, completion: nil)
                 }
             } else {
                 MemberDataManager.createMember(email: email, username: username, password: password, onSuccess: {
@@ -386,10 +387,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     self.updateLoader(visible: false, animated: true)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
-                    guard let description = error?.localizedDescription else {
-                        return
-                    }
-                    self.updateEmailError(text: description, animated: true)
                 }
             }
         }

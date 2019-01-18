@@ -301,7 +301,9 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         topPanelView.updateContent(topPanel: imageView, scrollableView: contentView)
         view.addSubview(topPanelView)
         
-        topPanelView.topAnchor.constraint(equalTo: view.topAnchor, constant: 88).isActive = true
+        let margins = view.safeAreaLayoutGuide
+        
+        topPanelView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
         topPanelView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         topPanelView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         topPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true

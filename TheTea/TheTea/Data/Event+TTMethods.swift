@@ -30,10 +30,6 @@ extension Event {
     static let imageURLKey = "imageURL"
     
     func update(name: String, hosts: [Member], hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool, repeats: String, repeatingEventId: String, imageURL: String?) {
-        if hosts.count == 0 {
-            print("UNABLE TO UPDATE EVENT WITH NO HOSTS")
-            return
-        }        
         self.name = name
         self.removeFromHosts(self.hosts ?? NSSet())
         self.addToHosts(NSSet(array: hosts))

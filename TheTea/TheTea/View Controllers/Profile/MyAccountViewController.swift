@@ -17,6 +17,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     private let loginVC = LoginViewController()
     private let loginContainer = UIView()
     private let timeFormatter = DateFormatter()
+    private var navActivityIndicatorItem =  UIBarButtonItem()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,10 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
+        
+        let navActivityIndicator = UIActivityIndicatorView(style: .gray)
+        navActivityIndicator.startAnimating()
+        navActivityIndicatorItem = UIBarButtonItem(customView: navActivityIndicator)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 0.01))
@@ -59,24 +64,29 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         loginVC.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         loginVC.view.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
         loginVC.didMove(toParent: self)
+        
+        if !MemberDataManager.isLoggedIn() {
+            presentLoginView()
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            navigationItem.rightBarButtonItem = navActivityIndicatorItem
+            
+            MemberDataManager.fetchLoggedInMember(onSuccess: {
+                self.tableView.reloadData()
+                let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTouched))
+                self.navigationItem.rightBarButtonItem = editButton
+            }) { (error) in
+                let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTouched))
+                self.navigationItem.rightBarButtonItem = editButton
+                print("ERROR UPDATING LOGGED IN MEMBER: \(error?.localizedDescription ?? "")")
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if !MemberDataManager.isLoggedIn() {
-            presentLoginView()
-            navigationItem.rightBarButtonItem = nil
-        } else {
-            let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
-            navigationItem.rightBarButtonItem = editButton
-            
-            MemberDataManager.fetchLoggedInMember(onSuccess: {
-                self.tableView.reloadData()
-            }) { (error) in
-                print("ERROR UPDATING LOGGED IN MEMBER: \(error?.localizedDescription ?? "")")
-            }
-        }
+        
     }
     
     //MARK: Actions
@@ -182,13 +192,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             
             if section == 1 {
                 header.titleLabel.text = "Favorites"
-                let favoriteCount = MemberDataManager.loggedInMember()?.favorites?.count
                 header.seeAllButton.alpha = 0
-                if favoriteCount ?? 0 > 3 {
-                    header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
-                    header.seeAllButton.alpha = 1
-                    header.seeAllButton.tag = 1
-                }
             } else if section == 2 {
                 header.titleLabel.text = "Hosted Events"
                 let hostingCount = MemberDataManager.loggedInMember()?.hosting?.count
@@ -313,9 +317,9 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         if tag == 1 {
-            let favorites = member.hotFavorites()
+            let favorites = member.chronologicalFavorites()
         
-            return favorites.count > 3 ? 3 : favorites.count
+            return favorites.count
         } else {
             let hosting = member.hotHosting()
             
@@ -333,7 +337,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         var event: Event?
         
         if carouselIndex == 1 {
-            let favorites = member.hotFavorites()
+            let favorites = member.chronologicalFavorites()
             event = favorites[index]
         }
         
@@ -364,7 +368,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             return
         }
         
-        let favorites = member.hotFavorites()
+        let favorites = member.chronologicalFavorites()
         var event = favorites[index]
         
         if carouselIndex == 2 {

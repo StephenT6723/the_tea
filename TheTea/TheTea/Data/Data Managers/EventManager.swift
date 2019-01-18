@@ -137,12 +137,12 @@ class EventManager {
     
     private class func updateLocalEvents(from data: [[String: Any]]) {
         for eventDict in data {
-            let _ = updateLocalEvent(from: eventDict)
+            let _ = updateLocalEvent(from: eventDict, overrideImages: true, overrideHosts: true, overrideHotness: true)
         }
         CoreDataManager.sharedInstance.saveContext()
     }
     
-    class func updateLocalEvent(from data: [String: Any]) -> Event? {
+    class func updateLocalEvent(from data: [String: Any], overrideImages: Bool, overrideHosts: Bool, overrideHotness: Bool) -> Event? {
         guard let gayID = data[Event.gayIDKey] as? String  else {
             print("TRIED TO UPDATE EVENT WITHOUT GAYID")
             return nil
@@ -180,7 +180,10 @@ class EventManager {
         }
         
         let endTimeString = data[Event.endTimeKey] as? String ?? ""
-        let hotness = Int32(data[Event.hotnessKey] as? String ?? "")
+        var hotness: Int32 = event.hotness
+        if overrideHotness{
+            hotness = Int32(data[Event.hotnessKey] as? String ?? "") ?? 0
+        }
         
         let price = Double(data[Event.priceKey] as? String ?? "")
         let ticketURL = data[Event.ticketURLKey] as? String
@@ -191,17 +194,26 @@ class EventManager {
         let repeatRules = data[Event.repeatsKey] as? String ?? "0000000"
         let repeatingEventId = data[Event.repeatingEventIdKey] as? String ?? ""
         
-        let imageURL = data[Event.imageURLKey] as? String ?? ""
+        
+        var imageURL = event.imageURL
+        if overrideImages {
+            imageURL = data[Event.imageURLKey] as? String ?? ""
+        }
+        
         
         var hostObjects = [Member]()
-        let hosts = data[Event.hostsKey] as? [[String :String]] ?? []
-        for hostData in hosts {
-            guard let id = hostData[Member.tgaIDKey], let name = hostData[Member.nameKey] else {
-                print("MEMBER FOUND WITH NO ID/NAME")
-                return nil
+        if overrideHosts {
+            let hosts = data[Event.hostsKey] as? [[String :String]] ?? []
+            for hostData in hosts {
+                guard let id = hostData[Member.tgaIDKey], let name = hostData[Member.nameKey] else {
+                    print("MEMBER FOUND WITH NO ID/NAME")
+                    return nil
+                }
+                let member = MemberDataManager.updateLocalMember(tgaID: id, name: name)
+                hostObjects.append(member)
             }
-            let member = MemberDataManager.updateLocalMember(tgaID: id, name: name)
-            hostObjects.append(member)
+        } else {
+            hostObjects = event.hosts?.allObjects as? [Member] ?? [Member]()
         }
         
         //update event object

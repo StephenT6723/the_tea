@@ -31,7 +31,7 @@ extension Member {
         self.removeFromFavorites(self.favorites ?? NSSet())
         if let favoritesData = data[Member.favoritesKey] as? [[String: Any]] {
             for eventData in favoritesData {
-                if let event = EventManager.updateLocalEvent(from: eventData) {
+                if let event = EventManager.updateLocalEvent(from: eventData, overrideImages: false, overrideHosts: false, overrideHotness: false) {
                     addToFavorites(event)
                 }
             }
@@ -47,7 +47,7 @@ extension Member {
         return Data(tokenString.utf8).base64EncodedString()
     }
     
-    func hotFavorites() -> [Event] {
+    func chronologicalFavorites() -> [Event] {
         guard let favorites = self.favorites else {
             return [Event]()
         }
@@ -55,7 +55,18 @@ extension Member {
             return [Event]()
         }
         
-        return favoritesArray.sorted(by: { $0.hotness > $1.hotness })
+        let timeSortedFavorites = favoritesArray.sorted(by: { $0.startTime ?? Date() < $1.startTime ?? Date() }) //Sorting by time so that the instance of each event we get is the closest one to now. The ones way in the future will not have images.
+        
+        var repeatIDs = [String]()
+        var uniqueEvents = [Event]()
+        for event in timeSortedFavorites {
+            if !repeatIDs.contains(event.repeatingEventId ?? "") {
+                repeatIDs.append(event.repeatingEventId ?? "")
+                uniqueEvents.append(event)
+            }
+        }
+        
+        return uniqueEvents
     }
     
     func hotHosting() -> [Event] {
