@@ -171,7 +171,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
             let hostView = EventDetailHostView(frame: CGRect())
             hostView.translatesAutoresizingMaskIntoConstraints = false
             hostView.label.text = host.name
-            hostView.imageView.image = UIImage(named: "placeholder_profile_image")
+            hostView.imageView.image = UIImage(named: "defaultAvatar")
             hostView.button.tag = i
             hostView.button.addTarget(self, action: #selector(hostButtonTouched), for: .touchUpInside)
             contentView.addSubview(hostView)
@@ -490,6 +490,7 @@ class EventDetailHostView : UIView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = EventDetailHostView.imageViewSize / 2
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
         addSubview(imageView)
         
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -420,8 +420,8 @@ class ProfileHeader: UITableViewHeaderFooterView {
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.layer.cornerRadius = 35
         profileImageView.clipsToBounds = true
-        profileImageView.contentMode = .scaleAspectFill
-        profileImageView.image = UIImage(named: "placeholder_profile_image")
+        profileImageView.contentMode = .scaleAspectFit
+        profileImageView.image = UIImage(named: "defaultAvatar")
         imageViewContainer.addSubview(profileImageView)
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
