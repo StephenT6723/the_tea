@@ -28,8 +28,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "The Gay Agenda".uppercased()
+        
         view.backgroundColor = .white
 
         timeFormatter.dateStyle = .none

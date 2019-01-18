@@ -29,7 +29,7 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "EDIT PROFILE"
+        title = "Edit Profile"
         view.backgroundColor = UIColor.white
         edgesForExtendedLayout = UIRectEdge()
         

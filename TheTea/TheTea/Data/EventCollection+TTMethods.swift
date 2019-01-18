@@ -57,7 +57,7 @@ extension EventCollection {
         let request = NSFetchRequest<Event>(entityName:"Event")
         let predicate = NSPredicate(format: "ANY collections == %@", self)
         request.predicate = predicate
-        let sort = sortDescriptors ?? [NSSortDescriptor(key: "hotness", ascending: true)]
+        let sort = sortDescriptors ?? [NSSortDescriptor(key: "hotness", ascending: false)]
         request.sortDescriptors = sort
         
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext

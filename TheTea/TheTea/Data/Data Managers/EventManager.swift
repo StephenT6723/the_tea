@@ -20,7 +20,7 @@ class EventManager {
         let predicate = NSPredicate(format: "daySectionIdentifier >= %@ AND canceled == false", todayString)
         request.predicate = predicate
         let startTimeSort = NSSortDescriptor(key: "daySectionIdentifier", ascending: true)
-        let hotnessSort = NSSortDescriptor(key: "hotness", ascending: true)
+        let hotnessSort = NSSortDescriptor(key: "hotness", ascending: false)
         request.sortDescriptors = [startTimeSort, hotnessSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()
@@ -39,7 +39,7 @@ class EventManager {
         let request = NSFetchRequest<Event>(entityName:"Event")
         let predicate = NSPredicate(format: "daySectionIdentifier == %@ AND canceled == false", sectionIdentifier)
         request.predicate = predicate
-        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: true)
+        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: false)
         request.sortDescriptors = [startTimeSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()
@@ -62,7 +62,7 @@ class EventManager {
         let request = NSFetchRequest<Event>(entityName:"Event")
         let predicate = NSPredicate(format: "favoritedBy contains %@", member)
         request.predicate = predicate
-        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: true)
+        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: false)
         request.sortDescriptors = [startTimeSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()
@@ -85,7 +85,7 @@ class EventManager {
         let request = NSFetchRequest<Event>(entityName:"Event")
         let predicate = NSPredicate(format: "hosts contains %@", member)
         request.predicate = predicate
-        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: true)
+        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: false)
         request.sortDescriptors = [startTimeSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()
@@ -189,6 +189,7 @@ class EventManager {
         let published = Bool(data[Event.publishedKey] as? String ?? "") ?? false
         
         let repeatRules = data[Event.repeatsKey] as? String ?? "0000000"
+        let repeatingEventId = data[Event.repeatingEventIdKey] as? String ?? ""
         
         let imageURL = data[Event.imageURLKey] as? String ?? ""
         
@@ -204,7 +205,7 @@ class EventManager {
         }
         
         //update event object
-        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules, imageURL: imageURL)
+        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules, repeatingEventId: repeatingEventId, imageURL: imageURL)
         return event
     }
     
@@ -229,12 +230,24 @@ class EventManager {
         }
     }
     
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
-        TGAServer.updateEvent(event: event, name: name, startTime: startTime, endTime: endTime, about: about, location: location)
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
+                           onSuccess success:@escaping () -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        TGAServer.updateEvent(event: event, name: name, startTime: startTime, endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, image: image, onSuccess: { () in
+            success()
+        }) { (error) in
+            failure(error)
+        }
     }
     
-    class func delete(event:Event) -> Bool {
-        return TGAServer.delete(event: event)
+    class func cancelEvent(event:Event,
+                           onSuccess success:@escaping () -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        TGAServer.cancel(event: event, onSuccess: {
+            success()
+        }) { (error) in
+            failure(error)
+        }
     }
     
     class func toggleFavorite(event:Event,

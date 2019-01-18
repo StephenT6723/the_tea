@@ -12,6 +12,7 @@ import SwiftyJSON
 
 class TGAServer {
     static let apiEventNameKey = "name"
+    static let apiRepeatingIDKey = "repeatingEventId"
     static let apiAboutKey = "about"
     static let apiStartTimeKey = "startTime"
     static let apiEndTimeKey = "endTime"
@@ -265,6 +266,9 @@ class TGAServer {
         if let gayID = json["id"].number {
             eventDict[Event.gayIDKey] = "\(gayID)"
         }
+        if let repeatingID = json[apiRepeatingIDKey].number {
+            eventDict[Event.repeatingEventIdKey] = "\(repeatingID)"
+        }
         if let startTime = json[apiStartTimeKey].string {
             eventDict[Event.startTimeKey] = startTime
         }
@@ -402,27 +406,116 @@ class TGAServer {
                     success()
             }
         }
+        failure(nil)
     }
     
-    class func fetchEvent(tgaID: String) -> [String: String] {
-        return [String: String]()
+    class func fetchEvent(eventID: String,
+                          onSuccess success:@escaping (_ data: [[String: Any]]) -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        Alamofire.request("\(domain)/events/\(eventID)",
+            method: .get,
+            parameters: ["format": "json"],
+            encoding: URLEncoding(destination: .queryString),
+            headers: nil).responseJSON { response in
+                guard let data = response.data else {
+                    failure(response.error)
+                    return
+                }
+                do {
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response?.statusCode ?? 500, userInfo:nil))
+                        return
+                    }
+                    let json = try JSON(data: data)
+                    let data = eventsDictFrom(json: json)
+                    success(data)
+                } catch {
+                    failure(error)
+                }
+        }
     }
     
-    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?) {
-        /*
-         event.update(name: name, hotness: nil, startTime: startTime, endTime: endTime, about: about, location: location, price: 0, ticketURL:"")
-         CoreDataManager.sharedInstance.saveContext() */
+    class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
+                           onSuccess success:@escaping () -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         
-        //PUSH TO SERVER AND WAIT FOR RESPONSE
+        var params = [String: Any]()
+        params["format"] = "json"
+        params[apiEventNameKey] = name
+        params[apiStartTimeKey] = dateFormatter.string(from: startTime)
+        if let endTime = endTime {
+            params[apiEndTimeKey] = dateFormatter.string(from: endTime)
+        }
+        params[apiAboutKey] = about ?? ""
+        params[apiAddressKey] = location?.address ?? ""
+        params[apiLocationNameKey] = location?.locationName ?? ""
+        params[apiLatitudeKey] = "\(location?.latitude ?? 0)"
+        params[apiLongitudeKey] = "\(location?.longitude ?? 0)"
+        params[apiPriceKey] = "\(price)"
+        params[apiTicketURLKey] = ticketURL ?? ""
+        params[apiRepeatsKey] = repeats
+        params[apiTimeZoneKey] = "\(TimeZone.current.secondsFromGMT())"
+        if let imageData = image?.pngData() {
+            let dataString = imageData.base64EncodedString()
+            var dataDict = [String:String]()
+            dataDict["extension"] = "png"
+            dataDict["base64"] = dataString
+            params["images"] = [dataDict]
+        }
+        
+        let headers = self.headersForCurrentMember()
+        
+        if let theJSONData = try? JSONSerialization.data(
+            withJSONObject: params,
+            options: []) {
+            let theJSONText = String(data: theJSONData,
+                                     encoding: .ascii) ?? ""
+            Alamofire.request("\(domain)/events/\(event.repeatingEventId ?? "")",
+                method: .put,
+                parameters: [:],
+                encoding: JSONStringArrayEncoding.init(string: theJSONText),
+                headers: headers).responseJSON { response in
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                        return
+                    }
+                    success()
+            }
+        }
+        failure(nil)
     }
     
-    class func delete(event:Event) -> Bool {
-        /*
-         CoreDataManager.sharedInstance.persistentContainer.viewContext.delete(event)
-         CoreDataManager.sharedInstance.saveContext() */
+    class func cancel(event: Event,
+                      onSuccess success:@escaping () -> Void,
+                      onFailure failure: @escaping (_ error: Error?) -> Void) {
+        var params = [String: Any]()
+        params["format"] = "json"
+        params[apiCanceledKey] = true
         
-        //PUSH TO SERVER AND WAIT FOR RESPONSE
-        return true
+        let headers = self.headersForCurrentMember()
+        
+        if let theJSONData = try? JSONSerialization.data(
+            withJSONObject: params,
+            options: []) {
+            let theJSONText = String(data: theJSONData,
+                                     encoding: .ascii) ?? ""
+            Alamofire.request("\(domain)/events/\(event.repeatingEventId ?? "")",
+                method: .put,
+                parameters: [:],
+                encoding: JSONStringArrayEncoding.init(string: theJSONText),
+                headers: headers).responseJSON { response in
+                    if response.response?.statusCode != 200 {
+                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                        return
+                    }
+                    success()
+            }
+        }
+        failure(nil)
     }
     
     //MARK: Favorites

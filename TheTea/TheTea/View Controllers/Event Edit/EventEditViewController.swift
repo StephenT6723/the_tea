@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Kingfisher
 
 class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, LocationPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var event: Event?
@@ -35,7 +36,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     private let locationLabel = InputField()
     private let aboutTextView = InputField()
-    private let deleteButton = AlertCTA()
+    private let deleteButton = UIButton()
     
     private let collectionsLabel = UILabel()
     private var collectionInputFields = [InputField]()
@@ -154,10 +155,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         aboutTextView.translatesAutoresizingMaskIntoConstraints = false
         aboutTextView.title = "MORE INFO"
-        //aboutTextView.textView.delegate = self
         aboutTextView.type = .textView
         aboutTextView.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
-        //aboutTextView.textView.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(aboutTextView)
         
         priceInputField.translatesAutoresizingMaskIntoConstraints = false
@@ -175,42 +174,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         ticketURLTextField.textField.autocorrectionType = .no
         ticketURLTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(ticketURLTextField)
-        /*
-        collectionsLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionsLabel.text = "COLLECTIONS"
-        collectionsLabel.font = UIFont.headerOne()
-        collectionsLabel.textColor = UIColor.lightCopy()
-        scrollView.addSubview(collectionsLabel)
-        
-        let collections = EventCollectionManager.userUpdatedEventCollections()
-        var previousCollectionInputField: LegacyInputField? = nil
-        for collection in collections {
-            let currentIndex = collections.index(of: collection) ?? 0
-            
-            let inputField = LegacyInputField()
-            inputField.translatesAutoresizingMaskIntoConstraints = false
-            inputField.type = .button
-            inputField.label.text = collection.title?.uppercased()
-            inputField.button.tag = currentIndex
-            inputField.button.addTarget(self, action: #selector(collectionButtonTouched), for: .touchUpInside)
-            if currentIndex == collections.count - 1 {
-                inputField.showDivider = false
-            }
-            scrollView.addSubview(inputField)
-            
-            if let previousInputField = previousCollectionInputField {
-                inputField.topAnchor.constraint(equalTo: previousInputField.bottomAnchor).isActive = true
-            } else {
-                inputField.topAnchor.constraint(equalTo: collectionsLabel.bottomAnchor, constant: 20).isActive = true
-            }
-            
-            inputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-            inputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-            inputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-            
-            previousCollectionInputField = inputField
-            collectionInputFields.append(inputField)
-        } */
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -236,15 +199,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         startTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
         startTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-        //addEndTimeButton.widthAnchor.constraint(equalToConstant: 90).isActive = true
-        
         endTimeTopConstraint = endTimeTextField.topAnchor.constraint(equalTo: startTimeTextField.topAnchor, constant: 0)
         endTimeTopConstraint.isActive = true
         endTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
         endTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
         endTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        //hideEndTimeButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
         repeatsInputView.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor, constant: 24).isActive = true
         repeatsInputView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
@@ -271,11 +230,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         ticketURLTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
         ticketURLTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
         ticketURLTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        /*
-        collectionsLabel.topAnchor.constraint(equalTo: ticketURLTextField.bottomAnchor, constant: 20).isActive = true
-        collectionsLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        collectionsLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true */
         
         if isCreatingNew() {
             createContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -315,6 +269,15 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             updateEndTime()
         } else {
             if let event = self.event {
+                if let url = URL(string: event.fullImageURL()) {
+                    KingfisherManager.shared.retrieveImage(with: url) { result in
+                        if let image = result.value?.image {
+                            self.imageSelectButton.image = image
+                            self.selectedImage = image
+                        }
+                    }
+                }
+                
                 nameTextField.textField.text = event.name
                 if let startTime = event.startTime {
                     startTimePicker.date = startTime as Date
@@ -335,22 +298,25 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                     selectedLocation = eventLocation
                 }
                 
-                selectedRepeats = event.repeatRules()
+                selectedRepeats = EventRepeatRules(dataString: event.repeatRules().dataString())
                 
                 if MemberDataManager.canEditEvent(event: event) {
                     deleteButton.translatesAutoresizingMaskIntoConstraints = false
-                    deleteButton.setTitle("DELETE EVENT", for: .normal)
+                    deleteButton.setTitle("CANCEL EVENT", for: .normal)
+                    deleteButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
+                    deleteButton.titleLabel?.font = UIFont.cta()
                     deleteButton.addTarget(self, action: #selector(deleteButtonTouched), for: .touchUpInside)
                     scrollView.addSubview(deleteButton)
                     
-                    deleteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-                    deleteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-                    deleteButton.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor, constant: 20).isActive = true
-                    deleteButton.heightAnchor.constraint(equalToConstant: AlertCTA.preferedHeight).isActive = true
-                    deleteButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
+                    deleteButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+                    deleteButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
+                    deleteButton.topAnchor.constraint(equalTo: ticketURLTextField.bottomAnchor, constant: 20).isActive = true
+                    deleteButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+                    deleteButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
                 } else {
                     ticketURLTextField.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
                 }
+                scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             }
         }
         
@@ -393,8 +359,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         navigationItem.leftBarButtonItem = cancelButton
         
         if !isCreatingNew() {
-            let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTouched))
-            navigationItem.rightBarButtonItem = doneButton
+            let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(doneButtonTouched))
+            navigationItem.rightBarButtonItem = saveButton
         }
     }
     
@@ -410,7 +376,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func updateEndTime() {
         let calendar = NSCalendar.current
-        if let newEndTime = calendar.date(byAdding: .hour, value: 1, to: startTimePicker.date) {
+        if let newEndTime = calendar.date(byAdding: .hour, value: 3, to: startTimePicker.date) {
             endTimePicker.date = newEndTime
         }
     }
@@ -470,10 +436,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         return event == nil
     }
     
-    func isEndTimeVisible() -> Bool {
-        return endTimeTextField.alpha > 0
-    }
-    
     func dataUpdated() -> Bool {
         if !MemberDataManager.isLoggedIn() {
             return false
@@ -485,24 +447,18 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                     return true
                 }
             }
-            if let startTime = event.startTime as Date? {
-                if startTimePicker.date != startTime {
-                    return true
-                }
+            if selectedStartTime() != event.startTime ?? Date() {
+                return true
             }
-            if let endTime = event.endTime as Date? {
-                if endTimePicker.date != endTime {
-                    return true
-                }
+            if selectedEndTime() != event.endTime ?? Date() {
+                return true
             }
-            var aboutText = ""
-            if aboutTextView.textView.text != aboutTextViewPlaceholder && aboutTextView.textView.text.count > 0 {
-                aboutText = aboutTextView.textView.text
-                if aboutText != event.about {
-                    return true
-                }
+            if aboutTextView.textView.text != event.about {
+                return true
             }
-            
+            if event.repeatRules().dataString() != selectedRepeats.dataString() {
+                return true
+            }
             if let selectedLocation = self.selectedLocation {
                 if let location = event.eventLocation() {
                     if selectedLocation != location {
@@ -512,6 +468,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                     return true
                 }
             } else if event.eventLocation() != nil {
+                return true
+            }
+            if event.price != Double(priceInputField.textField.text ?? "0") ?? 0 {
+                return true
+            }
+            if event.ticketURL != ticketURLTextField.textField.text {
                 return true
             }
         } else  {
@@ -574,11 +536,29 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 if let name = nameTextField.textField.text {
                     if name.count > 0 {
                         EventManager.updateEvent(event: event,
-                                                        name: name,
-                                                        startTime: selectedStartTime(),
-                                                        endTime: isEndTimeVisible() ? endTimePicker.date : nil,
-                                                        about: aboutTextView.textView.text,
-                                                        location: selectedLocation)
+                                                 name: name,
+                                                 startTime: selectedStartTime(),
+                                                 endTime: selectedEndTime(),
+                                                 about: aboutTextView.textView.text,
+                                                 location: selectedLocation,
+                                                 price: Double(priceInputField.textField.text ?? "0") ?? 0,
+                                                 ticketURL: ticketURLTextField.textField.text,
+                                                 repeats: selectedRepeats.dataString(),
+                                                 image: selectedImage,
+                                                 onSuccess: { () in
+                                                    self.dismiss(animated: true, completion: nil)
+                        }) { (error) in
+                            guard let error = error else {
+                                return
+                            }
+                            print("EVENT UUPDATE FAILED: \(error.localizedDescription)")
+                            let alert = UIAlertController(title: "Error", message: "We were unable to update your event. Please try again.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                                
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            //update loader
+                        }
                     }
                 }
             }
@@ -711,18 +691,26 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             return
         }
         
-        let alert = UIAlertController(title: nil, message: "Are you sure you want to delete \(eventName)", preferredStyle: UIAlertController.Style.alert)
-        let deleteAction = UIAlertAction(title: "DELETE", style: UIAlertAction.Style.destructive)  { (action: UIAlertAction) in
+        let alert = UIAlertController(title: nil, message: "Are you sure you want to cancel \(eventName)", preferredStyle: UIAlertController.Style.alert)
+        let deleteAction = UIAlertAction(title: "CANCEL", style: UIAlertAction.Style.destructive)  { (action: UIAlertAction) in
             if let event = self.event {
-                if EventManager.delete(event: event) {
+                EventManager.cancelEvent(event: event, onSuccess: {
                     self.dismiss(animated: true, completion: nil)
-                } else {
-                    print("DELETE FAILED")
-                }
+                }, onFailure: { (error) in
+                    guard let error = error else {
+                        return
+                    }
+                    print("EVENT CANCELATION FAILED: \(error.localizedDescription)")
+                    let alert = UIAlertController(title: "Error", message: "We were unable to cancel your event. Please try again.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                        
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                })
             }
         }
         alert.addAction(deleteAction)
-        let cancelAction = UIAlertAction.init(title: "CANCEL", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction.init(title: "KEEP", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }
@@ -821,13 +809,7 @@ class EventEditImageSelectButton : UIView {
             imageView.image = image
             removeButton.alpha = 1
             
-            let imageSize = image.size
-            let ratio = imageSize.height / imageSize.width
-            
-            let width = self.bounds.width
-            let imageHeight = width * ratio
-            let height = imageHeight > minHeight ? imageHeight : minHeight
-            heightConstraint.constant = height
+            setNeedsLayout()
         }
     }
     let button = UIButton()
@@ -920,5 +902,21 @@ class EventEditImageSelectButton : UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        guard let image = self.image else {
+            heightConstraint.constant = minHeight
+            return
+        }
+        let imageSize = image.size
+        let ratio = imageSize.height / imageSize.width
+        
+        let width = self.bounds.width
+        let imageHeight = width * ratio
+        let height = imageHeight > minHeight ? imageHeight : minHeight
+        heightConstraint.constant = height
     }
 }

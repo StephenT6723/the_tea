@@ -18,7 +18,7 @@ enum CollectionSortType: String, CaseIterable {
         
         switch self {
         case .hot:
-            let hotnessSort = NSSortDescriptor(key: "hotness", ascending: true)
+            let hotnessSort = NSSortDescriptor(key: "hotness", ascending: false)
             descriptors.append(hotnessSort)
         case .time:
             let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)

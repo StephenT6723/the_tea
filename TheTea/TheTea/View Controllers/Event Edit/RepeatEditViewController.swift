@@ -15,7 +15,7 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "REPEATS"
+        title = "Repeats"
         
         view.backgroundColor = .white
         

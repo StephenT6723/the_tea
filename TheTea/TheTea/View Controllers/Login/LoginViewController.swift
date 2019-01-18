@@ -55,7 +55,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "WELCOME"
+        title = "Welcome"
         view.backgroundColor = UIColor(red: 200.0/255.0, green: 125.0/255.0, blue: 237.0/255.0, alpha: 1)
         
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false

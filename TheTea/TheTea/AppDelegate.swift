@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let myAccountVC = MyAccountViewController()
             let myAccountNav = UINavigationController(rootViewController: myAccountVC)
             myAccountNav.navigationBar.isTranslucent = false
-            myAccountVC.title = "MY PROFILE"
+            myAccountVC.title = "My Profile"
             myAccountNav.tabBarItem.image = UIImage(named: "myProfileIcon")
             
             let tabBarController = UITabBarController()

@@ -60,7 +60,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "EVENT DETAIL"
+        title = "Event Detail"
         view.backgroundColor = .white
         
         if MemberDataManager.canEditEvent(event:event) {
