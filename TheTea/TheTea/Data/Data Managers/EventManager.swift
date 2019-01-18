@@ -142,7 +142,7 @@ class EventManager {
         CoreDataManager.sharedInstance.saveContext()
     }
     
-    private class func updateLocalEvent(from data: [String: Any]) -> Event? {
+    class func updateLocalEvent(from data: [String: Any]) -> Event? {
         guard let gayID = data[Event.gayIDKey] as? String  else {
             print("TRIED TO UPDATE EVENT WITHOUT GAYID")
             return nil
@@ -159,7 +159,7 @@ class EventManager {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         
-        guard let name = data[Event.nameKey] as? String, let startTimeString = data[Event.startTimeKey] as? String, let hosts = data[Event.hostsKey] as? [[String :String]] else {
+        guard let name = data[Event.nameKey] as? String, let startTimeString = data[Event.startTimeKey] as? String else {
             print("TRIED TO CREATE EVENT WITHOUT REQUIRED DATA")
             return nil
         }
@@ -193,6 +193,7 @@ class EventManager {
         let imageURL = data[Event.imageURLKey] as? String ?? ""
         
         var hostObjects = [Member]()
+        let hosts = data[Event.hostsKey] as? [[String :String]] ?? []
         for hostData in hosts {
             guard let id = hostData[Member.tgaIDKey], let name = hostData[Member.nameKey] else {
                 print("MEMBER FOUND WITH NO ID/NAME")

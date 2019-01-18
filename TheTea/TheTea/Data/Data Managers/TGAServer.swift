@@ -37,6 +37,7 @@ class TGAServer {
     static let apiMemberFacebookIDKey = "facebookID"
     static let apiMemberInstagramKey = "instagram"
     static let apiMemberTwitterKey = "twitter"
+    static let apiMemberFavoritesKey = "favoriteEvents"
     
     static let domain = "https://www.thegayagenda.com"
     
@@ -62,7 +63,7 @@ class TGAServer {
     //MARK: Users
     
     class func createMember(email: String, username: String, password: String,
-                            onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                            onSuccess success:@escaping (_ data: [String: Any]) -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
         var params = [String: String]()
         params["format"] = "json"
@@ -95,7 +96,7 @@ class TGAServer {
     }
     
     class func loginMember(email: String, password: String,
-                            onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                            onSuccess success:@escaping (_ data: [String: Any]) -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
         let headers: HTTPHeaders = [
             "Authorization": "Basic \(Member.createToken(email: email, password: password))",
@@ -129,7 +130,7 @@ class TGAServer {
     }
     
     class func updateMember(name: String, email: String, facebookID: String, instagram: String, twitter: String, about: String,
-                           onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                           onSuccess success:@escaping (_ data: [String: Any]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         var memberDict = [String:String]()
         memberDict[Member.nameKey] = name
@@ -167,7 +168,7 @@ class TGAServer {
     }
     
     class func fetchMember(id: String,
-                           onSuccess success:@escaping (_ data: [String: String]) -> Void,
+                           onSuccess success:@escaping (_ data: [String: Any]) -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
         Alamofire.request("\(domain)/user/\(id)",
             method: .get,
@@ -193,8 +194,8 @@ class TGAServer {
         }
     }
     
-    private class func memberDictFrom(json: JSON) -> [String: String] {
-        var memberDict = [String:String]()
+    private class func memberDictFrom(json: JSON) -> [String: Any] {
+        var memberDict = [String:Any]()
         let jsonData = json["user"]
         if let gayID = jsonData["id"].number {
             memberDict[Member.tgaIDKey] = "\(gayID)"
@@ -216,6 +217,15 @@ class TGAServer {
         }
         if let about = jsonData[apiMemberAboutKey].string {
             memberDict[Member.aboutKey] = about
+        }
+        if let favorites = jsonData[apiMemberFavoritesKey].array {
+            if favorites.count > 0 {
+                var favoritesData = [[String: Any]]()
+                for eventData in favorites {
+                    favoritesData.append(eventDictFrom(json: eventData))
+                }
+                memberDict[Member.favoritesKey] = favoritesData
+            }
         }
         return memberDict
     }
@@ -239,7 +249,7 @@ class TGAServer {
                     return
                 }
                 let json = try JSON(data: data)
-                let data = eventDictFrom(json: json)
+                let data = eventsDictFrom(json: json)
                 success(data)
             } catch {
                 failure(error)
@@ -247,77 +257,80 @@ class TGAServer {
         }
     }
     
-    private class func eventDictFrom(json: JSON) -> [[String: Any]] {
-        var cleanedData = [[String:Any]]()
-        for eventData in json["events"] {
-            var eventDict = [String:Any]()
-            let jsonData = eventData.1
-            if let name = jsonData[apiEventNameKey].string {
-                eventDict[Event.nameKey] = name
-            }
-            if let gayID = jsonData["id"].number {
-                eventDict[Event.gayIDKey] = "\(gayID)"
-            }
-            if let startTime = jsonData[apiStartTimeKey].string {
-                eventDict[Event.startTimeKey] = startTime
-            }
-            if let endTime = jsonData[apiEndTimeKey].string {
-                eventDict[Event.endTimeKey] = endTime
-            }
-            if let about = jsonData[apiAboutKey].string {
-                eventDict[Event.aboutKey] = about
-            }
-            if let locationName = jsonData[apiLocationNameKey].string {
-                eventDict[Event.locationNameKey] = locationName
-            }
-            if let address = jsonData[apiAddressKey].string {
-                eventDict[Event.addressKey] = address
-            }
-            if let latitude = jsonData[apiLatitudeKey].string {
-                eventDict[Event.latitudeKey] = latitude
-            }
-            if let longitude = jsonData[apiLongitudeKey].string {
-                eventDict[Event.longitudeKey] = longitude
-            }
-            if let canceled = jsonData[apiCanceledKey].bool {
-                eventDict[Event.canceledKey] = "\(canceled)"
-            }
-            if let published = jsonData[apiPublishedKey].bool {
-                eventDict[Event.publishedKey] = "\(published)"
-            }
-            if let price = jsonData["ticketPrice"].string { //TODO: Fix this on the API side
-                eventDict[Event.priceKey] = price
-            }
-            if let ticketURL = jsonData[apiTicketURLKey].string {
-                eventDict[Event.ticketURLKey] = ticketURL
-            }
-            if let hotness = jsonData[apiHotnessKey].number {
-                eventDict[Event.hotnessKey] = "\(hotness)"
-            }
-            if let hosts = jsonData[apiHostsKey].array {
-                if hosts.count > 0 {
-                    var hostsArray = [[String: String]]()
-                    for host in hosts {
-                        guard let id = host["id"].number, let name = host["name"].string else {
-                            continue
-                        }
-                        hostsArray.append([Member.tgaIDKey : "\(id)", Member.nameKey : name])
-                    }
-                    eventDict[Event.hostsKey] = hostsArray
-                }
-            }
-            if let repeats = jsonData[apiRepeatsKey].string {
-                eventDict[Event.repeatsKey] = repeats
-            }
-            if let imageData = jsonData[apiImagesKey].array {
-                if imageData.count > 0 {
-                    guard let firstImageURL = imageData[0][apiURLKey].string else {
+    private class func eventDictFrom(json: JSON) -> [String: Any] {
+        var eventDict = [String:Any]()
+        if let name = json[apiEventNameKey].string {
+            eventDict[Event.nameKey] = name
+        }
+        if let gayID = json["id"].number {
+            eventDict[Event.gayIDKey] = "\(gayID)"
+        }
+        if let startTime = json[apiStartTimeKey].string {
+            eventDict[Event.startTimeKey] = startTime
+        }
+        if let endTime = json[apiEndTimeKey].string {
+            eventDict[Event.endTimeKey] = endTime
+        }
+        if let about = json[apiAboutKey].string {
+            eventDict[Event.aboutKey] = about
+        }
+        if let locationName = json[apiLocationNameKey].string {
+            eventDict[Event.locationNameKey] = locationName
+        }
+        if let address = json[apiAddressKey].string {
+            eventDict[Event.addressKey] = address
+        }
+        if let latitude = json[apiLatitudeKey].string {
+            eventDict[Event.latitudeKey] = latitude
+        }
+        if let longitude = json[apiLongitudeKey].string {
+            eventDict[Event.longitudeKey] = longitude
+        }
+        if let canceled = json[apiCanceledKey].bool {
+            eventDict[Event.canceledKey] = "\(canceled)"
+        }
+        if let published = json[apiPublishedKey].bool {
+            eventDict[Event.publishedKey] = "\(published)"
+        }
+        if let price = json["ticketPrice"].string { //TODO: Fix this on the API side
+            eventDict[Event.priceKey] = price
+        }
+        if let ticketURL = json[apiTicketURLKey].string {
+            eventDict[Event.ticketURLKey] = ticketURL
+        }
+        if let hotness = json[apiHotnessKey].number {
+            eventDict[Event.hotnessKey] = "\(hotness)"
+        }
+        if let hosts = json[apiHostsKey].array {
+            if hosts.count > 0 {
+                var hostsArray = [[String: String]]()
+                for host in hosts {
+                    guard let id = host["id"].number, let name = host["name"].string else {
                         continue
                     }
+                    hostsArray.append([Member.tgaIDKey : "\(id)", Member.nameKey : name])
+                }
+                eventDict[Event.hostsKey] = hostsArray
+            }
+        }
+        if let repeats = json[apiRepeatsKey].string {
+            eventDict[Event.repeatsKey] = repeats
+        }
+        if let imageData = json[apiImagesKey].array {
+            if imageData.count > 0 {
+                if let firstImageURL = imageData[0][apiURLKey].string {
                     eventDict[Event.imageURLKey] = firstImageURL
                 }
             }
-            cleanedData.append(eventDict)
+        }
+        return eventDict
+    }
+    
+    private class func eventsDictFrom(json: JSON) -> [[String: Any]] {
+        var cleanedData = [[String:Any]]()
+        for eventData in json["events"] {
+            let jsonData = eventData.1
+            cleanedData.append(eventDictFrom(json: jsonData))
         }
         return cleanedData
     }

@@ -22,14 +22,13 @@ class MemberDataManager {
     class func createMember(email: String, username: String, password: String,
                             onSuccess success:@escaping () -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
-        //TODO: Validate email
         TGAServer.createMember(email: email, username: username, password: password, onSuccess: { (data) in
-            guard let id = data[Member.tgaIDKey] else {
-                //TODO: Fail
+            guard let id = data[Member.tgaIDKey] as? String else {
+                failure(nil)
                 return
             }
             //find or create member object
-            let member = self.member(tgaID: id) ?? addNewMember(tgaID: id)
+            let member = self.member(tgaID: id) ?? createLocalMember(tgaID: id)
             
             member.updateWithData(data: data)
             member.authToken = Member.createToken(email: email, password: password)
@@ -43,14 +42,13 @@ class MemberDataManager {
     class func loginMember(email: String, password: String,
                             onSuccess success:@escaping () -> Void,
                             onFailure failure: @escaping (_ error: Error?) -> Void) {
-        //TODO: Validate email
         TGAServer.loginMember(email: email, password: password, onSuccess: { (data) in
-            guard let id = data[Member.tgaIDKey] else {
-                //TODO: Fail
+            guard let id = data[Member.tgaIDKey] as? String else {
+                failure(nil)
                 return
             }
             //find or create member object
-            let member = self.member(tgaID: id) ?? addNewMember(tgaID: id)
+            let member = self.member(tgaID: id) ?? createLocalMember(tgaID: id)
             
             member.updateWithData(data: data)
             member.authToken = Member.createToken(email: email, password: password)
@@ -141,19 +139,10 @@ class MemberDataManager {
         return member
     }
     
-    class func addNewMember(tgaID: String) -> Member {
-        let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
-        let member = Member(context: context)
-        member.tgaID = tgaID
-        CoreDataManager.sharedInstance.saveContext()
-        return member
-    }
-    
     //MARK: Helpers
     
     class func isLoggedIn() -> Bool {
-        let member = loggedInMember()
-        return member != nil
+        return loggedInMember() != nil
     }
     
     class func loggedInMember() -> Member? {
@@ -176,20 +165,13 @@ class MemberDataManager {
     }
     
     class func canEditEvent(event: Event) -> Bool {
-        if let member = self.loggedInMember() {
-            return member.canEditEvent(event: event)
-        }
-        
-        return false
+        return loggedInMember()?.canEditEvent(event:event) ?? false
     }
     
     //MARK: Data Validation
     
     static func isValidPassword(password: String) -> Bool {
-        if password.count < minPasswordLength {
-            return false
-        }
-        return true
+        return password.count >= minPasswordLength
     }
     
     static func isValidEmail(email: String) -> Bool {

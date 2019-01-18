@@ -18,18 +18,28 @@ extension Member {
     static let instagramKey = "instagram"
     static let twitterKey = "twitter"
     static let aboutKey = "about"
+    static let favoritesKey = "favoriteEvents"
     
-    func updateWithData(data: [String: String]) {
-        self.email = data[Member.emailKey]
-        self.name = data[Member.nameKey]
-        self.facebookID = data[Member.facebookIDKey]
-        self.instagram = data[Member.instagramKey]
-        self.twitter = data[Member.twitterKey]
-        self.about = data[Member.aboutKey]
+    func updateWithData(data: [String: Any]) {
+        self.email = data[Member.emailKey] as? String ?? nil
+        self.name = data[Member.nameKey] as? String ?? nil
+        self.facebookID = data[Member.facebookIDKey] as? String ?? nil
+        self.instagram = data[Member.instagramKey] as? String ?? nil
+        self.twitter = data[Member.twitterKey] as? String ?? nil
+        self.about = data[Member.aboutKey] as? String ?? nil
+        
+        self.removeFromFavorites(self.favorites ?? NSSet())
+        if let favoritesData = data[Member.favoritesKey] as? [[String: Any]] {
+            for eventData in favoritesData {
+                if let event = EventManager.updateLocalEvent(from: eventData) {
+                    addToFavorites(event)
+                }
+            }
+        }
     }
     
     func canEditEvent(event: Event) -> Bool {
-        return event.creatorTGAID == tgaID
+        return hosting?.contains(event) ?? false
     }
     
     class func createToken(email: String, password: String) -> String {
