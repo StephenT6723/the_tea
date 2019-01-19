@@ -127,7 +127,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordInputField.selectedColor = .white
         passwordInputField.deSelectedColor = .white
         passwordInputField.textField.textColor = .white
-        passwordInputField.textField.textColor = .white
+        passwordInputField.textField.tintColor = .white
         view.addSubview(passwordInputField)
         
         confirmPasswordInputField.translatesAutoresizingMaskIntoConstraints = false
@@ -138,7 +138,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         confirmPasswordInputField.selectedColor = .white
         confirmPasswordInputField.deSelectedColor = .white
         confirmPasswordInputField.textField.textColor = .white
-        confirmPasswordInputField.textField.textColor = .white
+        confirmPasswordInputField.textField.tintColor = .white
         view.insertSubview(confirmPasswordInputField, belowSubview: passwordInputField)
         
         passwordErrorLabel.translatesAutoresizingMaskIntoConstraints = false

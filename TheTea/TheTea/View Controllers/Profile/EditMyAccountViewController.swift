@@ -8,9 +8,13 @@
 
 import UIKit
 
-//TODO: Add @'s to twitter and insta when needed
+protocol AccountEditViewDelegate {
+    func updateSucceeded()
+}
 
 class EditMyAccountViewController: UIViewController, UITextViewDelegate {
+    var delegate: AccountEditViewDelegate?
+    
     private let scrollView = UIScrollView()
     private let nameTextField = InputField()
     private let facebookTextField = InputField()
@@ -77,6 +81,7 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         aboutTextView.title = "ABOUT ME"
         aboutTextView.type = .textView
         aboutTextView.textView.text = member.about
+        aboutTextView.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(aboutTextView)
         
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
@@ -212,9 +217,19 @@ class EditMyAccountViewController: UIViewController, UITextViewDelegate {
         let about = aboutTextView.textView.text == aboutTextViewPlaceholder ? nil : aboutTextView.textView.text
         self.updateLoader(visible: true, animated: true)
         MemberDataManager.updateMember(name: name, email: MemberDataManager.loggedInMember()?.email, facebookID: facebookTextField.textField.text, instagram: instagramTextField.textField.text, twitter: twitterTextField.textField.text, about: about, onSuccess: {
-            self.dismiss(animated: true, completion: nil)
+            MemberDataManager.fetchLoggedInMember(onSuccess: {
+                self.dismiss(animated: true, completion: nil)
+                self.delegate?.updateSucceeded()
+            }) { (error) in
+                self.dismiss(animated: true, completion: nil)
+                print("ERROR UPDATING LOGGED IN MEMBER: \(error?.localizedDescription ?? "")")
+            }
         }) { (error) in
-            //TODO: Display Error somewhere
+            let alert = UIAlertController(title: "Error", message: "\(error?.localizedDescription ?? "We were unable to update your profile. Please try again.")", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                
+            }))
+            self.present(alert, animated: true, completion: nil)
             self.updateLoader(visible: false, animated: true)
             print(error?.localizedDescription ?? "Unable to save member")
         }

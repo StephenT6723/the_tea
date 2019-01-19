@@ -21,10 +21,10 @@ enum CollectionSortType: String, CaseIterable {
             let hotnessSort = NSSortDescriptor(key: "hotness", ascending: false)
             descriptors.append(hotnessSort)
         case .time:
-            let startTimeSort = NSSortDescriptor(key: "startTime", ascending: false)
+            let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
             descriptors.append(startTimeSort)
         default:
-            let locationSort = NSSortDescriptor(key: "dateCreated", ascending: true)
+            let locationSort = NSSortDescriptor(key: "dateCreated", ascending: false)
             descriptors.append(locationSort)
         }
         

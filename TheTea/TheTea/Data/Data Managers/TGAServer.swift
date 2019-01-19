@@ -14,6 +14,7 @@ class TGAServer {
     static let apiEventNameKey = "name"
     static let apiRepeatingIDKey = "repeatingEventId"
     static let apiAboutKey = "about"
+    static let apiDateCreatedKey = "createdAt"
     static let apiStartTimeKey = "startTime"
     static let apiEndTimeKey = "endTime"
     static let apiLocationNameKey = "locationName"
@@ -27,7 +28,7 @@ class TGAServer {
     static let apiHotnessKey = "hotness"
     static let apiHostsKey = "hosts"
     static let apiRepeatsKey = "repeats"
-    static let apiImagesKey = "images"
+    static let apiImagesKey = "image"
     static let apiURLKey = "url"
     static let apiTimeZoneKey = "timeZone"
     
@@ -144,27 +145,33 @@ class TGAServer {
         let id = MemberDataManager.loggedInMember()?.tgaID ?? ""
         let headers = self.headersForCurrentMember()
         
-        Alamofire.request("\(domain)/user/\(id)",
-            method: .put,
-            parameters: nil,
-            encoding: URLEncoding(destination: .queryString),
-            headers: headers).responseJSON { response in
-                guard let data = response.data else {
-                    failure(response.error)
-                    return
-                }
-                do {
-                    if response.response?.statusCode != 200 {
-                        failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+        if let theJSONData = try? JSONSerialization.data(
+            withJSONObject: memberDict,
+            options: []) {
+            let theJSONText = String(data: theJSONData,
+                                     encoding: .ascii) ?? ""
+            Alamofire.request("\(domain)/user/\(id)",
+                method: .put,
+                parameters: [:],
+                encoding: JSONStringArrayEncoding.init(string: theJSONText),
+                headers: headers).responseJSON { response in
+                    guard let data = response.data else {
+                        failure(response.error)
                         return
                     }
-                    //TODO: Handle errors when name missing or email taken.
-                    let json = try JSON(data: data)
-                    let dict = memberDictFrom(json: json)
-                    success(dict)
-                } catch {
-                    failure(error)
-                }
+                    do {
+                        if response.response?.statusCode != 200 {
+                            failure(NSError(domain:"", code:response.response!.statusCode, userInfo:nil))
+                            return
+                        }
+                        //TODO: Handle errors when name missing or email taken.
+                        let json = try JSON(data: data)
+                        let dict = memberDictFrom(json: json)
+                        success(dict)
+                    } catch {
+                        failure(error)
+                    }
+            }
         }
     }
     
@@ -269,6 +276,9 @@ class TGAServer {
         if let repeatingID = json[apiRepeatingIDKey].number {
             eventDict[Event.repeatingEventIdKey] = "\(repeatingID)"
         }
+        if let dateCreated = json[apiDateCreatedKey].string {
+            eventDict[Event.dateCreatedKey] = dateCreated
+        }
         if let startTime = json[apiStartTimeKey].string {
             eventDict[Event.startTimeKey] = startTime
         }
@@ -320,12 +330,9 @@ class TGAServer {
         if let repeats = json[apiRepeatsKey].string {
             eventDict[Event.repeatsKey] = repeats
         }
-        if let imageData = json[apiImagesKey].array {
-            if imageData.count > 0 {
-                if let firstImageURL = imageData[0][apiURLKey].string {
-                    eventDict[Event.imageURLKey] = firstImageURL
-                }
-            }
+        
+        if let imageURL = json[apiImagesKey][apiURLKey].string {
+            eventDict[Event.imageURLKey] = imageURL
         }
         return eventDict
     }

@@ -179,6 +179,7 @@ class EventManager {
             }
         }
         
+        let dateCreatedString = data[Event.dateCreatedKey] as? String ?? ""
         let endTimeString = data[Event.endTimeKey] as? String ?? ""
         var hotness: Int32 = event.hotness
         if overrideHotness{
@@ -200,7 +201,6 @@ class EventManager {
             imageURL = data[Event.imageURLKey] as? String ?? ""
         }
         
-        
         var hostObjects = [Member]()
         if overrideHosts {
             let hosts = data[Event.hostsKey] as? [[String :String]] ?? []
@@ -217,7 +217,7 @@ class EventManager {
         }
         
         //update event object
-        event.update(name: name, hosts: hostObjects, hotness: hotness, startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules, repeatingEventId: repeatingEventId, imageURL: imageURL)
+        event.update(name: name, hosts: hostObjects, hotness: hotness, dateCreated: dateFormatter.date(from:dateCreatedString) ?? Date(), startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules, repeatingEventId: repeatingEventId, imageURL: imageURL)
         return event
     }
     

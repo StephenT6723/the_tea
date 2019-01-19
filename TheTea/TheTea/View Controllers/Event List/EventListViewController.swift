@@ -38,7 +38,11 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         weekdayFormatter.dateFormat = "EEEE"
         dateFormatter.dateFormat = "MMM d"
         
-        navigationItem.titleView = UIImageView(image: UIImage(named: "navLogo"))
+        //navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "navLogo"), style: .plain, target: nil, action: nil)
+        let navImageView = UIImageView(image: UIImage(named: "navLogo"))
+        navImageView.contentMode = .scaleAspectFill
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navImageView)
+        navigationItem.titleView = UIImageView(image: UIImage(named: ""))
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navActivityIndicator)
         
         //table view

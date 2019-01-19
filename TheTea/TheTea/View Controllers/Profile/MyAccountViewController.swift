@@ -9,11 +9,12 @@
 import UIKit
 import FBSDKLoginKit
 
-class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CarouselDelegate, LoginViewDelegate {
+class MyAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CarouselDelegate, LoginViewDelegate, AccountEditViewDelegate {
     let tableView = UITableView(frame: CGRect(), style: .grouped)
     var upcomingEvents = EventCollection()
     var currentMember = MemberDataManager.loggedInMember()
     var hasShownLogin = false
+    var isMyProfileView = true
     private let loginVC = LoginViewController()
     private let loginContainer = UIView()
     private let timeFormatter = DateFormatter()
@@ -86,13 +87,19 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        
+        if isMyProfileView {
+            if !MemberDataManager.isLoggedIn() {
+                presentLoginView()
+                navigationItem.rightBarButtonItem = nil
+            }
+        }
     }
     
     //MARK: Actions
     
     @objc func editButtonTouched() {
         let editVC = EditMyAccountViewController()
+        editVC.delegate = self
         let editNav = UINavigationController(rootViewController: editVC)
         editNav.navigationBar.isTranslucent = false
         present(editNav, animated: true, completion: nil)
@@ -124,6 +131,18 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             eventCollectionVC.eventsFRC = selectedEventsFRC
             eventCollectionVC.title = "HOSTED EVENTS"
             navigationController?.pushViewController(eventCollectionVC, animated: true)
+        }
+    }
+    
+    @objc func instagramButtonTouched() {
+        guard let url = URL(string: "instagram://location?id=angusobrien_") else {
+            return
+        }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        } else {
+            guard let webURL = URL(string: "https://www.instagram.com/\("angusobrien_/")") else { return }
+            UIApplication.shared.open(webURL)
         }
     }
     
@@ -179,6 +198,7 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
             
             header.facebookButton.isEnabled = true
             header.instagramButton.isEnabled = true//currentMember.instagram?.count ?? 0 > 0
+            header.instagramButton.addTarget(self, action: #selector(instagramButtonTouched), for: .touchUpInside)
             header.twitterButton.isEnabled = currentMember.twitter?.count ?? 0 > 0
             header.aboutText = currentMember.about
             
@@ -305,6 +325,12 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTouched))
         navigationItem.rightBarButtonItem = editButton
+    }
+    
+    //MARK: Update View Delegate
+    
+    func updateSucceeded() {
+        tableView.reloadData()
     }
     
     //MARK: Carousel Delegate

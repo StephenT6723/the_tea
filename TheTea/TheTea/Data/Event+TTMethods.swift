@@ -13,6 +13,7 @@ extension Event {
     static let nameKey = "name"
     static let hotnessKey = "hotness"
     static let gayIDKey = "gayID"
+    static let dateCreatedKey = "dateCreated"
     static let startTimeKey = "startTime"
     static let endTimeKey = "endTime"
     static let aboutKey = "about"
@@ -29,11 +30,12 @@ extension Event {
     static let repeatingEventIdKey = "repeatingEventId"
     static let imageURLKey = "imageURL"
     
-    func update(name: String, hosts: [Member], hotness: Int32?, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool, repeats: String, repeatingEventId: String, imageURL: String?) {
+    func update(name: String, hosts: [Member], hotness: Int32?, dateCreated: Date, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool, repeats: String, repeatingEventId: String, imageURL: String?) {
         self.name = name
         self.removeFromHosts(self.hosts ?? NSSet())
         self.addToHosts(NSSet(array: hosts))
         self.hotness = hotness ?? 0
+        self.dateCreated = dateCreated
         self.startTime = startTime
         self.endTime = endTime
         self.about = about
