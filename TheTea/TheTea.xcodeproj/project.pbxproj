@@ -56,7 +56,6 @@
 		93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */; };
 		93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */; };
 		93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */; };
-		93EAF8EF206D72D7008B213F /* EventCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */; };
 		93EAF8F1206DA621008B213F /* test_event_collections.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93EAF8F0206DA621008B213F /* test_event_collections.plist */; };
 		93FCC26521FB38D4009BBF8D /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */; };
 		93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */; };
@@ -128,7 +127,6 @@
 		93EAF8E7206C39AB008B213F /* EventCollectionCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarousel.swift; sourceTree = "<group>"; };
 		93EAF8E9206C3CEE008B213F /* EventCollectionCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCarouselCell.swift; sourceTree = "<group>"; };
 		93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewController.swift; sourceTree = "<group>"; };
-		93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionHeaderView.swift; sourceTree = "<group>"; };
 		93EAF8F0206DA621008B213F /* test_event_collections.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = test_event_collections.plist; path = Misc/test_event_collections.plist; sourceTree = "<group>"; };
 		93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EventCollection+TTMethods.swift"; path = "Data/EventCollection+TTMethods.swift"; sourceTree = "<group>"; };
@@ -328,7 +326,6 @@
 			isa = PBXGroup;
 			children = (
 				93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */,
-				93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */,
 			);
 			path = "Event Collection";
 			sourceTree = "<group>";
@@ -604,7 +601,6 @@
 				93CF651A21E52C7100090B65 /* EventCarouselTableViewCell.swift in Sources */,
 				D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */,
 				933956EB1F440EF600F1AEE4 /* LoginViewController.swift in Sources */,
-				93EAF8EF206D72D7008B213F /* EventCollectionHeaderView.swift in Sources */,
 				9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */,
 				93262AA321ED9F5D00210A9F /* EventListTableViewHeader.swift in Sources */,
 				93399AF21F40E0A100ED02E9 /* MemberDataManager.swift in Sources */,

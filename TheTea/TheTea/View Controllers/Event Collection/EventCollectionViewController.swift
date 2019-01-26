@@ -9,16 +9,41 @@
 import UIKit
 import CoreData
 
+enum CollectionSortType: String, CaseIterable {
+    case hot = "Hot"
+    case time = "Now"
+    case new = "New"
+    
+    func sortDecriptors() -> [NSSortDescriptor] {
+        var descriptors = [NSSortDescriptor]()
+        
+        switch self {
+        case .hot:
+            let hotnessSort = NSSortDescriptor(key: "hotness", ascending: false)
+            descriptors.append(hotnessSort)
+        case .time:
+            let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
+            descriptors.append(startTimeSort)
+        default:
+            let locationSort = NSSortDescriptor(key: "dateCreated", ascending: false)
+            descriptors.append(locationSort)
+        }
+        
+        return descriptors
+    }
+}
+
 class EventCollectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
     private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
+    private let segmentedControl = SegmentedControl()
     private let timeFormatter = DateFormatter()
-    private var selectedSort = CollectionSortType.hot {
-        didSet {
-            updateData()
+    private var selectedSort: CollectionSortType {
+        get {
+            let cases = CollectionSortType.allCases
+            return cases[segmentedControl.selectedIndex]
         }
     }
     var eventsFRC = NSFetchedResultsController<Event>()
-    private var header: EventCollectionHeaderView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,19 +60,33 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0.1))
         tableView.backgroundColor = .white
         tableView.register(EventTableViewCell.self, forCellReuseIdentifier: String(describing: EventTableViewCell.self))
-        tableView.register(EventCollectionHeaderView.self, forHeaderFooterViewReuseIdentifier: String(describing: EventCollectionHeaderView.self))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
         tableView.clipsToBounds = false
         view.addSubview(tableView)
         
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        var items = [String]()
+        for sortType in CollectionSortType.allCases {
+            items.append(sortType.rawValue)
+        }
+        segmentedControl.items = items
+        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        segmentedControl.addTarget(self, action: #selector(sortTapped), for: .valueChanged)
+        view.addSubview(segmentedControl)
+        
         //layout
         let margins = view.layoutMarginsGuide
         
+        segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        segmentedControl.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        segmentedControl.heightAnchor.constraint(equalToConstant: 46).isActive = true
+        
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
@@ -74,7 +113,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 46
+        return 0.1
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -86,15 +125,7 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: EventCollectionHeaderView.self)) as? EventCollectionHeaderView else {
-            return EventCollectionHeaderView()
-        }
-        
-        header.selectedSort = selectedSort
-        header.segmentedControl.addTarget(self, action: #selector(sortTapped), for: .valueChanged)
-        self.header = header
-        
-        return header
+        return nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -125,7 +156,6 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: Actions
     
     @objc func sortTapped() {
-        self.selectedSort = header?.selectedSort ?? .hot
         updateData()
     }
     

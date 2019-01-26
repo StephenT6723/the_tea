@@ -51,7 +51,7 @@ class SegmentedControl: UIControl {
             button.translatesAutoresizingMaskIntoConstraints = false
             button.titleLabel?.font = font
             button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
-            button.backgroundColor = .white
+            button.backgroundColor = .clear
             button.setTitleColor(UIColor.primaryCopy(), for: .normal)
             addSubview(button)
             
