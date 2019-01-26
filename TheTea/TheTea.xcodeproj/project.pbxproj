@@ -58,6 +58,7 @@
 		93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */; };
 		93EAF8EF206D72D7008B213F /* EventCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */; };
 		93EAF8F1206DA621008B213F /* test_event_collections.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93EAF8F0206DA621008B213F /* test_event_collections.plist */; };
+		93FCC26521FB38D4009BBF8D /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */; };
 		93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */; };
 		BAD55B60C5FB356A890F5EC1 /* Pods_TheTea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C427DA39FC9C6CDCDF2F0D /* Pods_TheTea.framework */; };
 		D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */; };
@@ -129,6 +130,7 @@
 		93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewController.swift; sourceTree = "<group>"; };
 		93EAF8EE206D72D7008B213F /* EventCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionHeaderView.swift; sourceTree = "<group>"; };
 		93EAF8F0206DA621008B213F /* test_event_collections.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = test_event_collections.plist; path = Misc/test_event_collections.plist; sourceTree = "<group>"; };
+		93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EventCollection+TTMethods.swift"; path = "Data/EventCollection+TTMethods.swift"; sourceTree = "<group>"; };
 		D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
 		D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEditViewController.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 			children = (
 				933956E61F440EA600F1AEE4 /* MyAccountViewController.swift */,
 				D7103DBD1F8552AD00399263 /* EditMyAccountViewController.swift */,
+				93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				93262AA621F0FAB000210A9F /* MyProfileRootViewController.swift in Sources */,
 				932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,
+				93FCC26521FB38D4009BBF8D /* MyProfileViewController.swift in Sources */,
 				93CF653C21EB0CF200090B65 /* InputField.swift in Sources */,
 				938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */,
 				93CF653E21ED706200090B65 /* RadioButton.swift in Sources */,

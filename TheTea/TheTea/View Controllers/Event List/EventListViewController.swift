@@ -18,7 +18,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private var featuredCollections = EventCollectionManager.featuredEventCollections()
     private let carouselHeader = EventCollectionCarouselHeaderView(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
     private let noEventsView = NoEventsView(frame: CGRect())
-    private let navActivityIndicator = UIActivityIndicatorView(style: .gray)
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             eventsFRC.delegate = self
@@ -29,7 +28,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "The Gay Agenda".uppercased()
         view.backgroundColor = .white
 
         timeFormatter.dateStyle = .none
@@ -38,12 +36,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         weekdayFormatter.dateFormat = "EEEE"
         dateFormatter.dateFormat = "MMM d"
         
-        //navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "navLogo"), style: .plain, target: nil, action: nil)
-        let navImageView = UIImageView(image: UIImage(named: "navLogo"))
-        navImageView.contentMode = .scaleAspectFill
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navImageView)
-        navigationItem.titleView = UIImageView(image: UIImage(named: ""))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navActivityIndicator)
+        updateNavButtons()
         
         //table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -101,6 +94,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.pushViewController(eventCollectionVC, animated: true)
     }
     
+    @objc func myProfileButtonTouched() {
+        let myAccountVC = MyProfileViewController()
+        let myAccountNav = UINavigationController(rootViewController: myAccountVC)
+        myAccountNav.navigationBar.isTranslucent = false
+        present(myAccountNav, animated: true, completion: nil)
+    }
+    
     func updateCarouselContent() {
         self.featuredCollections = EventCollectionManager.featuredEventCollections()
         self.carouselHeader.carousel.updateContent()
@@ -110,8 +110,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let eventRefreshNeeded = eventsFRC.fetchedObjects?.count == 0 || EventManager.eventsStale()
         if eventRefreshNeeded {
             noEventsView.alpha = 1
-        } else {
-            navActivityIndicator.startAnimating()
         }
         noEventsView.label.text = "FETCHING EVENTS"
         noEventsView.showLoader(animated: false)
@@ -119,12 +117,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             UIView.animate(withDuration: 0.3, animations: {
                 self.noEventsView.alpha = 0
             })
-            self.navActivityIndicator.stopAnimating()
             self.tableView.reloadData()
         }) { (error) in
             self.noEventsView.label.text = "UNABLE TO FETCH EVENTS"
             self.noEventsView.showButton(animated: true)
-            self.navActivityIndicator.stopAnimating()
             print("Error loading events")
             //TODO: Display this error somewhere when the no events view is hidden.
         }
@@ -132,6 +128,34 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @objc func retryEventFetch() {
         updateEvents()
+    }
+    
+    func updateNavButtons() {
+        let navImageView = UIImageView(image: UIImage(named: "navLogo"))
+        navImageView.contentMode = .scaleAspectFill
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navImageView)
+        
+        let profileIconContainer = UIView()
+        profileIconContainer.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        profileIconContainer.backgroundColor = UIColor.white
+        profileIconContainer.layer.shadowOffset = CGSize(width: 0, height: 2)
+        profileIconContainer.layer.shadowColor = UIColor(red:0, green:0, blue:0, alpha:0.16).cgColor
+        profileIconContainer.layer.shadowOpacity = 1
+        profileIconContainer.layer.shadowRadius = 5
+        profileIconContainer.layer.cornerRadius = 15
+        
+        let profileImageView = UIImageView(image: UIImage(named: "defaultAvatar"))
+        profileImageView.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        profileImageView.clipsToBounds = true
+        profileImageView.contentMode = .scaleAspectFit
+        profileIconContainer.addSubview(profileImageView)
+        
+        let profileButton = UIButton()
+        profileButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        profileButton.addTarget(self, action: #selector(myProfileButtonTouched), for: .touchUpInside)
+        profileIconContainer.addSubview(profileButton)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileIconContainer)
     }
     
     //MARK: Table View
@@ -269,7 +293,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let cellView = EventView(frame: CGRect())
         cellView.imageURL = event.fullImageURL()
-        cellView.titleLabel.text = event.name
+        let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
+        cellView.update(title: event.name, subtitle: event.subtitle(), subtitleColor: subtitleColor)
         cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
         cellView.placeLabel.text = event.locationName
         let numberFormatter = NumberFormatter()
@@ -345,7 +370,7 @@ class NoEventsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.lightBackground()
+        backgroundColor = UIColor.white
         
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.headerOne()

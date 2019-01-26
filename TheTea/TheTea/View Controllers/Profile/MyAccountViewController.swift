@@ -121,13 +121,17 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if section == 1 {
             let eventCollectionVC = EventCollectionViewController()
-            let selectedEventsFRC = EventManager.favoritedEvents()
+            guard let selectedEventsFRC = EventManager.favoritedEvents() else {
+                return
+            }
             eventCollectionVC.eventsFRC = selectedEventsFRC
             eventCollectionVC.title = "FAVORITES"
             navigationController?.pushViewController(eventCollectionVC, animated: true)
         } else if section == 2 {
             let eventCollectionVC = EventCollectionViewController()
-            let selectedEventsFRC = EventManager.hostedEvents()
+            guard let selectedEventsFRC = EventManager.hostedEvents() else {
+                return
+            }
             eventCollectionVC.eventsFRC = selectedEventsFRC
             eventCollectionVC.title = "HOSTED EVENTS"
             navigationController?.pushViewController(eventCollectionVC, animated: true)
@@ -376,7 +380,8 @@ class MyAccountViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let cellView = EventView(frame: CGRect())
         cellView.imageURL = selectedEvent.fullImageURL()
-        cellView.titleLabel.text = selectedEvent.name
+        let subtitleColor = selectedEvent.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
+        cellView.update(title: selectedEvent.name, subtitle: selectedEvent.subtitle(), subtitleColor: subtitleColor)
         cellView.timeLabel.text = timeFormatter.string(from: selectedEvent.startTime ?? Date())
         cellView.placeLabel.text = selectedEvent.locationName
         let numberFormatter = NumberFormatter()

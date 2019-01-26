@@ -13,6 +13,7 @@ class EventView: UIView {
     var imageURL: String? {
         didSet {
             guard let imageURL = self.imageURL else {
+                imageView.image = nil
                 return
             }
             let url = URL(string: imageURL)
@@ -29,7 +30,9 @@ class EventView: UIView {
     private var imageViewContainer = UIView()
     private var imageView = UIImageView()
     private let overlay = UIView()
-    let titleLabel = UILabel()
+    private let subtitleLabel = UILabel()
+    private let titleLabel = UILabel()
+    private var titleTopConstraint = NSLayoutConstraint()
     
     let timeImageView = UIImageView(image: UIImage(named: "timeIcon"))
     let timeLabel = UILabel()
@@ -70,6 +73,11 @@ class EventView: UIView {
         overlay.translatesAutoresizingMaskIntoConstraints = false
         overlay.backgroundColor = UIColor(white: 1, alpha: 0.9)
         imageViewContainer.addSubview(overlay)
+        
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.font = UIFont.sectionTitle()
+        subtitleLabel.textColor = UIColor.lightCopy()
+        overlay.addSubview(subtitleLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.listTitle()
@@ -116,9 +124,13 @@ class EventView: UIView {
         overlay.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         overlay.heightAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive = true
         
+        subtitleLabel.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 20).isActive = true
+        subtitleLabel.topAnchor.constraint(equalTo: overlay.topAnchor, constant: 16).isActive = true
+        
         titleLabel.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 20).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: overlay.trailingAnchor, constant: -20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: overlay.topAnchor, constant: 12).isActive = true
+        titleTopConstraint = titleLabel.topAnchor.constraint(equalTo: overlay.topAnchor, constant: 12)
+        titleTopConstraint.isActive = true
         
         timeImageView.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 20).isActive = true
         timeImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12).isActive = true
@@ -182,5 +194,13 @@ class EventView: UIView {
         let height = imageHeight > self.bounds.height ? imageHeight : self.bounds.height
         
         imageView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+    }
+    
+    func update(title: String?, subtitle: String?, subtitleColor: UIColor?) {
+        titleLabel.text = title
+        subtitleLabel.text = subtitle
+        subtitleLabel.textColor = subtitleColor
+        
+        titleTopConstraint.constant = subtitle == nil ? 12: 40
     }
 }

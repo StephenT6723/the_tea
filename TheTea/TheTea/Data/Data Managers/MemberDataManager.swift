@@ -12,7 +12,6 @@ import FBSDKLoginKit
 
 class MemberDataManager {
     static let sharedInstance = MemberDataManager()
-    static let authEnabled = true
     static let minPasswordLength = 7
     static let minUsernameLength = 7
     private init() {}

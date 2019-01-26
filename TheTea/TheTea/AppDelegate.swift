@@ -16,9 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        let authEnabled = MemberDataManager.authEnabled
-        
         StyleManager.updateNavBarStyling()
  
         let eventListVC = EventListViewController()
@@ -27,26 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootNav = UINavigationController(rootViewController: eventListVC)
         rootNav.tabBarItem.image = UIImage(named: "rootViewIcon")
         
-        if authEnabled {
-            let myAccountVC = MyAccountViewController()
-            let myAccountNav = UINavigationController(rootViewController: myAccountVC)
-            myAccountNav.navigationBar.isTranslucent = false
-            myAccountVC.title = "My Profile"
-            myAccountNav.tabBarItem.image = UIImage(named: "myProfileIcon")
-            
-            let tabBarController = UITabBarController()
-            tabBarController.tabBar.tintColor = UIColor.primaryCTA()
-            tabBarController.tabBar.isTranslucent = false
-            tabBarController.viewControllers = [rootNav, myAccountNav]
-            
-            window = UIWindow(frame: UIScreen.main.bounds)
-            window!.rootViewController = tabBarController
-            window!.makeKeyAndVisible()
-        } else {
-            window = UIWindow(frame: UIScreen.main.bounds)
-            window!.rootViewController = rootNav
-            window!.makeKeyAndVisible()
-        }
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window!.rootViewController = rootNav
+        window!.makeKeyAndVisible()
         
         FBSDKProfile.enableUpdates(onAccessTokenChange: true)
         

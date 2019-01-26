@@ -54,13 +54,13 @@ class EventManager {
         return eventsFRC
     }
     
-    class func favoritedEvents() -> NSFetchedResultsController<Event> {
-        guard let member = MemberDataManager.loggedInMember() else {
-            return NSFetchedResultsController<Event>()
+    class func favoritedEvents() -> NSFetchedResultsController<Event>? {
+        guard let ids = MemberDataManager.loggedInMember()?.chronologicalFavoritIDs() else {
+            return nil
         }
         
         let request = NSFetchRequest<Event>(entityName:"Event")
-        let predicate = NSPredicate(format: "favoritedBy contains %@", member)
+        let predicate = NSPredicate(format: "gayID IN %@", ids)
         request.predicate = predicate
         let startTimeSort = NSSortDescriptor(key: "hotness", ascending: false)
         request.sortDescriptors = [startTimeSort]
@@ -77,13 +77,13 @@ class EventManager {
         return eventsFRC
     }
     
-    class func hostedEvents() -> NSFetchedResultsController<Event> {
-        guard let member = MemberDataManager.loggedInMember() else {
-            return NSFetchedResultsController<Event>()
+    class func hostedEvents() -> NSFetchedResultsController<Event>? {
+        guard let ids = MemberDataManager.loggedInMember()?.hotHostingIDs() else {
+            return nil
         }
         
         let request = NSFetchRequest<Event>(entityName:"Event")
-        let predicate = NSPredicate(format: "hosts contains %@", member)
+        let predicate = NSPredicate(format: "gayID IN %@", ids)
         request.predicate = predicate
         let startTimeSort = NSSortDescriptor(key: "hotness", ascending: false)
         request.sortDescriptors = [startTimeSort]

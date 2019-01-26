@@ -90,7 +90,10 @@ extension Event {
         return currentMember.favorites?.contains(self) ?? false
     }
     
-    func fullImageURL() -> String {
+    func fullImageURL() -> String? {
+        if imageURL?.count ?? 0 <= 0 {
+            return nil
+        }
         return TGAServer.domain + "/\(imageURL ?? "")"
     }
     
@@ -109,5 +112,16 @@ extension Event {
             }
             return firstName > secondName
         })
+    }
+    
+    func subtitle() -> String? {
+        if canceled {
+            return "CANCELED"
+        }
+        
+        if !published {
+            return "PENDING"
+        }
+        return nil
     }
 }

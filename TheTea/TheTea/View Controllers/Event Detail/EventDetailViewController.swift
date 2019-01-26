@@ -18,6 +18,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     let scrollView = UIScrollView()
     
     private let titleLabel = UILabel()
+    private let subTitleLabel = UILabel()
     private let favoriteButton = UIButton()
     private let favoriteButtonSize: CGFloat = 50
     private let favoriteActivityIndicator = UIActivityIndicatorView(style: .gray)
@@ -78,8 +79,14 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         contentView.backgroundColor = .white
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "eventPlaceholder18")
         imageView.contentMode = .scaleAspectFill
+        
+        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subTitleLabel.font = UIFont.sectionTitle()
+        subTitleLabel.textColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
+        subTitleLabel.text = event.subtitle()
+        subTitleLabel.numberOfLines = 0
+        contentView.addSubview(subTitleLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.headerOne()
@@ -158,7 +165,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         contentView.addSubview(hostsTitleLabel)
         
         reportButton.translatesAutoresizingMaskIntoConstraints = false
-        reportButton.setTitle("REPORT", for: .normal)
+        reportButton.setTitle("Report", for: .normal)
         reportButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
         reportButton.titleLabel?.font = UIFont.cta()
         reportButton.addTarget(self, action: #selector(reportButtonTouched), for: .touchUpInside)
@@ -193,14 +200,23 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
             previousHostView = hostView
         }
         
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 88).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
+        if event.subtitle() != nil {
+            subTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+            subTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+            subTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+            
+            titleLabel.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 4).isActive = true
+        } else {
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        }
+        
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
         
         favoriteButton.widthAnchor.constraint(equalToConstant: 47).isActive = true
         favoriteButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
@@ -310,15 +326,19 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     }
     
     func updateContent() {
-        let imageURL = event.fullImageURL()
-        let url = URL(string: imageURL)
-        imageView.kf.setImage(with: url) { result in
-            switch result {
-            case .success(_):
-                self.updateImageView()
-            case .failure(let error):
-                print(error.localizedDescription)
+        if let imageURL = event.fullImageURL() {
+            let url = URL(string: imageURL)
+            imageView.kf.setImage(with: url) { result in
+                switch result {
+                case .success(_):
+                    self.updateImageView()
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
             }
+            scrollView.alwaysBounceVertical = false
+        } else {
+            scrollView.alwaysBounceVertical = true
         }
         
         titleLabel.text = event.name?.capitalized

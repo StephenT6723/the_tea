@@ -19,6 +19,12 @@ class StyleManager {
         barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
                                                    NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .normal)
         barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .selected)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .focused)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .highlighted)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
                                                    NSAttributedString.Key.foregroundColor:UIColor.lightCopy()], for: .disabled)
     }
 }

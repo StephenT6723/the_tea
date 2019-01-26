@@ -104,7 +104,8 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         
         let event = eventsFRC.object(at: indexPath)
         cell.eventView.imageURL = event.fullImageURL()
-        cell.eventView.titleLabel.text = event.name
+        let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
+        cell.eventView.update(title: event.name, subtitle: event.subtitle(), subtitleColor: subtitleColor)
         cell.eventView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
         cell.eventView.placeLabel.text = event.locationName
         let numberFormatter = NumberFormatter()
@@ -120,42 +121,6 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         let detailVC = EventDetailViewController(event:event)
         navigationController?.pushViewController(detailVC, animated: true)
     }
-    
-    //MARK: FRC Delegate
-    /*
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .move:
-            break
-        case .update:
-            break
-        }
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
-        case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
-        case .update:
-            tableView.reloadRows(at: [indexPath!], with: .fade)
-        case .move:
-            tableView.reloadData()
-        }
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    } */
     
     //MARK: Actions
     

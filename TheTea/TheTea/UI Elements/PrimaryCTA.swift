@@ -20,12 +20,12 @@ class PrimaryCTA: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentHorizontalAlignment = .left
-        contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         backgroundColor = UIColor.primaryCTA()
         layer.cornerRadius = 6
         setTitleColor(.white, for: .normal)
+        setTitleColor(UIColor.lightCopy(), for: .highlighted)
         titleLabel?.font = UIFont.headerTwo()
         
         layer.shadowOffset = CGSize(width: 0, height: 2)

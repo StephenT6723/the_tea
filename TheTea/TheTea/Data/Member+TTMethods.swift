@@ -55,7 +55,7 @@ extension Member {
             return [Event]()
         }
         
-        let timeSortedFavorites = favoritesArray.sorted(by: { $0.startTime ?? Date() < $1.startTime ?? Date() }) //Sorting by time so that the instance of each event we get is the closest one to now. The ones way in the future will not have images.
+        let timeSortedFavorites = favoritesArray.sorted(by: { $0.startTime ?? Date() < $1.startTime ?? Date() }) //Sorting by time so that the instance of each event we get is the closest one to now.
         
         var repeatIDs = [String]()
         var uniqueEvents = [Event]()
@@ -69,6 +69,18 @@ extension Member {
         return uniqueEvents
     }
     
+    func chronologicalFavoritIDs() -> [String] {
+        var ids = [String]()
+        
+        let favorites = chronologicalFavorites()
+        
+        for favorite in favorites {
+            ids.append(favorite.gayID ?? "")
+        }
+        
+        return ids
+    }
+    
     func hotHosting() -> [Event] {
         guard let hosting = self.hosting else {
             return [Event]()
@@ -77,6 +89,29 @@ extension Member {
             return [Event]()
         }
         
-        return hostingArray.sorted(by: { $0.hotness > $1.hotness })
+        let timeSortedHosting = hostingArray.sorted(by: { $0.hotness < $1.hotness }) //Sorting by time so that the instance of each event we get is the closest one to now.
+        
+        var repeatIDs = [String]()
+        var uniqueEvents = [Event]()
+        for event in timeSortedHosting {
+            if !repeatIDs.contains(event.repeatingEventId ?? "") {
+                repeatIDs.append(event.repeatingEventId ?? "")
+                uniqueEvents.append(event)
+            }
+        }
+        
+        return uniqueEvents
+    }
+    
+    func hotHostingIDs() -> [String] {
+        var ids = [String]()
+        
+        let hosting = hotHosting()
+        
+        for event in hosting {
+            ids.append(event.gayID ?? "")
+        }
+        
+        return ids
     }
 }

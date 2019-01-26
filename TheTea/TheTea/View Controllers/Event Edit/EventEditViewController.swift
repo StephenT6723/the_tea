@@ -269,7 +269,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             updateEndTime()
         } else {
             if let event = self.event {
-                if let url = URL(string: event.fullImageURL()) {
+                if let url = URL(string: event.fullImageURL() ?? "") {
                     KingfisherManager.shared.retrieveImage(with: url) { result in
                         if let image = result.value?.image {
                             self.imageSelectButton.image = image

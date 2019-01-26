@@ -95,6 +95,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailInputField.translatesAutoresizingMaskIntoConstraints = false
         emailInputField.title = "EMAIL ADDRESS"
         emailInputField.textField.autocapitalizationType = .none
+        emailInputField.textField.keyboardType = .emailAddress
+        emailInputField.textField.returnKeyType = .done
         emailInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
         emailInputField.selectedColor = .white
         emailInputField.deSelectedColor = .white
@@ -105,6 +107,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         usernameInputField.translatesAutoresizingMaskIntoConstraints = false
         usernameInputField.title = "USERNAME"
         usernameInputField.textField.autocapitalizationType = .words
+        usernameInputField.textField.returnKeyType = .done
         usernameInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
         usernameInputField.selectedColor = .white
         usernameInputField.deSelectedColor = .white
@@ -122,7 +125,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordInputField.title = "PASSWORD"
         passwordInputField.textField.isSecureTextEntry = true
         passwordInputField.textField.autocapitalizationType = .none
-        passwordInputField.textField.delegate = self
+        passwordInputField.textField.returnKeyType = .done
         passwordInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
         passwordInputField.selectedColor = .white
         passwordInputField.deSelectedColor = .white
@@ -134,6 +137,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         confirmPasswordInputField.title = "CONFIRM PASSWORD"
         confirmPasswordInputField.textField.autocapitalizationType = .none
         confirmPasswordInputField.textField.isSecureTextEntry = true
+        confirmPasswordInputField.textField.returnKeyType = .done
         confirmPasswordInputField.textField.addTarget(self, action: #selector(updateSubmitButton), for: .editingChanged)
         confirmPasswordInputField.selectedColor = .white
         confirmPasswordInputField.deSelectedColor = .white
