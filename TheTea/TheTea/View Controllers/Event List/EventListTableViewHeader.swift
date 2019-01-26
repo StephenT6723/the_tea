@@ -33,7 +33,7 @@ class EventListTableViewHeader: UIView {
         
         tgaLabel.translatesAutoresizingMaskIntoConstraints = false
         tgaLabel.text = "- The Gay Agenda"
-        tgaLabel.font = UIFont(name: "Montserrat-Medium", size: 18)
+        tgaLabel.font = UIFont(name: "Montserrat-Medium", size: 14)
         tgaLabel.textColor = .white
         tgaLabel.textAlignment = .right
         addSubview(tgaLabel)
