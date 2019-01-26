@@ -27,7 +27,7 @@ class ActivityIndicator: UIControl {
         super.init(frame: frame)
         
         bouncingView.translatesAutoresizingMaskIntoConstraints = false
-        bouncingView.backgroundColor = UIColor(red:0.59, green:0.71, blue:1, alpha:1)
+        bouncingView.backgroundColor = UIColor.primaryCTA()
         bouncingView.layer.cornerRadius = 2
         addSubview(bouncingView)
         

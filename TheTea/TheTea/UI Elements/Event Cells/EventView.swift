@@ -28,6 +28,7 @@ class EventView: UIView {
         }
     }
     private var imageViewContainer = UIView()
+    private var activityIndicator = ActivityIndicator(frame: CGRect())
     private var imageView = UIImageView()
     private let overlay = UIView()
     private let subtitleLabel = UILabel()
@@ -49,7 +50,7 @@ class EventView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.primaryCTA()
+        backgroundColor = .white
         
         layer.cornerRadius = 16
         layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -66,6 +67,9 @@ class EventView: UIView {
         imageViewContainer.layer.cornerRadius = 16
         imageViewContainer.clipsToBounds = true
         addSubview(imageViewContainer)
+        
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        imageViewContainer.addSubview(activityIndicator)
         
         imageView.contentMode = .scaleAspectFill
         imageViewContainer.addSubview(imageView)
@@ -118,6 +122,13 @@ class EventView: UIView {
         imageViewContainer.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         imageViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         imageViewContainer.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        activityIndicator.heightAnchor.constraint(equalToConstant: ActivityIndicator.preferedHeight).isActive = true
+        activityIndicator.widthAnchor.constraint(equalToConstant: ActivityIndicator.preferedWidth).isActive = true
+        
+        activityIndicator.isAnimating = true
         
         overlay.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         overlay.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
