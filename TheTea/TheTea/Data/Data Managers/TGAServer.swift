@@ -346,6 +346,36 @@ class TGAServer {
         return cleanedData
     }
     
+    //MARK: City Fetches
+    
+    class func fetchCities(onSuccess success:@escaping (_ data: [[String: Any]]) -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void) {
+        var tempdata = [[String: Any]]()
+        
+        let newYork = ["name" : "New York",
+                       "quote": "Welcome to New York, the birthplace of The Gay Agenda. Enjoy the beta.",
+                       "gayID": "1",
+                       "state": "NY"]
+        tempdata.append(newYork)
+        
+        let la = ["name" : "Los Angeles",
+                       "quote": "Welcome to Los Angeles, the New York of the West Coast. Enjoy the beta.",
+                       "gayID": "2",
+                       "state": "CA"]
+        tempdata.append(la)
+        
+        let sf = ["name" : "San Francisco",
+                  "quote": "Welcome to San Franciso, the most expensive place on earth. Enjoy the beta.",
+                  "gayID": "3",
+                  "state": "CA"]
+        tempdata.append(sf)
+        
+        let deadlineTime = DispatchTime.now() + .seconds(1)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            success(tempdata)
+        }
+    }
+    
     //MARK: Event Collection Fetches
     
     class func fetchEventCollections() -> [[String: Any]] {

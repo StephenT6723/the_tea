@@ -225,7 +225,6 @@ class EventManager {
         let context = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let event = Event(context: context)
         event.gayID = gayID
-        event.dateCreated = Date() //TODO: Get this from the server
         
         return event
     }

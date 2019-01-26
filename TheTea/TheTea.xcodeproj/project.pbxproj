@@ -60,6 +60,8 @@
 		93FCC26521FB38D4009BBF8D /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */; };
 		93FCC28921FCD956009BBF8D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC28821FCD956009BBF8D /* ActivityIndicator.swift */; };
 		93FCC28D21FCD9C1009BBF8D /* UIViewController+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */; };
+		93FCC28F21FCEB5C009BBF8D /* CityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC28E21FCEB5C009BBF8D /* CityManager.swift */; };
+		93FCC29121FCEFDF009BBF8D /* City+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC29021FCEFDF009BBF8D /* City+TTMethods.swift */; };
 		93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */; };
 		BAD55B60C5FB356A890F5EC1 /* Pods_TheTea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C427DA39FC9C6CDCDF2F0D /* Pods_TheTea.framework */; };
 		D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */; };
@@ -131,6 +133,8 @@
 		93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		93FCC28821FCD956009BBF8D /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityIndicator.swift; path = "UI Elements/ActivityIndicator.swift"; sourceTree = "<group>"; };
 		93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+TheTea.swift"; path = "Helpers/UIViewController+TheTea.swift"; sourceTree = "<group>"; };
+		93FCC28E21FCEB5C009BBF8D /* CityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CityManager.swift; path = "Data/Data Managers/CityManager.swift"; sourceTree = "<group>"; };
+		93FCC29021FCEFDF009BBF8D /* City+TTMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "City+TTMethods.swift"; path = "Data/City+TTMethods.swift"; sourceTree = "<group>"; };
 		93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EventCollection+TTMethods.swift"; path = "Data/EventCollection+TTMethods.swift"; sourceTree = "<group>"; };
 		D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
 		D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEditViewController.swift; sourceTree = "<group>"; };
@@ -238,6 +242,7 @@
 				935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */,
 				93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */,
 				D739CD291F706D6F00E3779B /* Member+TTMethods.swift */,
+				93FCC29021FCEFDF009BBF8D /* City+TTMethods.swift */,
 				933956E21F4400EB00F1AEE4 /* EventLocation.swift */,
 				93E440AC21837201001E82E0 /* EventRepeatRules.swift */,
 			);
@@ -250,6 +255,7 @@
 				935A65941F3EA7C700E979E9 /* CoreDataManager.swift */,
 				932991322073E295008C7A3B /* EventCollectionManager.swift */,
 				935A65961F3EAC9400E979E9 /* EventManager.swift */,
+				93FCC28E21FCEB5C009BBF8D /* CityManager.swift */,
 				93399AF11F40E0A100ED02E9 /* MemberDataManager.swift */,
 				D7DFB9D01F8BDAEA0053B2C9 /* TGAServer.swift */,
 			);
@@ -566,6 +572,7 @@
 				D70260D01FE97C5500D20BB8 /* EventEditViewController.swift in Sources */,
 				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
 				D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */,
+				93FCC28F21FCEB5C009BBF8D /* CityManager.swift in Sources */,
 				93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */,
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
@@ -596,6 +603,7 @@
 				93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */,
 				D70260D51FE97DE600D20BB8 /* RootViewController.swift in Sources */,
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,
+				93FCC29121FCEFDF009BBF8D /* City+TTMethods.swift in Sources */,
 				933956E71F440EA600F1AEE4 /* MyAccountViewController.swift in Sources */,
 				D7103DBE1F8552AD00399263 /* EditMyAccountViewController.swift in Sources */,
 				93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */,

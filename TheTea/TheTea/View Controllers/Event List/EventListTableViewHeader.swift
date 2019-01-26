@@ -22,6 +22,7 @@ class EventListTableViewHeader: UIView {
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
+        backgroundImageView.alpha = 0
         addSubview(backgroundImageView)
         
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -29,6 +30,7 @@ class EventListTableViewHeader: UIView {
         label.font = UIFont(name: "Montserrat-Medium", size: 18)
         label.textColor = .white
         label.numberOfLines = 0
+        label.alpha = 0
         addSubview(label)
         
         tgaLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -36,6 +38,7 @@ class EventListTableViewHeader: UIView {
         tgaLabel.font = UIFont(name: "Montserrat-Medium", size: 14)
         tgaLabel.textColor = .white
         tgaLabel.textAlignment = .right
+        tgaLabel.alpha = 0
         addSubview(tgaLabel)
         
         locationButton.translatesAutoresizingMaskIntoConstraints = false
@@ -63,11 +66,29 @@ class EventListTableViewHeader: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
+    func updateContent(city: City) {
+        label.text = city.quote
+        locationButton.title = "\(city.name ?? ""), \(city.state ?? "")"
+        UIView.animate(withDuration: 0.3) {
+            self.label.alpha = 1
+            self.backgroundImageView.alpha = 1
+        }
+    }
 }
 
 class LocationButton: UIButton {
     static let preferedHeight: CGFloat = 35.0
     static let preferedWidth: CGFloat = 190.0
+    var title: String? {
+        didSet {
+            locationLabel.text = title
+            UIView.animate(withDuration: 0.3) {
+                self.locationLabel.alpha = 1
+                self.locationIcon.alpha = 1
+            }
+        }
+    }
     let locationLabel = UILabel()
     private let locationIcon = UIImageView(image: UIImage(named: "locationIcon"))
     
@@ -82,13 +103,14 @@ class LocationButton: UIButton {
         layer.shadowRadius = 6
         
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        locationLabel.text = "New York City".uppercased()
         locationLabel.font = UIFont.inputFieldTitle()
         locationLabel.textColor = UIColor.primaryCTA()
+        locationLabel.alpha = 0
         addSubview(locationLabel)
         
         locationIcon.translatesAutoresizingMaskIntoConstraints = false
         locationIcon.contentMode = .center
+        locationIcon.alpha = 0
         addSubview(locationIcon)
         
         locationLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true

@@ -16,7 +16,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let dateFormatter = DateFormatter()
     private let maxEventsPerDay = 3
     private var featuredCollections = EventCollectionManager.featuredEventCollections()
-    private let carouselHeader = EventCollectionCarouselHeaderView(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
+    private let quoteHeader = EventListTableViewHeader(frame: CGRect(x: 0, y: 0, width: 300, height: 208))
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             eventsFRC.delegate = self
@@ -55,19 +55,14 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         view.addSubview(tableView)
         
         //carousel
-        carouselHeader.carousel.delegate = self
-        tableView.tableHeaderView = EventListTableViewHeader(frame: CGRect(x: 0, y: 0, width: 300, height: 208))
+        tableView.tableHeaderView = quoteHeader
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        NotificationCenter.default.addObserver(forName: .featuredUpdatedNotificationName, object: nil, queue: nil) { (notification: Notification) in
-            self.updateCarouselContent()
-        }
-        
-        updateCarouselContent()
+
+        updateCities()
         updateEvents()
     }
     
@@ -94,9 +89,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         present(myAccountNav, animated: true, completion: nil)
     }
     
-    func updateCarouselContent() {
-        self.featuredCollections = EventCollectionManager.featuredEventCollections()
-        self.carouselHeader.carousel.updateContent()
+    func updateCities() {
+        CityManager.updateAllCities(onSuccess: {
+            self.updateQuoteHeader()
+        }) { (error) in
+            print("Error updating cities")
+            self.updateQuoteHeader()
+        }
     }
     
     func updateEvents() {
@@ -122,6 +121,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    
+    func updateQuoteHeader() {
+        guard let selectedCity = CityManager.selectedCity() else {
+            return
+        }
+        quoteHeader.updateContent(city: selectedCity)
     }
     
     func updateNavButtons() {

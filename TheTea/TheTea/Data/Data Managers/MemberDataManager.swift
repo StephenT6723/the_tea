@@ -11,10 +11,8 @@ import CoreData
 import FBSDKLoginKit
 
 class MemberDataManager {
-    static let sharedInstance = MemberDataManager()
     static let minPasswordLength = 7
     static let minUsernameLength = 7
-    private init() {}
     
     //MARK: Actions
     
