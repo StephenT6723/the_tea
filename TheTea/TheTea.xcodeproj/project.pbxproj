@@ -58,16 +58,16 @@
 		93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */; };
 		93EAF8F1206DA621008B213F /* test_event_collections.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93EAF8F0206DA621008B213F /* test_event_collections.plist */; };
 		93FCC26521FB38D4009BBF8D /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */; };
+		93FCC28921FCD956009BBF8D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC28821FCD956009BBF8D /* ActivityIndicator.swift */; };
+		93FCC28D21FCD9C1009BBF8D /* UIViewController+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */; };
 		93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */; };
 		BAD55B60C5FB356A890F5EC1 /* Pods_TheTea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C427DA39FC9C6CDCDF2F0D /* Pods_TheTea.framework */; };
 		D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */; };
 		D70260D01FE97C5500D20BB8 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */; };
 		D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260D11FE97C7200D20BB8 /* TopPanelView.swift */; };
 		D70260D51FE97DE600D20BB8 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260D41FE97DE600D20BB8 /* RootViewController.swift */; };
-		D7103DB81F85277D00399263 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB71F85277D00399263 /* LoadingView.swift */; };
 		D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB91F85278400399263 /* SegmentedControl.swift */; };
 		D7103DBE1F8552AD00399263 /* EditMyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DBD1F8552AD00399263 /* EditMyAccountViewController.swift */; };
-		D7103DC01F85543200399263 /* LegacyInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DBF1F85543200399263 /* LegacyInputField.swift */; };
 		D7103DC21F85599300399263 /* AlertCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DC11F85599300399263 /* AlertCTA.swift */; };
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
@@ -129,15 +129,15 @@
 		93EAF8EC206D6C3D008B213F /* EventCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewController.swift; sourceTree = "<group>"; };
 		93EAF8F0206DA621008B213F /* test_event_collections.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = test_event_collections.plist; path = Misc/test_event_collections.plist; sourceTree = "<group>"; };
 		93FCC26421FB38D4009BBF8D /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
+		93FCC28821FCD956009BBF8D /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityIndicator.swift; path = "UI Elements/ActivityIndicator.swift"; sourceTree = "<group>"; };
+		93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+TheTea.swift"; path = "Helpers/UIViewController+TheTea.swift"; sourceTree = "<group>"; };
 		93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EventCollection+TTMethods.swift"; path = "Data/EventCollection+TTMethods.swift"; sourceTree = "<group>"; };
 		D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
 		D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEditViewController.swift; sourceTree = "<group>"; };
 		D70260D11FE97C7200D20BB8 /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopPanelView.swift; sourceTree = "<group>"; };
 		D70260D41FE97DE600D20BB8 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		D7103DB71F85277D00399263 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingView.swift; path = "UI Elements/LoadingView.swift"; sourceTree = "<group>"; };
 		D7103DB91F85278400399263 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedControl.swift; path = "UI Elements/SegmentedControl.swift"; sourceTree = "<group>"; };
 		D7103DBD1F8552AD00399263 /* EditMyAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMyAccountViewController.swift; sourceTree = "<group>"; };
-		D7103DBF1F85543200399263 /* LegacyInputField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LegacyInputField.swift; path = "UI Elements/LegacyInputField.swift"; sourceTree = "<group>"; };
 		D7103DC11F85599300399263 /* AlertCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertCTA.swift; path = "UI Elements/AlertCTA.swift"; sourceTree = "<group>"; };
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
@@ -226,6 +226,7 @@
 				9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */,
 				9337C7761F4F3F1400230829 /* UIFont+TheTea.swift */,
 				935D25C01F93CC1B007D25B8 /* Date+TheTea.swift */,
+				93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -258,12 +259,11 @@
 		935A659B1F3ECA1100E979E9 /* UI Elements */ = {
 			isa = PBXGroup;
 			children = (
+				93FCC28821FCD956009BBF8D /* ActivityIndicator.swift */,
 				D739CD271F704D8800E3779B /* PrimaryCTA.swift */,
 				D7103DC11F85599300399263 /* AlertCTA.swift */,
 				93CF653D21ED706200090B65 /* RadioButton.swift */,
-				D7103DB71F85277D00399263 /* LoadingView.swift */,
 				D7103DB91F85278400399263 /* SegmentedControl.swift */,
-				D7103DBF1F85543200399263 /* LegacyInputField.swift */,
 				93CF653B21EB0CF200090B65 /* InputField.swift */,
 				930E890D21E3E7C20013EC37 /* Carousel.swift */,
 				93CF651621E52C4700090B65 /* Event Cells */,
@@ -567,13 +567,14 @@
 				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
 				D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */,
 				93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */,
-				D7103DC01F85543200399263 /* LegacyInputField.swift in Sources */,
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
 				D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */,
 				D7103DC21F85599300399263 /* AlertCTA.swift in Sources */,
 				93E440AB21836DD2001E82E0 /* RepeatEditViewController.swift in Sources */,
+				93FCC28D21FCD9C1009BBF8D /* UIViewController+TheTea.swift in Sources */,
 				93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */,
+				93FCC28921FCD956009BBF8D /* ActivityIndicator.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */,
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
@@ -606,7 +607,6 @@
 				93399AF21F40E0A100ED02E9 /* MemberDataManager.swift in Sources */,
 				D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */,
 				93CF651C21E52CA000090B65 /* EventTableViewCell.swift in Sources */,
-				D7103DB81F85277D00399263 /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

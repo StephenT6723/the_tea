@@ -17,7 +17,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let maxEventsPerDay = 3
     private var featuredCollections = EventCollectionManager.featuredEventCollections()
     private let carouselHeader = EventCollectionCarouselHeaderView(frame: CGRect(x:0, y:0, width:300, height: EventCollectionCarouselHeaderView.preferedHeight))
-    private let noEventsView = NoEventsView(frame: CGRect())
     var eventsFRC = NSFetchedResultsController<Event>() {
         didSet {
             eventsFRC.delegate = self
@@ -27,6 +26,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if EventManager.eventsStale() {
+            EventManager.resetAllEvents()
+        }
 
         view.backgroundColor = .white
 
@@ -55,20 +58,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         carouselHeader.carousel.delegate = self
         tableView.tableHeaderView = EventListTableViewHeader(frame: CGRect(x: 0, y: 0, width: 300, height: 208))
         
-        noEventsView.translatesAutoresizingMaskIntoConstraints = false
-        noEventsView.button.addTarget(self, action: #selector(retryEventFetch), for: .touchUpInside)
-        noEventsView.alpha = 0
-        view.addSubview(noEventsView)
-        
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        noEventsView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        noEventsView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        noEventsView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        noEventsView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         NotificationCenter.default.addObserver(forName: .featuredUpdatedNotificationName, object: nil, queue: nil) { (notification: Notification) in
             self.updateCarouselContent()
@@ -107,27 +100,28 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func updateEvents() {
-        let eventRefreshNeeded = eventsFRC.fetchedObjects?.count == 0 || EventManager.eventsStale()
-        if eventRefreshNeeded {
-            noEventsView.alpha = 1
-        }
-        noEventsView.label.text = "FETCHING EVENTS"
-        noEventsView.showLoader(animated: false)
+        setLoaderVisible(true, animated: false)
+        navigationItem.rightBarButtonItem = nil
         EventManager.updateUpcomingEvents(onSuccess: {
             UIView.animate(withDuration: 0.3, animations: {
-                self.noEventsView.alpha = 0
+                self.setLoaderVisible(false, animated: true)
+                self.updateNavButtons()
             })
             self.tableView.reloadData()
         }) { (error) in
-            self.noEventsView.label.text = "UNABLE TO FETCH EVENTS"
-            self.noEventsView.showButton(animated: true)
             print("Error loading events")
-            //TODO: Display this error somewhere when the no events view is hidden.
+            let alert = UIAlertController(title: "Error", message: "Unable to load new events", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { action in
+                self.updateEvents()
+            }))
+            if self.eventsFRC.fetchedObjects?.count != 0 {
+                alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) in
+                    self.setLoaderVisible(false, animated: true)
+                    self.updateNavButtons()
+                }))
+            }
+            self.present(alert, animated: true, completion: nil)
         }
-    }
-    
-    @objc func retryEventFetch() {
-        updateEvents()
     }
     
     func updateNavButtons() {
@@ -359,63 +353,5 @@ class EventCollectionCarouselHeaderView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-}
-
-class NoEventsView: UIView {
-    let label = UILabel()
-    let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-    let button = PrimaryCTA(frame: CGRect())
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        backgroundColor = UIColor.white
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.headerOne()
-        label.textColor = UIColor.primaryCopy()
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        addSubview(label)
-        
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.startAnimating()
-        addSubview(activityIndicator)
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("RETRY", for: .normal)
-        button.alpha = 0
-        addSubview(button)
-        
-        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        
-        activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        activityIndicator.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 30).isActive = true
-        
-        button.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 170).isActive = true
-        button.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 34).isActive = true
-        button.heightAnchor.constraint(equalToConstant: PrimaryCTA.preferedHeight).isActive = true
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    func showButton(animated: Bool) {
-        UIView.animate(withDuration: animated ? 0.3 : 0) {
-            self.button.alpha = 1
-            self.activityIndicator.alpha = 0
-        }
-    }
-    
-    func showLoader(animated: Bool) {
-        UIView.animate(withDuration: animated ? 0.3 : 0) {
-            self.button.alpha = 0
-            self.activityIndicator.alpha = 1
-        }
     }
 }

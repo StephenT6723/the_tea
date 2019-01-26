@@ -230,6 +230,19 @@ class EventManager {
         return event
     }
     
+    class func resetAllEvents() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Event")
+        do {
+            let results = try CoreDataManager.sharedInstance.viewContext().fetch(fetchRequest)
+            for event in results {
+                guard let eventData = event as? Event else {continue}
+                CoreDataManager.sharedInstance.viewContext().delete(eventData)
+            }
+        } catch let error {
+            print("Resetting events failed :", error)
+        }
+    }
+    
     //MARK: Remote Data Updates
     
     class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
@@ -293,13 +306,11 @@ class EventManager {
     
     class func eventsStale() -> Bool {
         guard let lastFetchTime = UserDefaults.standard.object(forKey: "LastEventFetchTime") as? Date else {
-            print("FIRST FETCH")
+            //first fetch
             return true
         }
         
         let hoursSinceFetch = Calendar.current.dateComponents([.hour], from: lastFetchTime, to: Date()).hour ?? 0
-        
-        print("Hours Since Fetch: \(hoursSinceFetch)")
         return hoursSinceFetch > staleTime()
     }
     
