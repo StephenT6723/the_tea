@@ -27,6 +27,12 @@ class EventView: UIView {
             }
         }
     }
+    var image: UIImage? {
+        didSet {
+            imageView.image = image
+            updateImageView()
+        }
+    }
     private var imageViewContainer = UIView()
     private var activityIndicator = ActivityIndicator(frame: CGRect())
     private var imageView = UIImageView()

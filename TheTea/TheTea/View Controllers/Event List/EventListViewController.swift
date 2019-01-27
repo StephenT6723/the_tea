@@ -301,7 +301,11 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let event = eventsFRC.object(at: indexPath)
         
         let cellView = EventView(frame: CGRect())
-        cellView.imageURL = event.fullImageURL()
+        if let url = event.fullImageURL() {
+            cellView.imageURL = url
+        } else {
+            cellView.image = event.backupImage()
+        }
         let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
         cellView.update(title: event.name, subtitle: event.subtitle(), subtitleColor: subtitleColor)
         cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())

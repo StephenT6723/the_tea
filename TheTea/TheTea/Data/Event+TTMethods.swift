@@ -6,7 +6,7 @@
 //  Copyright © 2017 The Tea LLC. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 extension Event {
@@ -123,5 +123,29 @@ extension Event {
             return "PENDING"
         }
         return nil
+    }
+    
+    //MARK: Backup Images
+    
+    func backupImage() -> UIImage? {
+        guard let cityName = CityManager.selectedCity()?.name else {
+            return nil
+        }
+        
+        let imageName = "\(cityName.replacingOccurrences(of: " ", with: ""))Backup\(backupImageID())"
+        
+        return UIImage(named: imageName)
+    }
+    
+    func backupImageID() -> Int {
+        guard let lastChar = gayID?.last else {
+            return 1
+        }
+        
+        let number = Double("\(lastChar)")
+        let ratio = (number ?? 0)/10
+        let maxBackup: Double = 5
+        
+        return Int((maxBackup*ratio).rounded(.down))
     }
 }

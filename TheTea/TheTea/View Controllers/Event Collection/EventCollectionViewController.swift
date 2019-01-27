@@ -134,7 +134,11 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         let event = eventsFRC.object(at: indexPath)
-        cell.eventView.imageURL = event.fullImageURL()
+        if let url = event.fullImageURL() {
+            cell.eventView.imageURL = url
+        } else {
+            cell.eventView.image = event.backupImage()
+        }
         let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
         cell.eventView.update(title: event.name, subtitle: event.subtitle(), subtitleColor: subtitleColor)
         cell.eventView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
