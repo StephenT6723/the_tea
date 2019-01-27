@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCollectionCarouselDelegate, CarouselDelegate {
+class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, EventCollectionCarouselDelegate, CarouselDelegate, CitySelectViewControllerDelegate {
     private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
     private let timeFormatter = DateFormatter()
     private let weekdayFormatter = DateFormatter()
@@ -54,7 +54,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.clipsToBounds = false
         view.addSubview(tableView)
         
-        //carousel
+        //quote header
+        quoteHeader.locationButton.addTarget(self, action: #selector(locationButtonTapped), for: .touchUpInside)
         tableView.tableHeaderView = quoteHeader
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -156,6 +157,14 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         profileIconContainer.addSubview(profileButton)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileIconContainer)
+    }
+    
+    @objc func locationButtonTapped() {
+        let locationVC = CitySelectViewController()
+        locationVC.delegate = self
+        let nav = UINavigationController(rootViewController: locationVC)
+        nav.navigationBar.isTranslucent = false
+        present(nav, animated: true, completion: nil)
     }
     
     //MARK: Table View
@@ -312,6 +321,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let event = eventsFRC.object(at: indexPath)
         let detailVC = EventDetailViewController(event:event)
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    //MARK: City Select Delegate
+    
+    func citySelected(city: City) {
+        quoteHeader.updateContent(city: city)
     }
     
     //MARK: Helpers

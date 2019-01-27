@@ -12,19 +12,20 @@ import CoreData
 class CityManager {
     //MARK: Fetches
     
-    class func allCities() -> NSFetchedResultsController<City> {
+    class func allCities() -> [City] {
         let request = NSFetchRequest<City>(entityName:"City")
         request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: true)]
         let context = CoreDataManager.sharedInstance.viewContext()
-        let citiesFRC = NSFetchedResultsController<City>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        var results = [City]()
         
         do {
-            try citiesFRC.performFetch()
+            try results = context.fetch(request)
+            return results
         } catch {
-            fatalError("Failed to initialize FetchedResultsController: \(error)")
+            fatalError("Failed to fetch City Object: \(error)")
         }
         
-        return citiesFRC
+        return []
     }
     
     class func updateAllCities(onSuccess success:@escaping () -> Void,
@@ -65,7 +66,9 @@ class CityManager {
             return nil
         }
         
-        city.selected = name == "New York" ? true : false
+        if selectedCity() == nil {
+            city.selected = name == "New York" ? true : false
+        }
         
         //update city object
         city.update(name: name, quote: quote, state: state)
@@ -115,5 +118,19 @@ class CityManager {
         }
         
         return nil
+    }
+    
+    class func selectCity(city: City) {
+        guard let previousCity = selectedCity() else {
+            return
+        }
+        if previousCity == city {
+            return
+        }
+        previousCity.selected = false
+        
+        city.selected = true
+        
+        CoreDataManager.sharedInstance.saveContext()
     }
 }

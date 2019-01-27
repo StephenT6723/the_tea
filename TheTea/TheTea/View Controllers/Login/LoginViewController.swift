@@ -23,7 +23,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     private var selectedType:AuthType? = .signIn
     
-    private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground"))
+    private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground2"))
     private let gradientLayer = CAGradientLayer()
     
     private let logoTopSpacer = UIView()
@@ -274,6 +274,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         gradientLayer.frame = view.frame
     }
+    
     //MARK: Actions
     
     @objc func modeChangeButtonTouched() {

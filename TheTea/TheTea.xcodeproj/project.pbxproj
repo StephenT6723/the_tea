@@ -62,12 +62,13 @@
 		93FCC28D21FCD9C1009BBF8D /* UIViewController+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */; };
 		93FCC28F21FCEB5C009BBF8D /* CityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC28E21FCEB5C009BBF8D /* CityManager.swift */; };
 		93FCC29121FCEFDF009BBF8D /* City+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC29021FCEFDF009BBF8D /* City+TTMethods.swift */; };
+		93FCC29421FCFB24009BBF8D /* CitySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC29321FCFB24009BBF8D /* CitySelectViewController.swift */; };
+		93FCC29621FD0035009BBF8D /* SingleSelectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FCC29521FD0035009BBF8D /* SingleSelectList.swift */; };
 		93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */; };
 		BAD55B60C5FB356A890F5EC1 /* Pods_TheTea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C427DA39FC9C6CDCDF2F0D /* Pods_TheTea.framework */; };
 		D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */; };
 		D70260D01FE97C5500D20BB8 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */; };
 		D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260D11FE97C7200D20BB8 /* TopPanelView.swift */; };
-		D70260D51FE97DE600D20BB8 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260D41FE97DE600D20BB8 /* RootViewController.swift */; };
 		D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB91F85278400399263 /* SegmentedControl.swift */; };
 		D7103DBE1F8552AD00399263 /* EditMyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DBD1F8552AD00399263 /* EditMyAccountViewController.swift */; };
 		D7103DC21F85599300399263 /* AlertCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DC11F85599300399263 /* AlertCTA.swift */; };
@@ -135,11 +136,12 @@
 		93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+TheTea.swift"; path = "Helpers/UIViewController+TheTea.swift"; sourceTree = "<group>"; };
 		93FCC28E21FCEB5C009BBF8D /* CityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CityManager.swift; path = "Data/Data Managers/CityManager.swift"; sourceTree = "<group>"; };
 		93FCC29021FCEFDF009BBF8D /* City+TTMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "City+TTMethods.swift"; path = "Data/City+TTMethods.swift"; sourceTree = "<group>"; };
+		93FCC29321FCFB24009BBF8D /* CitySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySelectViewController.swift; sourceTree = "<group>"; };
+		93FCC29521FD0035009BBF8D /* SingleSelectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SingleSelectList.swift; path = "UI Elements/SingleSelectList.swift"; sourceTree = "<group>"; };
 		93FD6F8520740865009295A5 /* EventCollection+TTMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EventCollection+TTMethods.swift"; path = "Data/EventCollection+TTMethods.swift"; sourceTree = "<group>"; };
 		D70260CD1FE97C5400D20BB8 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
 		D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEditViewController.swift; sourceTree = "<group>"; };
 		D70260D11FE97C7200D20BB8 /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopPanelView.swift; sourceTree = "<group>"; };
-		D70260D41FE97DE600D20BB8 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		D7103DB91F85278400399263 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedControl.swift; path = "UI Elements/SegmentedControl.swift"; sourceTree = "<group>"; };
 		D7103DBD1F8552AD00399263 /* EditMyAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMyAccountViewController.swift; sourceTree = "<group>"; };
 		D7103DC11F85599300399263 /* AlertCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertCTA.swift; path = "UI Elements/AlertCTA.swift"; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				D7103DB91F85278400399263 /* SegmentedControl.swift */,
 				93CF653B21EB0CF200090B65 /* InputField.swift */,
 				930E890D21E3E7C20013EC37 /* Carousel.swift */,
+				93FCC29521FD0035009BBF8D /* SingleSelectList.swift */,
 				93CF651621E52C4700090B65 /* Event Cells */,
 			);
 			name = "UI Elements";
@@ -336,18 +339,18 @@
 			path = "Event Collection";
 			sourceTree = "<group>";
 		};
-		D70260D31FE97DB100D20BB8 /* Root */ = {
+		93FCC29221FCFAFF009BBF8D /* City Selection */ = {
 			isa = PBXGroup;
 			children = (
-				D70260D41FE97DE600D20BB8 /* RootViewController.swift */,
+				93FCC29321FCFB24009BBF8D /* CitySelectViewController.swift */,
 			);
-			path = Root;
+			path = "City Selection";
 			sourceTree = "<group>";
 		};
 		D70260D61FE97E5A00D20BB8 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D70260D31FE97DB100D20BB8 /* Root */,
+				93FCC29221FCFAFF009BBF8D /* City Selection */,
 				D70260D91FE97ECB00D20BB8 /* Event List */,
 				93EAF8EB206D6C15008B213F /* Event Collection */,
 				D70260DB1FE97EFF00D20BB8 /* Event Edit */,
@@ -583,6 +586,7 @@
 				93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */,
 				93FCC28921FCD956009BBF8D /* ActivityIndicator.swift in Sources */,
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
+				93FCC29421FCFB24009BBF8D /* CitySelectViewController.swift in Sources */,
 				93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */,
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				93262AA621F0FAB000210A9F /* MyProfileRootViewController.swift in Sources */,
@@ -601,7 +605,6 @@
 				93CF651921E52C7100090B65 /* EventView.swift in Sources */,
 				933956E31F4400EB00F1AEE4 /* EventLocation.swift in Sources */,
 				93FD6F8620740865009295A5 /* EventCollection+TTMethods.swift in Sources */,
-				D70260D51FE97DE600D20BB8 /* RootViewController.swift in Sources */,
 				938906821F3E891900BBB88C /* EventListViewController.swift in Sources */,
 				93FCC29121FCEFDF009BBF8D /* City+TTMethods.swift in Sources */,
 				933956E71F440EA600F1AEE4 /* MyAccountViewController.swift in Sources */,
@@ -615,6 +618,7 @@
 				93399AF21F40E0A100ED02E9 /* MemberDataManager.swift in Sources */,
 				D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */,
 				93CF651C21E52CA000090B65 /* EventTableViewCell.swift in Sources */,
+				93FCC29621FD0035009BBF8D /* SingleSelectList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

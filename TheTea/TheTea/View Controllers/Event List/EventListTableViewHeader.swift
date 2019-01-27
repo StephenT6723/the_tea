@@ -72,6 +72,7 @@ class EventListTableViewHeader: UIView {
         locationButton.title = "\(city.name ?? ""), \(city.state ?? "")"
         UIView.animate(withDuration: 0.3) {
             self.label.alpha = 1
+            self.tgaLabel.alpha = 1
             self.backgroundImageView.alpha = 1
         }
     }
@@ -82,7 +83,7 @@ class LocationButton: UIButton {
     static let preferedWidth: CGFloat = 190.0
     var title: String? {
         didSet {
-            locationLabel.text = title
+            locationLabel.text = title?.uppercased()
             UIView.animate(withDuration: 0.3) {
                 self.locationLabel.alpha = 1
                 self.locationIcon.alpha = 1
@@ -116,8 +117,8 @@ class LocationButton: UIButton {
         locationLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         locationLabel.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -6).isActive = true
         
-        locationIcon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -1).isActive = true
-        locationIcon.leadingAnchor.constraint(equalTo: locationLabel.trailingAnchor, constant: 4).isActive = true
+        locationIcon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0).isActive = true
+        locationIcon.leadingAnchor.constraint(equalTo: locationLabel.trailingAnchor, constant: 7).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
