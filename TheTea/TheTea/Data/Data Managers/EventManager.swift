@@ -117,7 +117,7 @@ class EventManager {
         return nil
     }
     
-    //MARK: Fetch
+    //MARK: Updates
     
     class func updateUpcomingEvents(onSuccess success:@escaping () -> Void,
                                     onFailure failure: @escaping (_ error: Error?) -> Void)  {
@@ -131,6 +131,11 @@ class EventManager {
             }
             failure(error)
         }
+    }
+    
+    class func updateEvent(event: Event,
+                           onSuccess success:@escaping () -> Void,
+                           onFailure failure: @escaping (_ error: Error?) -> Void)  {
     }
     
     //MARK: Local Data Updates
@@ -153,6 +158,12 @@ class EventManager {
         //find or create event object
         let event = self.event(gayID: gayID) ?? createLocalEvent(gayID: gayID)
         
+        updateLocalEvent(event: event, with: data, overrideImages: overrideImages, overrideHosts: overrideHosts, overrideHotness: overrideHotness)
+        
+        return event
+    }
+    
+    class func updateLocalEvent(event: Event, with data: [String: Any], overrideImages: Bool, overrideHosts: Bool, overrideHotness: Bool) {
         //parse data
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
@@ -161,12 +172,12 @@ class EventManager {
         
         guard let name = data[Event.nameKey] as? String, let startTimeString = data[Event.startTimeKey] as? String else {
             print("TRIED TO CREATE EVENT WITHOUT REQUIRED DATA")
-            return nil
+            return
         }
         
         guard let startTime = dateFormatter.date(from: startTimeString) else {
             print("UNABLE TO PARSE START TIME: \(startTimeString)")
-            return nil
+            return
         }
         
         var location: EventLocation?
@@ -207,7 +218,7 @@ class EventManager {
             for hostData in hosts {
                 guard let id = hostData[Member.tgaIDKey], let name = hostData[Member.nameKey] else {
                     print("MEMBER FOUND WITH NO ID/NAME")
-                    return nil
+                    return
                 }
                 let member = MemberDataManager.updateLocalMember(tgaID: id, name: name)
                 hostObjects.append(member)
@@ -218,7 +229,6 @@ class EventManager {
         
         //update event object
         event.update(name: name, hosts: hostObjects, hotness: hotness, dateCreated: dateFormatter.date(from:dateCreatedString) ?? Date(), startTime: startTime, endTime: dateFormatter.date(from:endTimeString), about: data[Event.aboutKey] as? String, location: location, price: price, ticketURL:ticketURL, canceled: canceled, published: published, repeats: repeatRules, repeatingEventId: repeatingEventId, imageURL: imageURL)
-        return event
     }
     
     private class func createLocalEvent(gayID: String) -> Event {
@@ -315,7 +325,7 @@ class EventManager {
     
     class func staleTime() -> Int {
         //in hours
-        return 24
+        return 6
     }
     
     class func updateStaleTime() {
