@@ -31,13 +31,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     private let logoImageView = UIImageView(image: UIImage(named: "logoWhite"))
     private let logoBottomSpacer = UIView()
     
-    private let emailErrorLabel = UILabel()
     private let emailInputField = InputField(frame: CGRect(x: 0, y: 0, width: 0, height: 500))
     private let usernameInputField = InputField(frame: CGRect())
     private let passwordInputField = InputField(frame: CGRect(x: 0, y: 0, width: 300, height: 56))
     private let confirmPasswordInputField = InputField(frame: CGRect())
-    private let usernameErrorLabel = UILabel()
-    private let passwordErrorLabel = UILabel()
     
     private let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     
@@ -86,12 +83,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         logoBottomSpacer.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoBottomSpacer)
         
-        emailErrorLabel.translatesAutoresizingMaskIntoConstraints = false
-        emailErrorLabel.numberOfLines = 0
-        emailErrorLabel.font = UIFont.body()
-        emailErrorLabel.textColor = .red
-        //view.addSubview(emailErrorLabel)
-        
         emailInputField.translatesAutoresizingMaskIntoConstraints = false
         emailInputField.title = "EMAIL ADDRESS"
         emailInputField.textField.autocapitalizationType = .none
@@ -113,13 +104,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         usernameInputField.deSelectedColor = .white
         usernameInputField.textField.textColor = .white
         usernameInputField.textField.textColor = .white
+        usernameInputField.textField.tintColor = .white
         view.insertSubview(usernameInputField, belowSubview: emailInputField)
-        
-        usernameErrorLabel.translatesAutoresizingMaskIntoConstraints = false
-        usernameErrorLabel.numberOfLines = 0
-        usernameErrorLabel.font = UIFont.body()
-        usernameErrorLabel.textColor = .red
-        //view.addSubview(usernameErrorLabel)
         
         passwordInputField.translatesAutoresizingMaskIntoConstraints = false
         passwordInputField.title = "PASSWORD"
@@ -146,12 +132,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         confirmPasswordInputField.textField.tintColor = .white
         view.insertSubview(confirmPasswordInputField, belowSubview: passwordInputField)
         
-        passwordErrorLabel.translatesAutoresizingMaskIntoConstraints = false
-        passwordErrorLabel.numberOfLines = 0
-        passwordErrorLabel.font = UIFont.body()
-        passwordErrorLabel.textColor = .red
-        //view.addSubview(passwordErrorLabel)
-        
         termsRadioButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(termsRadioButton)
         
@@ -166,8 +146,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
             ])
         let textRange = NSMakeRange(13, 18)
         termsAttrString.addAttribute(.link, value: "", range: textRange)
-        //termsAttrString.addAttribute(NSAttributedString.Key.underlineStyle , value: NSUnderlineStyle.single.rawValue, range: textRange)
-        
         termsTextView.attributedText = termsAttrString
         termsTextView.linkTextAttributes = [NSAttributedString.Key.font: termsFont, NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue]
         termsTextView.font = UIFont.listSubTitle()
@@ -187,15 +165,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         view.addSubview(submitButton)
         
         modeChangeButton.translatesAutoresizingMaskIntoConstraints = false
-        modeChangeButton.setTitle("Already have an account?  Log In", for: .normal)
+        //modeChangeButton.setTitle("Already have an account?  Log In", for: .normal)
         modeChangeButton.setTitleColor(.white, for: .normal)
         modeChangeButton.titleLabel?.font = UIFont.cta()
         modeChangeButton.addTarget(self, action: #selector(modeChangeButtonTouched), for: .touchUpInside)
         view.addSubview(modeChangeButton)
-        
-//        emailErrorLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-//        emailErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-//        emailErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -226,10 +200,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         usernameInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
         usernameInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
-//        usernameErrorLabel.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 10).isActive = true
-//        usernameErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-//        usernameErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        
         passwordTopConstraint = passwordInputField.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 24)
         passwordTopConstraint.isActive = true
         passwordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
@@ -241,12 +211,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         confirmPasswordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
         confirmPasswordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
         confirmPasswordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        
-        //passwordErrorLabel.topAnchor.constraint(equalTo: confirmPasswordInputField.bottomAnchor, constant: 10).isActive = true
-        //passwordErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        //passwordErrorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        
-        
         
         activityIndicator.centerXAnchor.constraint(equalTo: submitButton.centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor).isActive = true
@@ -269,14 +233,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         modeChangeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
         modeChangeButton.heightAnchor.constraint(equalToConstant: 15).isActive = true
         
-        //DEBUG
         view.setNeedsLayout()
         view.layoutIfNeeded()
-        //SETUP
         
-        //updateEmailError(text: "", animated: false)
-        //updateUsernameError(text: "", animated: false)
-        //updatePasswordError(text: "", animated: false)
+        //SETUP
         updateSubmitButton()
         updateLoader(visible: false, animated: false)
         modeChanged(animated: false)
@@ -303,9 +263,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     }
     
     @objc func modeChanged(animated: Bool) {
-        updateEmailError(text: "", animated: true)
-        updateUsernameError(text: "", animated: true)
-        updatePasswordError(text: "", animated: true)
         if selectedType == .register {
             submitButton.setTitle("SIGN UP", for: .normal)
             modeChangeButton.setTitle("Already have an account? Log In", for: .normal)
@@ -376,18 +333,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
             emailError = "Please enter a valid e-mail address"
         }
         if !usernameValid {
-            usernameError = "Your username must be at least \(MemberDataManager.minUsernameLength) characters"
+            usernameError = "Must be at least \(MemberDataManager.minUsernameLength) characters"
         }
         if !passwordsMatch {
             passwordError = "Your passwords do not match"
         }
         if !passwordValid {
-            passwordError = "Your password must be at least \(MemberDataManager.minPasswordLength) characters"
+            passwordError = "Must be at least \(MemberDataManager.minPasswordLength) characters"
         }
         
-        //updateEmailError(text: emailError, animated: true)
-        //updateUsernameError(text: usernameError, animated: true)
-        //updatePasswordError(text: passwordError, animated: true)
+        updateEmailError(text: emailError, animated: true)
+        updateUsernameError(text: usernameError, animated: true)
+        updatePasswordError(text: passwordError, animated: true)
         
         if emailValid && usernameValid && passwordsMatch && passwordValid && termsAccepted {
             updateLoader(visible: true, animated: true)
@@ -429,61 +386,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     //MARK: Helpers
     
     func updateEmailError(text: String, animated: Bool) {
-        if text.count > 0 {
-            emailTopConstraint.constant = 10
-            emailErrorLabel.text = text
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.emailErrorLabel.alpha = 1
-                
-                self.view.layoutIfNeeded()
-            })
-        } else {
-            emailTopConstraint.constant =  emailErrorLabel.bounds.height * -1
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.emailErrorLabel.alpha = 0
-                
-                self.view.layoutIfNeeded()
-            }) { (complete: Bool) in
-                self.emailErrorLabel.text = ""
-                self.emailTopConstraint.constant =  0
-            }
-        }
+        emailInputField.showError(text: text)
     }
     
     func updateUsernameError(text: String, animated: Bool) {
-        if text.count > 0 {
-            passwordTopConstraint.constant = 60
-            usernameErrorLabel.text = text
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.usernameErrorLabel.alpha = 1
-                
-                self.view.layoutIfNeeded()
-            })
-        } else {
-            passwordTopConstraint.constant =  24
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.usernameErrorLabel.alpha = 0
-                
-                self.view.layoutIfNeeded()
-            }) { (complete: Bool) in
-                self.usernameErrorLabel.text = ""
-            }
-        }
+        usernameInputField.showError(text: text)
     }
     
     func updatePasswordError(text: String, animated: Bool) {
-        if text.count > 0 {
-            passwordErrorLabel.text = text
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.passwordErrorLabel.alpha = 1
-            })
-        } else {
-            UIView.animate(withDuration: animated ? 0.3 : 0.0, animations: {
-                self.passwordErrorLabel.alpha = 0
-            }) { (complete: Bool) in
-                self.passwordErrorLabel.text = ""
-            }
-        }
+        passwordInputField.showError(text: text)
     }
     
     func reset() {

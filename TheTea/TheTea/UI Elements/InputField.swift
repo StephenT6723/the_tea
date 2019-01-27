@@ -47,6 +47,9 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
             divider.backgroundColor = deSelectedColor
         }
     }
+    private let errorIconContainer = UIView()
+    private let errorIcon = UIImageView(image: UIImage(named: "errorIcon"))
+    private let errorLabel = UILabel()
     private let divider = UIView()
     private var dividerHeightConstraint = NSLayoutConstraint()
     private var priceWidthConstraint = NSLayoutConstraint()
@@ -100,6 +103,22 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         priceLabel.text = "$"
         addSubview(priceLabel)
         
+        errorIconContainer.translatesAutoresizingMaskIntoConstraints = false
+        errorIconContainer.backgroundColor = UIColor(red:1, green:0.42, blue:0.42, alpha:1)
+        errorIconContainer.layer.cornerRadius = 10
+        errorIconContainer.alpha = 0
+        addSubview(errorIconContainer)
+        
+        errorIcon.translatesAutoresizingMaskIntoConstraints = false
+        errorIcon.contentMode = .scaleAspectFit
+        errorIconContainer.addSubview(errorIcon)
+        
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.font = UIFont.inputFieldTitle()
+        errorLabel.textColor = .white
+        errorLabel.alpha = 0
+        addSubview(errorLabel)
+        
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.inputField()
         textField.textColor = UIColor.primaryCopy()
@@ -145,6 +164,18 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         priceWidthConstraint.isActive = true
         priceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
         
+        errorIconContainer.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        errorIconContainer.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        errorIconContainer.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        errorIconContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+        
+        errorIcon.centerXAnchor.constraint(equalTo: errorIconContainer.centerXAnchor).isActive = true
+        errorIcon.centerYAnchor.constraint(equalTo: errorIconContainer.centerYAnchor).isActive = true
+        
+        errorLabel.leadingAnchor.constraint(equalTo: errorIconContainer.trailingAnchor, constant: 10).isActive = true
+        errorLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        errorLabel.centerYAnchor.constraint(equalTo: errorIconContainer.centerYAnchor).isActive = true
+        
         textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -4).isActive = true
         textView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 4).isActive = true
         textView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6).isActive = true
@@ -174,6 +205,25 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
             self.selectedTitleLabel.alpha = selected ? 1 : 0
             self.divider.backgroundColor = selected ? self.selectedColor : self.deSelectedColor
             self.layoutIfNeeded()
+        }
+    }
+    
+    func showError(text: String) {
+        if text.count == 0 {
+            return
+        }
+        
+        errorLabel.text = text
+        UIView.animate(withDuration: 0.3, animations: {
+            self.errorIconContainer.alpha = 1
+            self.errorLabel.alpha = 1
+            self.textField.alpha = 0
+        }) { (complete) in
+            UIView.animate(withDuration: 0.3, delay: 2, options: .curveEaseInOut, animations: {
+                self.errorIconContainer.alpha = 0
+                self.errorLabel.alpha = 0
+                self.textField.alpha = 1
+            }, completion: nil)
         }
     }
     
