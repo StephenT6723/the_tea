@@ -131,13 +131,13 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         if !MemberDataManager.isLoggedIn() {
             presentLoginView()
         } else {
-            updateLoader(visible: true, animated: false)
+            setLoaderVisible(true, animated: false)
             
             MemberDataManager.fetchLoggedInMember(onSuccess: {
                 self.updateContent()
-                self.updateLoader(visible: false, animated: true)
+                self.setLoaderVisible(false, animated: true)
             }) { (error) in
-                self.updateLoader(visible: false, animated: true)
+                self.setLoaderVisible(false, animated: true)
                 print("ERROR UPDATING LOGGED IN MEMBER: \(error?.localizedDescription ?? "")")
             }
         }
@@ -230,16 +230,16 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
             self.present(alert, animated: true, completion: nil)
         }
         
-        self.updateLoader(visible: true, animated: true)
+        setLoaderVisible(true, animated: true)
         MemberDataManager.updateMember(name: name, email: email, facebookID: "", instagram: "", twitter: "", about: "", onSuccess: {
-            self.updateLoader(visible: false, animated: true)
+            self.setLoaderVisible(false, animated: true)
         }) { (error) in
             let alert = UIAlertController(title: "Error", message: "\(error?.localizedDescription ?? "We were unable to update your profile. Please try again.")", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
                 
             }))
             self.present(alert, animated: true, completion: nil)
-            self.updateLoader(visible: false, animated: true)
+            self.setLoaderVisible(false, animated: true)
             print(error?.localizedDescription ?? "Unable to save member")
         }
     }
@@ -283,18 +283,6 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         }
         
         return member.name != usernameInputField.textField.text ?? "" || member.email != emailInputField.textField.text ?? ""
-    }
-    
-    func updateLoader(visible: Bool, animated: Bool) {
-        /*
-        UIView.animate(withDuration: animated ? 0.3 : 0) {
-            self.submitButton.alpha = visible ? 0 : 1
-            if visible {
-                self.activityIndicator.startAnimating()
-            } else {
-                self.activityIndicator.stopAnimating()
-            }
-        } */
     }
 }
 
