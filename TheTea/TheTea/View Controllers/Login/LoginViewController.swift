@@ -366,6 +366,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         let usernameValid = MemberDataManager.isValidUsername(username: username) || selectedType == .signIn
         let passwordsMatch = passwordInputField.textField.text ?? "" == confirmPasswordInputField.textField.text ?? "" || selectedType == .signIn
         let passwordValid = MemberDataManager.isValidPassword(password: password)
+        let termsAccepted = termsRadioButton.isSelected || selectedType == .signIn
         
         var emailError = ""
         var usernameError = ""
@@ -388,7 +389,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         //updateUsernameError(text: usernameError, animated: true)
         //updatePasswordError(text: passwordError, animated: true)
         
-        if emailValid && usernameValid && passwordsMatch && passwordValid {
+        if emailValid && usernameValid && passwordsMatch && passwordValid && termsAccepted {
             updateLoader(visible: true, animated: true)
             if selectedType == .signIn {
                 MemberDataManager.loginMember(email: email, password: password, onSuccess: {
