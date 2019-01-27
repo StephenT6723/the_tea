@@ -18,10 +18,10 @@ protocol LoginViewDelegate {
     func loginSucceeded()
 }
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var delegate: LoginViewDelegate?
     
-    private var selectedType:AuthType? = .signIn
+    private var selectedType:AuthType? = .register
     
     private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground2"))
     private let gradientLayer = CAGradientLayer()
@@ -48,7 +48,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private var confirmPasswordTopConstraint = NSLayoutConstraint()
     
     private let termsRadioButton = RadioButton(frame: CGRect())
-    private let termsLabel = UILabel()
+    private let termsTextView = UITextView()
     private let submitButton = UIButton()
     private let modeChangeButton = UIButton()
     
@@ -123,6 +123,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         passwordInputField.translatesAutoresizingMaskIntoConstraints = false
         passwordInputField.title = "PASSWORD"
+        passwordInputField.ctaButton.addTarget(self, action: #selector(forgotPasswordTouched), for: .touchUpInside)
         passwordInputField.textField.isSecureTextEntry = true
         passwordInputField.textField.autocapitalizationType = .none
         passwordInputField.textField.returnKeyType = .done
@@ -154,11 +155,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         termsRadioButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(termsRadioButton)
         
-        termsLabel.translatesAutoresizingMaskIntoConstraints = false
-        termsLabel.text = "I agree with terms & conditions"
-        termsLabel.textColor = .white
-        termsLabel.font = UIFont.listSubTitle()
-        view.addSubview(termsLabel)
+        termsTextView.translatesAutoresizingMaskIntoConstraints = false
+        termsTextView.isEditable = false
+        termsTextView.isScrollEnabled = false
+        termsTextView.backgroundColor = .clear
+        let termsString = "I agree with terms & conditions"
+        guard let termsFont = UIFont.listSubTitle() else { return }
+        let termsAttrString = NSMutableAttributedString(string: termsString, attributes: [
+            NSAttributedString.Key.font: termsFont, NSAttributedString.Key.foregroundColor: UIColor.white
+            ])
+        let textRange = NSMakeRange(13, 18)
+        termsAttrString.addAttribute(.link, value: "", range: textRange)
+        //termsAttrString.addAttribute(NSAttributedString.Key.underlineStyle , value: NSUnderlineStyle.single.rawValue, range: textRange)
+        
+        termsTextView.attributedText = termsAttrString
+        termsTextView.linkTextAttributes = [NSAttributedString.Key.font: termsFont, NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue]
+        termsTextView.font = UIFont.listSubTitle()
+        termsTextView.delegate = self
+        view.addSubview(termsTextView)
         
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.startAnimating()
@@ -242,8 +256,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         termsRadioButton.widthAnchor.constraint(equalToConstant: RadioButton.preferedSize).isActive = true
         termsRadioButton.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -32).isActive = true
         
-        termsLabel.centerYAnchor.constraint(equalTo: termsRadioButton.centerYAnchor).isActive = true
-        termsLabel.leadingAnchor.constraint(equalTo: termsRadioButton.trailingAnchor, constant: 8).isActive = true
+        termsTextView.centerYAnchor.constraint(equalTo: termsRadioButton.centerYAnchor).isActive = true
+        termsTextView.leadingAnchor.constraint(equalTo: termsRadioButton.trailingAnchor, constant: 8).isActive = true
         
         submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
         submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
@@ -295,6 +309,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if selectedType == .register {
             submitButton.setTitle("SIGN UP", for: .normal)
             modeChangeButton.setTitle("Already have an account? Log In", for: .normal)
+            passwordInputField.cta = ""
             view.layoutIfNeeded()
             
             confirmPasswordTopConstraint.constant = 24
@@ -304,13 +319,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             usernameInputField.alpha = 1
             
             UIView.animate(withDuration: animated ? 0.3 : 0, animations: {
-                self.termsLabel.alpha = 1
+                self.termsTextView.alpha = 1
                 self.termsRadioButton.alpha = 1
                 self.view.layoutIfNeeded()
             })
         } else {
             submitButton.setTitle("LOG IN", for: .normal)
             modeChangeButton.setTitle("Dont have an account? Sign Up", for: .normal)
+            passwordInputField.cta = "Forgot?"
             view.layoutIfNeeded()
             
             confirmPasswordTopConstraint.constant = -1 * textFieldHeight
@@ -320,7 +336,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.confirmPasswordInputField.alpha = 0
                 self.usernameInputField.alpha = 0
                 self.view.layoutIfNeeded()
-                self.termsLabel.alpha = 0
+                self.termsTextView.alpha = 0
                 self.termsRadioButton.alpha = 0
             }) { (complete: Bool) in
                 
@@ -397,6 +413,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @objc func forgotPasswordTouched() {
+        //TODO: Connect Functionality
+        print("FORGOT PASSWORD")
+    }
+    
     func updateLoader(visible: Bool, animated: Bool) {
         UIView.animate(withDuration: animated ? 0.3 : 0) {
             self.submitButton.alpha = visible ? 0 : 1
@@ -470,5 +491,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         usernameInputField.textField.text = ""
         passwordInputField.textField.text = ""
         confirmPasswordInputField.textField.text = ""
+    }
+    //MARK: Textview Delegate
+    
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        let termsVC = TermsViewController()
+        let termsNav = UINavigationController(rootViewController: termsVC)
+        termsNav.navigationBar.isTranslucent = false
+        present(termsNav, animated: true, completion: nil)
+        return false
     }
 }
