@@ -290,6 +290,7 @@ class MyProfileEventButton: UIControl {
     let button = UIButton()
     let titleLabel = UILabel()
     let label = UILabel()
+    private let arrowImageView = UIImageView(image:UIImage(named: "arrow"))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -304,6 +305,10 @@ class MyProfileEventButton: UIControl {
         label.textColor = UIColor.primaryCopy()
         addSubview(label)
         
+        arrowImageView.translatesAutoresizingMaskIntoConstraints = false
+        arrowImageView.contentMode = .scaleAspectFill
+        addSubview(arrowImageView)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         addSubview(button)
         
@@ -312,6 +317,9 @@ class MyProfileEventButton: UIControl {
         
         label.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+        
+        arrowImageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        arrowImageView.centerYAnchor.constraint(equalTo: label.centerYAnchor).isActive = true
         
         button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         button.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
