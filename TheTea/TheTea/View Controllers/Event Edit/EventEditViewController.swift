@@ -17,6 +17,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let gradientLayer = CAGradientLayer()
     
     private let scrollView = UIScrollView()
+    private var scrollViewBottomConstraint = NSLayoutConstraint()
     
     private let imageSelectButton = EventEditImageSelectButton(frame: CGRect())
     
@@ -53,9 +54,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     private let requiredFieldLabel = UILabel()
     
-    private let createContainer = UIView()
     private let activityIndicator = UIActivityIndicatorView(style: .gray)
-    private let createButton = PrimaryCTA(frame: CGRect())
+    private let createButton = UIButton()
     
     private let aboutTextViewPlaceholder = "MORE INFO"
     private let textFieldHeight: CGFloat = 56.0
@@ -134,6 +134,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         dateTextField.textField.tintColor = .clear
         datePicker.minimumDate = Date()
         datePicker.datePickerMode = .date
+        let dateDoneBar = UIToolbar()
+        dateDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
+        dateDoneBar.backgroundColor = .white
+        let dateDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        dateDoneBar.setItems([dateDoneButton], animated: false)
+        dateTextField.textField.inputAccessoryView = dateDoneBar
         datePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         dateTextField.textField.inputView = datePicker
         scrollView.addSubview(dateTextField)
@@ -146,6 +152,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         startTimeTextField.deSelectedColor = .white
         startTimeTextField.ctaButton.addTarget(self, action: #selector(addEndTimeTouched), for: .touchUpInside)
         startTimeTextField.textField.tintColor = .clear
+        let startTimeDoneBar = UIToolbar()
+        startTimeDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
+        startTimeDoneBar.backgroundColor = .white
+        let startTimeDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        startTimeDoneBar.setItems([startTimeDoneButton], animated: false)
+        startTimeTextField.textField.inputAccessoryView = startTimeDoneBar
         startTimePicker.datePickerMode = .time
         startTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         startTimePicker.minuteInterval = 15
@@ -161,6 +173,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         endTimeTextField.alpha = 0
         endTimeTextField.xIcon.alpha = 1
         endTimeTextField.xIcon.addTarget(self, action: #selector(hideEndTimeTouched), for: .touchUpInside)
+        let endTimeDoneBar = UIToolbar()
+        endTimeDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
+        endTimeDoneBar.backgroundColor = .white
+        let endTimeDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        endTimeDoneBar.setItems([endTimeDoneButton], animated: false)
+        endTimeTextField.textField.inputAccessoryView = endTimeDoneBar
         endTimePicker.datePickerMode = .time
         endTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         endTimePicker.minuteInterval = 15
@@ -201,6 +219,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         aboutTextView.type = .textView
         aboutTextView.textView.textColor = .white
         aboutTextView.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
+        let moreInfoDoneBar = UIToolbar()
+        moreInfoDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
+        moreInfoDoneBar.backgroundColor = .white
+        let moreInfoDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        moreInfoDoneBar.setItems([moreInfoDoneButton], animated: false)
+        aboutTextView.textView.inputAccessoryView = moreInfoDoneBar
         scrollView.addSubview(aboutTextView)
         
         priceInputField.translatesAutoresizingMaskIntoConstraints = false
@@ -213,6 +237,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         priceInputField.textField.textColor = .white
         priceInputField.priceLabel.textColor = .white
         priceInputField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
+        let priceDoneBar = UIToolbar()
+        priceDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
+        priceDoneBar.backgroundColor = .white
+        let priceDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        priceDoneBar.setItems([priceDoneButton], animated: false)
+        priceInputField.textField.inputAccessoryView = priceDoneBar
         scrollView.addSubview(priceInputField)
         
         ticketURLTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -223,6 +253,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         ticketURLTextField.textField.textColor = .white
         ticketURLTextField.selectedColor = .white
         ticketURLTextField.deSelectedColor = .white
+        ticketURLTextField.textField.returnKeyType = .done
         ticketURLTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(ticketURLTextField)
         
@@ -297,39 +328,29 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         requiredFieldLabel.topAnchor.constraint(equalTo: ticketURLTextField.bottomAnchor, constant: 30).isActive = true
         
         if isCreatingNew() {
-            createContainer.translatesAutoresizingMaskIntoConstraints = false
-            createContainer.backgroundColor = .white
-            createContainer.layer.masksToBounds = false
-            createContainer.layer.shadowColor = UIColor.black.cgColor
-            createContainer.layer.shadowOpacity = 0.1
-            createContainer.layer.shadowRadius = 5
-            createContainer.layer.shouldRasterize = true
-            createContainer.layer.rasterizationScale = UIScreen.main.scale
-            view.addSubview(createContainer)
-            
             activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-            createContainer.addSubview(activityIndicator)
+            scrollView.addSubview(activityIndicator)
             
             createButton.translatesAutoresizingMaskIntoConstraints = false
-            createButton.setTitle("Create Event", for: .normal)
+            createButton.setTitle("ADD EVENT", for: .normal)
             createButton.addTarget(self, action: #selector(createButtonTouched), for: .touchUpInside)
-            createContainer.addSubview(createButton)
-            
-            createContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-            createContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            createContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-            createContainer.heightAnchor.constraint(equalToConstant: 80).isActive = true
+            createButton.backgroundColor = .white
+            createButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
+            createButton.layer.cornerRadius = 5
+            createButton.titleLabel?.font = UIFont.cta()
+            scrollView.addSubview(createButton)
             
             activityIndicator.centerXAnchor.constraint(equalTo: createButton.centerXAnchor).isActive = true
             activityIndicator.centerYAnchor.constraint(equalTo: createButton.centerYAnchor).isActive = true
             
-            createButton.leadingAnchor.constraint(equalTo: createContainer.leadingAnchor, constant: sidePadding).isActive = true
-            createButton.trailingAnchor.constraint(equalTo: createContainer.trailingAnchor, constant: -1 * sidePadding).isActive = true
-            createButton.topAnchor.constraint(equalTo: createContainer.topAnchor, constant: 14).isActive = true
-            createButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight)).isActive = true
+            createButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+            createButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
+            createButton.topAnchor.constraint(equalTo: requiredFieldLabel.bottomAnchor, constant: 30).isActive = true
+            createButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
             
-            requiredFieldLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -30).isActive = true
-            scrollView.bottomAnchor.constraint(equalTo: createContainer.topAnchor).isActive = true
+            createButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -40).isActive = true
+            scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollViewBottomConstraint.isActive = true
             
             updateEndTime()
         } else {
@@ -356,7 +377,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 if let about = event.about {
                     if about.count > 0 {
                         aboutTextView.textView.text = about
-                        aboutTextView.textView.textColor = .black
                     }
                 }
                 if let eventLocation = event.eventLocation() {
@@ -365,32 +385,38 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 
                 selectedRepeats = EventRepeatRules(dataString: event.repeatRules().dataString())
                 
+                if event.price > 0 {
+                    priceInputField.textField.text = "\(event.price)"
+                }
+                
+                ticketURLTextField.textField.text = event.ticketURL
+                
                 if MemberDataManager.canEditEvent(event: event) {
                     deleteButton.translatesAutoresizingMaskIntoConstraints = false
                     deleteButton.setTitle("CANCEL EVENT", for: .normal)
-                    deleteButton.setTitleColor(UIColor.primaryCTA(), for: .normal)
+                    deleteButton.setTitleColor(.white, for: .normal)
                     deleteButton.titleLabel?.font = UIFont.cta()
                     deleteButton.addTarget(self, action: #selector(deleteButtonTouched), for: .touchUpInside)
                     scrollView.addSubview(deleteButton)
                     
                     deleteButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
                     deleteButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
-                    deleteButton.topAnchor.constraint(equalTo: ticketURLTextField.bottomAnchor, constant: 20).isActive = true
+                    deleteButton.topAnchor.constraint(equalTo: requiredFieldLabel.bottomAnchor, constant: 30).isActive = true
                     deleteButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
                     deleteButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
                 } else {
-                    ticketURLTextField.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+                    requiredFieldLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
                 }
-                scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+                scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+                scrollViewBottomConstraint.isActive = true
             }
         }
         
         updateLocationLabel()
         updateTimeTextFields()
-        updateCollections()
         updateSaveButtons()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
@@ -461,37 +487,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         }
         
         locationLabel.textField.text = ""
-    }
-    
-    func updateCollections() {
-        /*
-        let collections = EventCollectionManager.userUpdatedEventCollections()
-        for collection in collections {
-            guard let index = collections.index(of: collection) else {
-                return
-            }
-            let inputField = collectionInputFields[index]
-            if selectedCollections.contains(collection) {
-                inputField.label.textColor = UIColor.primaryCopy()
-            } else {
-                inputField.label.textColor = UIColor.lightCopy()
-            }
-        } */
-    }
-    
-    @objc func updatePrice() {
-        /*
-        let price = priceStepper.value
-        if price == 0 {
-            priceInputField.label.text = "FREE"
-        } else {
-            let numberFormatter = NumberFormatter()
-            numberFormatter.numberStyle = .currency
-            
-            priceInputField.label.text = numberFormatter.string(from: NSNumber(value: priceStepper.value))
-        }
-        
-        updateTicketURL(visible: price != 0, animated: true) */
     }
     
     @objc func updateSaveButtons() {
@@ -721,8 +716,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         } else {
             selectedCollections.append(tappedCollection)
         }
-        
-        updateCollections()
     }
     
     func updateEndTime(visible: Bool, animated: Bool) {
@@ -786,6 +779,14 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         self.present(alert, animated: true, completion: nil)
     }
     
+    @objc func keyboardDoneButtonTouched() {
+        dateTextField.textField.resignFirstResponder()
+        startTimeTextField.textField.resignFirstResponder()
+        endTimeTextField.textField.resignFirstResponder()
+        aboutTextView.textView.resignFirstResponder()
+        priceInputField.textField.resignFirstResponder()
+    }
+    
     //MARK: Location selection
     
     func locationPicker(sender: LocationPickerViewController, selected location:EventLocation) {
@@ -797,15 +798,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     //MARK: Keyboard updates
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            let screenHeight = UIScreen.main.bounds.height
-            view.frame = CGRect(x: 0, y: view.frame.origin.y, width: view.frame.width, height: screenHeight - (keyboardSize.height + view.frame.origin.y))
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            scrollViewBottomConstraint.constant = keyboardSize.height * -1
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        let screenHeight = UIScreen.main.bounds.height
-        view.frame = CGRect(x: 0, y: view.frame.origin.y, width: view.frame.width, height: screenHeight - view.frame.origin.y)
+        scrollViewBottomConstraint.constant = 0
     }
     
     //MARK: Image Delegate

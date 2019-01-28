@@ -232,6 +232,9 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         setSelected(true, animated: true)
+        if type == .price {
+            textField.text = ""
+        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
