@@ -31,13 +31,14 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
     let ctaButton = UIButton()
     let xIcon = UIButton()
     private let selectedTitleLabel = UILabel()
-    private let priceLabel = UILabel()
+    let priceLabel = UILabel()
     let textField = UITextField()
     let button = UIButton()
     let textView = UITextView()
     var selectedColor = UIColor.primaryCTA() {
         didSet {
             selectedTitleLabel.textColor = selectedColor
+            textField.tintColor = selectedColor
         }
     }
     var deSelectedColor = UIColor.lightCopy() {
@@ -131,11 +132,11 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         textView.alpha = 0
         textView.font = UIFont.inputField()
         textView.delegate = self
+        textView.backgroundColor = .clear
         addSubview(textView)
         
         xIcon.translatesAutoresizingMaskIntoConstraints = false
         xIcon.setImage(UIImage(named: "xIcon"), for: .normal)
-        xIcon.backgroundColor = UIColor.primaryCTA()
         xIcon.alpha = 0
         addSubview(xIcon)
         

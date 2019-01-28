@@ -17,9 +17,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let maxEventsPerDay = 3
     private var featuredCollections = EventCollectionManager.featuredEventCollections()
     private let quoteHeader = EventListTableViewHeader(frame: CGRect(x: 0, y: 0, width: 300, height: 208))
-    var eventsFRC = NSFetchedResultsController<Event>() {
+    var eventsFRC: NSFetchedResultsController<Event>? {
         didSet {
-            eventsFRC.delegate = self
+            eventsFRC?.delegate = self
             tableView.reloadData()
         }
     }
@@ -29,6 +29,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if EventManager.eventsStale() {
             EventManager.resetAllEvents()
+            eventsFRC = nil
         }
 
         view.backgroundColor = .white
@@ -72,7 +73,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     @objc func seeAllTapped(sender: UIButton) {
         let section = sender.tag
         
-        guard let sectionInfo = eventsFRC.sections?[section] else { return }
+        guard let sectionInfo = eventsFRC?.sections?[section] else { return }
         
         let sectionName = sectionInfo.name
         
@@ -107,6 +108,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
                 self.setLoaderVisible(false, animated: true)
                 self.updateNavButtons()
             })
+            if self.eventsFRC == nil {
+                self.eventsFRC = EventManager.allFutureEvents()
+            }
             self.tableView.reloadData()
         }) { (error) in
             print("Error loading events")
@@ -114,7 +118,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { action in
                 self.updateEvents()
             }))
-            if self.eventsFRC.fetchedObjects?.count != 0 {
+            if self.eventsFRC?.fetchedObjects?.count != 0 {
                 alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) in
                     self.setLoaderVisible(false, animated: true)
                     self.updateNavButtons()
@@ -170,7 +174,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     //MARK: Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard let sections = eventsFRC.sections else {
+        guard let sections = eventsFRC?.sections else {
             return 0
         }
         return sections.count
@@ -207,7 +211,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         header.seeAllButton.tag = section
         header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
         
-        guard let sections = eventsFRC.sections else {
+        guard let sections = eventsFRC?.sections else {
             return nil
         }
         
@@ -235,7 +239,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let event = eventsFRC.object(at: indexPath)
+        guard let event = eventsFRC?.object(at: indexPath) else {
+            return
+        }
         let detailVC = EventDetailViewController(event:event)
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -265,7 +271,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             let collection = featuredCollections[index]
             
             let section = 0 //debug
-            guard let sectionInfo = eventsFRC.sections?[section] else { return } //debug
+            guard let sectionInfo = eventsFRC?.sections?[section] else { return } //debug
             let sectionName = sectionInfo.name //debug
             
             let eventCollectionVC = EventCollectionViewController()
@@ -281,7 +287,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     func numberOfItemsIn(carousel: Carousel) -> Int {
         let index = carousel.tag
         
-        guard let sections = eventsFRC.sections else {
+        guard let sections = eventsFRC?.sections else {
             return 0
         }
         
@@ -298,7 +304,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let section = carousel.tag
         let indexPath = IndexPath(row: index, section: section)
         
-        let event = eventsFRC.object(at: indexPath)
+        guard let event = eventsFRC?.object(at: indexPath) else {
+            return nil
+        }
         
         let cellView = EventView(frame: CGRect())
         if let url = event.fullImageURL() {
@@ -322,7 +330,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let section = carousel.tag
         let indexPath = IndexPath(row: index, section: section)
         
-        let event = eventsFRC.object(at: indexPath)
+        guard let event = eventsFRC?.object(at: indexPath) else {
+            return
+        }
         let detailVC = EventDetailViewController(event:event)
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -336,7 +346,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     //MARK: Helpers
     
     func title(forHeader section: Int) -> String {
-        guard let sectionInfo = eventsFRC.sections?[section] else { return "" }
+        guard let sectionInfo = eventsFRC?.sections?[section] else { return "" }
         
         let todayString = DateStringHelper.dataString(from: Date())
         
@@ -351,7 +361,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func subTitle(forHeader section: Int) -> String {
-        guard let sectionInfo = eventsFRC.sections?[section] else { return "" }
+        guard let sectionInfo = eventsFRC?.sections?[section] else { return "" }
         
         let dataString = sectionInfo.name
         guard let sectionDate = DateStringHelper.date(from: dataString) else { return "" }

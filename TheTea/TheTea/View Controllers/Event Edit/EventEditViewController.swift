@@ -12,6 +12,10 @@ import Kingfisher
 
 class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, LocationPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var event: Event?
+    
+    private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground3"))
+    private let gradientLayer = CAGradientLayer()
+    
     private let scrollView = UIScrollView()
     
     private let imageSelectButton = EventEditImageSelectButton(frame: CGRect())
@@ -47,12 +51,15 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private var ticketURLTopConstraint = NSLayoutConstraint()
     private let ticketURLTextField = InputField()
     
+    private let requiredFieldLabel = UILabel()
+    
     private let createContainer = UIView()
     private let activityIndicator = UIActivityIndicatorView(style: .gray)
     private let createButton = PrimaryCTA(frame: CGRect())
     
     private let aboutTextViewPlaceholder = "MORE INFO"
     private let textFieldHeight: CGFloat = 56.0
+    private let sidePadding: CGFloat = 40.0
     private var selectedLocation: EventLocation?
     private var selectedRepeats = EventRepeatRules()
     private var selectedImage: UIImage?
@@ -65,6 +72,20 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         updateTitle()
         updateNavButtons()
         
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundImageView.contentMode = .scaleAspectFill
+        view.addSubview(backgroundImageView)
+        
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
+        gradientLayer.colors = [
+            UIColor(red:0.94, green:0.53, blue:1, alpha:0.9).cgColor,
+            UIColor(red:0.47, green:0.77, blue:1, alpha:0.9).cgColor
+        ]
+        gradientLayer.locations = [0, 1]
+        gradientLayer.startPoint = CGPoint.zero
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        backgroundImageView.layer.addSublayer(gradientLayer)
+        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.alwaysBounceVertical = true
         view.addSubview(scrollView)
@@ -75,7 +96,11 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         scrollView.addSubview(imageSelectButton)
         
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
-        nameTextField.title = "EVENT NAME"
+        nameTextField.title = "EVENT NAME *"
+        nameTextField.selectedColor = .white
+        nameTextField.deSelectedColor = .white
+        nameTextField.textField.textColor = .white
+        nameTextField.textField.returnKeyType = .done
         nameTextField.textField.autocapitalizationType = .words
         nameTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(nameTextField)
@@ -86,8 +111,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         hostTextField.alpha = 0
         scrollView.addSubview(hostTextField)
         
-        hostTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        hostTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        hostTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        hostTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         hostTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24).isActive = true
         hostHeightConstraint = hostTextField.heightAnchor.constraint(equalToConstant: textFieldHeight)
         hostHeightConstraint.isActive = true
@@ -103,7 +128,10 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         dateTextField.translatesAutoresizingMaskIntoConstraints = false
         dateTextField.title = "DATE"
-        dateTextField.textField.tintColor = UIColor.white
+        dateTextField.selectedColor = .white
+        dateTextField.deSelectedColor = .white
+        dateTextField.textField.textColor = .white
+        dateTextField.textField.tintColor = .clear
         datePicker.minimumDate = Date()
         datePicker.datePickerMode = .date
         datePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
@@ -111,10 +139,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         scrollView.addSubview(dateTextField)
         
         startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
-        startTimeTextField.title = "START TIME"
+        startTimeTextField.title = "START TIME *"
         startTimeTextField.cta = "Add end time"
+        startTimeTextField.textField.textColor = .white
+        startTimeTextField.selectedColor = .white
+        startTimeTextField.deSelectedColor = .white
         startTimeTextField.ctaButton.addTarget(self, action: #selector(addEndTimeTouched), for: .touchUpInside)
-        startTimeTextField.textField.tintColor = UIColor.white
+        startTimeTextField.textField.tintColor = .clear
         startTimePicker.datePickerMode = .time
         startTimePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         startTimePicker.minuteInterval = 15
@@ -124,7 +155,9 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         endTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         endTimeTextField.title = "END TIME"
-        endTimeTextField.textField.tintColor = UIColor.white
+        endTimeTextField.textField.textColor = .white
+        endTimeTextField.selectedColor = .white
+        endTimeTextField.deSelectedColor = .white
         endTimeTextField.alpha = 0
         endTimeTextField.xIcon.alpha = 1
         endTimeTextField.xIcon.addTarget(self, action: #selector(hideEndTimeTouched), for: .touchUpInside)
@@ -133,10 +166,14 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         endTimePicker.minuteInterval = 15
         endTimePicker.date = Calendar.current.date(bySettingHour: 22, minute: 00, second: 0, of: Date()) ?? Date()
         endTimeTextField.textField.inputView = endTimePicker
+        endTimeTextField.textField.tintColor = .clear
         scrollView.addSubview(endTimeTextField)
         
         repeatsInputView.translatesAutoresizingMaskIntoConstraints = false
         repeatsInputView.title = "REPEATS"
+        repeatsInputView.selectedColor = .white
+        repeatsInputView.deSelectedColor = .white
+        repeatsInputView.textField.textColor = .white
         repeatsInputView.type = .button
         repeatsInputView.button.addTarget(self, action: #selector(repeatsButtonTouched), for: .touchUpInside)
         scrollView.addSubview(repeatsInputView)
@@ -148,22 +185,33 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         repeatsLabel.textAlignment = .right
         
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        locationLabel.title = "LOCATION"
+        locationLabel.title = "LOCATION *"
         locationLabel.type = .button
+        locationLabel.selectedColor = .white
+        locationLabel.deSelectedColor = .white
+        locationLabel.textField.textColor = .white
         locationLabel.button.addTarget(self, action: #selector(locationButtonTouched), for: .touchUpInside)
         scrollView.addSubview(locationLabel)
         
         aboutTextView.translatesAutoresizingMaskIntoConstraints = false
         aboutTextView.title = "MORE INFO"
+        aboutTextView.selectedColor = .white
+        aboutTextView.deSelectedColor = .white
+        aboutTextView.textView.tintColor = .white
         aboutTextView.type = .textView
+        aboutTextView.textView.textColor = .white
         aboutTextView.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(aboutTextView)
         
         priceInputField.translatesAutoresizingMaskIntoConstraints = false
         priceInputField.title = "PRICE"
         priceInputField.textField.keyboardType = .decimalPad
+        priceInputField.selectedColor = .white
+        priceInputField.deSelectedColor = .white
         priceInputField.type = .price
         priceInputField.textField.text = "0"
+        priceInputField.textField.textColor = .white
+        priceInputField.priceLabel.textColor = .white
         priceInputField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(priceInputField)
         
@@ -172,64 +220,81 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         ticketURLTextField.textField.keyboardType = .URL
         ticketURLTextField.textField.autocapitalizationType = .none
         ticketURLTextField.textField.autocorrectionType = .no
+        ticketURLTextField.textField.textColor = .white
+        ticketURLTextField.selectedColor = .white
+        ticketURLTextField.deSelectedColor = .white
         ticketURLTextField.textField.addTarget(self, action: #selector(updateSaveButtons), for: .editingChanged)
         scrollView.addSubview(ticketURLTextField)
+        
+        requiredFieldLabel.translatesAutoresizingMaskIntoConstraints = false
+        requiredFieldLabel.textColor = .white
+        requiredFieldLabel.font = UIFont(name: "Montserrat-Bold", size: 12)
+        requiredFieldLabel.text = "* Required Field"
+        scrollView.addSubview(requiredFieldLabel)
+        
+        backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         
-        imageSelectButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        imageSelectButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        imageSelectButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        imageSelectButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         imageSelectButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20).isActive = true
         
-        nameTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        nameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
-        nameTextField.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40).isActive = true
+        nameTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
+        nameTextField.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -2 * sidePadding).isActive = true
         nameTextField.topAnchor.constraint(equalTo: imageSelectButton.bottomAnchor, constant: 32).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         dateTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24).isActive = true
-        dateTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        dateTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        dateTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        dateTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         dateTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         startTimeTextField.topAnchor.constraint(equalTo: dateTextField.bottomAnchor, constant: 24).isActive = true
-        startTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        startTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        startTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        startTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         startTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         endTimeTopConstraint = endTimeTextField.topAnchor.constraint(equalTo: startTimeTextField.topAnchor, constant: 0)
         endTimeTopConstraint.isActive = true
-        endTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        endTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        endTimeTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        endTimeTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         endTimeTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         repeatsInputView.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor, constant: 24).isActive = true
-        repeatsInputView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        repeatsInputView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        repeatsInputView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        repeatsInputView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         repeatsInputView.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         locationLabel.topAnchor.constraint(equalTo: repeatsInputView.bottomAnchor, constant: 24).isActive = true
-        locationLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
-        locationLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        locationLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
+        locationLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
         locationLabel.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         aboutTextView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 24).isActive = true
-        aboutTextView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
-        aboutTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        aboutTextView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
+        aboutTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
         aboutTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: textFieldHeight).isActive = true
         
         priceInputField.topAnchor.constraint(equalTo: aboutTextView.bottomAnchor, constant: 24).isActive = true
-        priceInputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        priceInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        priceInputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        priceInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         priceInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         ticketURLTopConstraint = ticketURLTextField.topAnchor.constraint(equalTo: priceInputField.bottomAnchor, constant: 24)
         ticketURLTopConstraint.isActive = true
-        ticketURLTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
-        ticketURLTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        ticketURLTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        ticketURLTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
         ticketURLTextField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        
+        requiredFieldLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
+        requiredFieldLabel.topAnchor.constraint(equalTo: ticketURLTextField.bottomAnchor, constant: 30).isActive = true
         
         if isCreatingNew() {
             createContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -258,12 +323,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             activityIndicator.centerXAnchor.constraint(equalTo: createButton.centerXAnchor).isActive = true
             activityIndicator.centerYAnchor.constraint(equalTo: createButton.centerYAnchor).isActive = true
             
-            createButton.leadingAnchor.constraint(equalTo: createContainer.leadingAnchor, constant: 20).isActive = true
-            createButton.trailingAnchor.constraint(equalTo: createContainer.trailingAnchor, constant: -20).isActive = true
+            createButton.leadingAnchor.constraint(equalTo: createContainer.leadingAnchor, constant: sidePadding).isActive = true
+            createButton.trailingAnchor.constraint(equalTo: createContainer.trailingAnchor, constant: -1 * sidePadding).isActive = true
             createButton.topAnchor.constraint(equalTo: createContainer.topAnchor, constant: 14).isActive = true
             createButton.heightAnchor.constraint(equalToConstant: CGFloat(PrimaryCTA.preferedHeight)).isActive = true
             
-            ticketURLTextField.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
+            requiredFieldLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -30).isActive = true
             scrollView.bottomAnchor.constraint(equalTo: createContainer.topAnchor).isActive = true
             
             updateEndTime()
@@ -342,6 +407,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         }
         
         repeatsInputView.textField.text = selectedRepeats.rules(abreviated: true)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        gradientLayer.frame = view.bounds
     }
     
     //MARK: Display Update
@@ -831,8 +902,10 @@ class EventEditImageSelectButton : UIView {
         layer.shadowColor = UIColor(red:0, green:0, blue:0, alpha:0.16).cgColor
         layer.shadowOpacity = 1
         layer.shadowRadius = 6
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.white.cgColor
         
-        backgroundColor = .white
+        backgroundColor = UIColor(red:1, green:1, blue:1, alpha:0.2)
         
         translatesAutoresizingMaskIntoConstraints = false
         heightConstraint = heightAnchor.constraint(equalToConstant: minHeight)
@@ -847,7 +920,7 @@ class EventEditImageSelectButton : UIView {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Add an event picture"
-        label.textColor = UIColor.primaryCTA()
+        label.textColor = .white
         label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
         addSubview(label)
         
