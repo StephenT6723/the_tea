@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import FBSDKLoginKit
 import Kingfisher
 
 @UIApplicationMain
@@ -28,26 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window!.rootViewController = rootNav
         window!.makeKeyAndVisible()
         
-        FBSDKProfile.enableUpdates(onAccessTokenChange: true)
-        
-        EventCollectionManager.updateFeaturedEventCollections()
-        
-        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-    }
+        return true    }
 
     func applicationWillTerminate(_ application: UIApplication) {
         CoreDataManager.sharedInstance.saveContext()
-    }
-    
-    func applicationWillResignActive(_ application: UIApplication) {
-        FBSDKAppEvents.activateApp()
-    }
-    
-    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        return FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
-    }
-    
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        FBSDKAppEvents.activateApp()
     }
 }

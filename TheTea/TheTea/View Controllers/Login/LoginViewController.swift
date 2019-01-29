@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FBSDKLoginKit
 
 enum AuthType: Int {
     case register
@@ -22,6 +21,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     var delegate: LoginViewDelegate?
     
     private var selectedType:AuthType? = .register
+    
+    private let scrollView = UIScrollView()
     
     private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground2"))
     private let gradientLayer = CAGradientLayer()
@@ -69,19 +70,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         backgroundImageView.layer.addSublayer(gradientLayer)
         
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        //scrollView.alwaysBounceVertical = true
+        view.addSubview(scrollView)
+        
         logoTopSpacer.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(logoTopSpacer)
+        scrollView.addSubview(logoTopSpacer)
         
         logoIconImageView.translatesAutoresizingMaskIntoConstraints = false
         logoIconImageView.contentMode = .scaleAspectFill
-        view.addSubview(logoIconImageView)
+        scrollView.addSubview(logoIconImageView)
         
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.contentMode = .scaleAspectFill
-        view.addSubview(logoImageView)
+        scrollView.addSubview(logoImageView)
         
         logoBottomSpacer.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(logoBottomSpacer)
+        scrollView.addSubview(logoBottomSpacer)
         
         emailInputField.translatesAutoresizingMaskIntoConstraints = false
         emailInputField.title = "EMAIL ADDRESS"
@@ -93,7 +98,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         emailInputField.deSelectedColor = .white
         emailInputField.textField.textColor = .white
         emailInputField.textField.tintColor = .white
-        view.addSubview(emailInputField)
+        scrollView.addSubview(emailInputField)
         
         usernameInputField.translatesAutoresizingMaskIntoConstraints = false
         usernameInputField.title = "USERNAME"
@@ -105,7 +110,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         usernameInputField.textField.textColor = .white
         usernameInputField.textField.textColor = .white
         usernameInputField.textField.tintColor = .white
-        view.insertSubview(usernameInputField, belowSubview: emailInputField)
+        scrollView.insertSubview(usernameInputField, belowSubview: emailInputField)
         
         passwordInputField.translatesAutoresizingMaskIntoConstraints = false
         passwordInputField.title = "PASSWORD"
@@ -118,7 +123,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         passwordInputField.deSelectedColor = .white
         passwordInputField.textField.textColor = .white
         passwordInputField.textField.tintColor = .white
-        view.addSubview(passwordInputField)
+        scrollView.addSubview(passwordInputField)
         
         confirmPasswordInputField.translatesAutoresizingMaskIntoConstraints = false
         confirmPasswordInputField.title = "CONFIRM PASSWORD"
@@ -130,10 +135,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         confirmPasswordInputField.deSelectedColor = .white
         confirmPasswordInputField.textField.textColor = .white
         confirmPasswordInputField.textField.tintColor = .white
-        view.insertSubview(confirmPasswordInputField, belowSubview: passwordInputField)
+        scrollView.insertSubview(confirmPasswordInputField, belowSubview: passwordInputField)
         
         termsRadioButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(termsRadioButton)
+        scrollView.addSubview(termsRadioButton)
         
         termsTextView.translatesAutoresizingMaskIntoConstraints = false
         termsTextView.isEditable = false
@@ -150,11 +155,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         termsTextView.linkTextAttributes = [NSAttributedString.Key.font: termsFont, NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue]
         termsTextView.font = UIFont.listSubTitle()
         termsTextView.delegate = self
-        view.addSubview(termsTextView)
+        scrollView.addSubview(termsTextView)
         
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.startAnimating()
-        view.addSubview(activityIndicator)
+        scrollView.addSubview(activityIndicator)
         
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.backgroundColor = .white
@@ -162,27 +167,32 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         submitButton.titleLabel?.font = UIFont.cta()
         submitButton.layer.cornerRadius = 5
         submitButton.addTarget(self, action: #selector(submitButtonTouched), for: .touchUpInside)
-        view.addSubview(submitButton)
+        scrollView.addSubview(submitButton)
         
         modeChangeButton.translatesAutoresizingMaskIntoConstraints = false
-        //modeChangeButton.setTitle("Already have an account?  Log In", for: .normal)
         modeChangeButton.setTitleColor(.white, for: .normal)
         modeChangeButton.titleLabel?.font = UIFont.cta()
         modeChangeButton.addTarget(self, action: #selector(modeChangeButtonTouched), for: .touchUpInside)
-        view.addSubview(modeChangeButton)
+        scrollView.addSubview(modeChangeButton)
+        
+        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        logoTopSpacer.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        logoTopSpacer.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        logoTopSpacer.heightAnchor.constraint(greaterThanOrEqualToConstant: 64).isActive = true
         logoTopSpacer.bottomAnchor.constraint(equalTo: logoIconImageView.topAnchor).isActive = true
         
-        logoIconImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        logoIconImageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
         logoImageView.topAnchor.constraint(equalTo: logoIconImageView.bottomAnchor, constant: 24).isActive = true
-        logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        logoImageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
         logoBottomSpacer.topAnchor.constraint(equalTo: logoImageView.bottomAnchor).isActive = true
         logoBottomSpacer.heightAnchor.constraint(equalTo: logoTopSpacer.heightAnchor).isActive = true
@@ -190,32 +200,33 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         
         let yOffset = -1 * (26.0 + 4 * textFieldHeight + 24 * 3)
         emailInputField.topAnchor.constraint(equalTo: termsRadioButton.topAnchor, constant: yOffset).isActive = true
-        emailInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        emailInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        emailInputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 40).isActive = true
+        emailInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -40).isActive = true
         emailInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         usernameTopConstraint = usernameInputField.topAnchor.constraint(equalTo: emailInputField.bottomAnchor, constant: 24)
         usernameTopConstraint.isActive = true
-        usernameInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        usernameInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        usernameInputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 40).isActive = true
+        usernameInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -40).isActive = true
+        usernameInputField.widthAnchor.constraint(equalTo:view.widthAnchor, constant: -80).isActive = true
         usernameInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         passwordTopConstraint = passwordInputField.topAnchor.constraint(equalTo: usernameInputField.bottomAnchor, constant: 24)
         passwordTopConstraint.isActive = true
-        passwordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        passwordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        passwordInputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 40).isActive = true
+        passwordInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -40).isActive = true
         passwordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         confirmPasswordTopConstraint = confirmPasswordInputField.topAnchor.constraint(equalTo: passwordInputField.bottomAnchor, constant: 24)
         confirmPasswordTopConstraint.isActive = true
-        confirmPasswordInputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        confirmPasswordInputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        confirmPasswordInputField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 40).isActive = true
+        confirmPasswordInputField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -40).isActive = true
         confirmPasswordInputField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         
         activityIndicator.centerXAnchor.constraint(equalTo: submitButton.centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor).isActive = true
         
-        termsRadioButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        termsRadioButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 40).isActive = true
         termsRadioButton.heightAnchor.constraint(equalToConstant: RadioButton.preferedSize).isActive = true
         termsRadioButton.widthAnchor.constraint(equalToConstant: RadioButton.preferedSize).isActive = true
         termsRadioButton.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -32).isActive = true
@@ -223,14 +234,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         termsTextView.centerYAnchor.constraint(equalTo: termsRadioButton.centerYAnchor).isActive = true
         termsTextView.leadingAnchor.constraint(equalTo: termsRadioButton.trailingAnchor, constant: 8).isActive = true
         
-        submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        submitButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 40).isActive = true
+        submitButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -40).isActive = true
         submitButton.bottomAnchor.constraint(equalTo: modeChangeButton.topAnchor, constant: -20).isActive = true
         submitButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        modeChangeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        modeChangeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        modeChangeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
+        modeChangeButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20).isActive = true
+        modeChangeButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20).isActive = true
+        if UIScreen.main.bounds.height < 800 {
+            modeChangeButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -40).isActive = true
+        } else {
+            modeChangeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
+        }
         modeChangeButton.heightAnchor.constraint(equalToConstant: 15).isActive = true
         
         view.setNeedsLayout()

@@ -8,10 +8,6 @@ target 'TheTea' do
   use_frameworks!
 
   # Pods for TheTea
-pod 'FBSDKCoreKit'  
-pod 'FBSDKLoginKit'
-pod 'FBSDKShareKit'
-pod 'FBSDKPlacesKit'
 pod 'Alamofire', '~> 4.7'
 pod 'SwiftyJSON', '~> 4.0'
 pod 'Kingfisher', '~> 5.0'

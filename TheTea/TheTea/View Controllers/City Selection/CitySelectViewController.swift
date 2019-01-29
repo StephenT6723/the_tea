@@ -20,13 +20,22 @@ class CitySelectViewController: UIViewController, SingleSelectListDelegate {
     private let missingCityButton = UIButton()
     var delegate: CitySelectViewControllerDelegate?
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Choose Location"
         view.backgroundColor = .white
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
+        cancelButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                             NSAttributedString.Key.foregroundColor:UIColor.white], for: .normal)
+        cancelButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                             NSAttributedString.Key.foregroundColor:UIColor.white], for: .highlighted)
+        navigationItem.leftBarButtonItem = cancelButton
         
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.contentMode = .scaleAspectFill

@@ -175,8 +175,7 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
     
     @objc func addEventButtonTouched() {
         let addEventVC = EventEditViewController()
-        let addNav = UINavigationController(rootViewController: addEventVC)
-        addNav.navigationBar.isTranslucent = false
+        let addNav = ClearNavigationController(rootViewController: addEventVC)
         present(addNav, animated: true, completion: nil)
     }
     

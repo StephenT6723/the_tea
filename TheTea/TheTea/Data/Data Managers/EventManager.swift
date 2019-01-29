@@ -180,6 +180,10 @@ class EventManager {
             return
         }
         
+        if name == "One Woman Show" {
+            print("Start Time: \(startTime)")
+        }
+        
         var location: EventLocation?
         
         if let locationName = data[Event.locationNameKey] as? String, let address = data[Event.addressKey] as? String, let latitudeString = data[Event.latitudeKey] as? String, let longitudeString = data[Event.longitudeKey] as? String {

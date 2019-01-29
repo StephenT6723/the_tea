@@ -462,8 +462,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
     @objc func editButtonTouched() {
         let editVC = EventEditViewController()
         editVC.event = event
-        let editNav = UINavigationController(rootViewController: editVC)
-        editNav.navigationBar.isTranslucent = false
+        let editNav = ClearNavigationController(rootViewController: editVC)
         present(editNav, animated: true, completion: nil)
     }
     

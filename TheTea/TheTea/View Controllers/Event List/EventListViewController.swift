@@ -166,8 +166,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     @objc func locationButtonTapped() {
         let locationVC = CitySelectViewController()
         locationVC.delegate = self
-        let nav = UINavigationController(rootViewController: locationVC)
-        nav.navigationBar.isTranslucent = false
+        let nav = ClearNavigationController(rootViewController: locationVC)
         present(nav, animated: true, completion: nil)
     }
     

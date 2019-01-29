@@ -66,8 +66,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        edgesForExtendedLayout = UIRectEdge()
+        
         view.backgroundColor = .white
         updateTitle()
         updateNavButtons()
@@ -453,10 +452,18 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func updateNavButtons() {
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
+        cancelButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                             NSAttributedString.Key.foregroundColor:UIColor.white], for: .normal)
+        cancelButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                             NSAttributedString.Key.foregroundColor:UIColor.white], for: .highlighted)
         navigationItem.leftBarButtonItem = cancelButton
         
         if !isCreatingNew() {
             let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(doneButtonTouched))
+            saveButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                 NSAttributedString.Key.foregroundColor:UIColor.white], for: .normal)
+            saveButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                 NSAttributedString.Key.foregroundColor:UIColor.white], for: .highlighted)
             navigationItem.rightBarButtonItem = saveButton
         }
     }

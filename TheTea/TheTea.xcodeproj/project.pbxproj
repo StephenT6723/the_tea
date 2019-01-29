@@ -12,6 +12,7 @@
 		930E890821DD4D940013EC37 /* Montserrat-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */; };
 		930E890A21E169230013EC37 /* Montserrat-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890921E169230013EC37 /* Montserrat-Medium.otf */; };
 		930E890E21E3E7C20013EC37 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930E890D21E3E7C20013EC37 /* Carousel.swift */; };
+		932258B721FFE46F00448E50 /* ClearNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932258B621FFE46F00448E50 /* ClearNavigationController.swift */; };
 		93262AA321ED9F5D00210A9F /* EventListTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93262AA221ED9F5D00210A9F /* EventListTableViewHeader.swift */; };
 		932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932991322073E295008C7A3B /* EventCollectionManager.swift */; };
 		9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7721F4F3BEA00230829 /* StyleManager.swift */; };
@@ -82,6 +83,7 @@
 		930E890521DD4D940013EC37 /* Montserrat-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-SemiBold.otf"; path = "Misc/Montserrat/Montserrat-SemiBold.otf"; sourceTree = "<group>"; };
 		930E890921E169230013EC37 /* Montserrat-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Medium.otf"; path = "Misc/Montserrat/Montserrat-Medium.otf"; sourceTree = "<group>"; };
 		930E890D21E3E7C20013EC37 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Carousel.swift; path = "UI Elements/Carousel.swift"; sourceTree = "<group>"; };
+		932258B621FFE46F00448E50 /* ClearNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClearNavigationController.swift; path = "UI Elements/ClearNavigationController.swift"; sourceTree = "<group>"; };
 		93262AA221ED9F5D00210A9F /* EventListTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListTableViewHeader.swift; sourceTree = "<group>"; };
 		932991322073E295008C7A3B /* EventCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventCollectionManager.swift; path = "Data/Data Managers/EventCollectionManager.swift"; sourceTree = "<group>"; };
 		9337C7721F4F3BEA00230829 /* StyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleManager.swift; path = Helpers/StyleManager.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				930E890D21E3E7C20013EC37 /* Carousel.swift */,
 				93FCC29521FD0035009BBF8D /* SingleSelectList.swift */,
 				93CF651621E52C4700090B65 /* Event Cells */,
+				932258B621FFE46F00448E50 /* ClearNavigationController.swift */,
 			);
 			name = "UI Elements";
 			sourceTree = "<group>";
@@ -526,22 +529,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-TheTea/Pods-TheTea-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
@@ -574,6 +567,7 @@
 				935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */,
 				93FCC29421FCFB24009BBF8D /* CitySelectViewController.swift in Sources */,
 				93EAF8ED206D6C3D008B213F /* EventCollectionViewController.swift in Sources */,
+				932258B721FFE46F00448E50 /* ClearNavigationController.swift in Sources */,
 				9337C7771F4F3F1400230829 /* UIFont+TheTea.swift in Sources */,
 				932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */,
 				93399AEE1F40DB5900ED02E9 /* DateStringHelper.swift in Sources */,

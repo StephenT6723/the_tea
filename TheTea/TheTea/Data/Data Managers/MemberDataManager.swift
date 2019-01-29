@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import FBSDKLoginKit
 
 class MemberDataManager {
     static let minPasswordLength = 7
