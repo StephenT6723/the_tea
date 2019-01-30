@@ -163,6 +163,7 @@ class LocationTableViewCell: UITableViewCell {
         
         contentView.backgroundColor = .clear
         backgroundColor = .clear
+        selectionStyle = .none
         
         customTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         customTitleLabel.font = UIFont(name: "Montserrat-SemiBold", size: 18)

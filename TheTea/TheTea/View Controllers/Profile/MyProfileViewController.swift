@@ -160,9 +160,7 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Log out", style: .default, handler: { action in
             MemberDataManager.logoutMember()
-            self.presentLoginView()
-            self.updateNavButtons()
-            self.updateContent()
+            self.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
             

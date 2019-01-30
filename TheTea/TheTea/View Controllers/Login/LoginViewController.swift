@@ -24,9 +24,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     
     private let scrollView = UIScrollView()
     
-    private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground2"))
-    private let gradientLayer = CAGradientLayer()
-    
     private let logoTopSpacer = UIView()
     private let logoIconImageView = UIImageView(image: UIImage(named: "logoIcon"))
     private let logoImageView = UIImageView(image: UIImage(named: "logoWhite"))
@@ -54,21 +51,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         super.viewDidLoad()
 
         title = "Welcome"
-        view.backgroundColor = UIColor(red: 200.0/255.0, green: 125.0/255.0, blue: 237.0/255.0, alpha: 1)
+        view.backgroundColor = .clear
         
-        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundImageView.contentMode = .scaleAspectFill
-        view.addSubview(backgroundImageView)
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
+        navigationItem.leftBarButtonItem = cancelButton
         
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
-        gradientLayer.colors = [
-            UIColor(red:0.94, green:0.53, blue:1, alpha:0.9).cgColor,
-            UIColor(red:0.47, green:0.77, blue:1, alpha:0.9).cgColor
-        ]
-        gradientLayer.locations = [0, 1]
-        gradientLayer.startPoint = CGPoint.zero
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        backgroundImageView.layer.addSublayer(gradientLayer)
+        if let nav = navigationController as? ClearNavigationController {
+            nav.backgroundImageView.image = UIImage(named: "placeholderBackground2")
+        }
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         //scrollView.alwaysBounceVertical = true
@@ -177,13 +167,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 88).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         logoTopSpacer.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
         logoTopSpacer.heightAnchor.constraint(greaterThanOrEqualToConstant: 64).isActive = true
@@ -257,14 +242,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         modeChanged(animated: false)
     }
     
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        gradientLayer.frame = view.frame
-    }
-    
     //MARK: Actions
+    
+    @objc func cancelButtonTouched() {
+        dismiss(animated: true, completion: nil)
+    }
     
     @objc func modeChangeButtonTouched() {
         guard let previousType = selectedType else {
@@ -367,6 +349,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
                 MemberDataManager.loginMember(email: email, password: password, onSuccess: {
                     self.delegate?.loginSucceeded()
                     self.updateLoader(visible: false, animated: true)
+                    self.dismiss(animated: true, completion: nil)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
                     let alert = UIAlertController(title: "Error", message: "\(error?.localizedDescription ?? "We were unable to log you in. Please try again.")", preferredStyle: .alert)
@@ -379,6 +362,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
                 MemberDataManager.createMember(email: email, username: username, password: password, onSuccess: {
                     self.delegate?.loginSucceeded()
                     self.updateLoader(visible: false, animated: true)
+                    self.dismiss(animated: true, completion: nil)
                 }) { (error) in
                     self.updateLoader(visible: false, animated: true)
                 }
@@ -423,8 +407,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         let termsVC = TermsViewController()
-        let termsNav = UINavigationController(rootViewController: termsVC)
-        termsNav.navigationBar.isTranslucent = false
+        let termsNav = ClearNavigationController(rootViewController: termsVC)
         present(termsNav, animated: true, completion: nil)
         return false
     }

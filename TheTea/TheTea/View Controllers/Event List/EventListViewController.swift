@@ -85,6 +85,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func myProfileButtonTouched() {
+        if !MemberDataManager.isLoggedIn() {
+            let loginVC = LoginViewController()
+            let loginNav = ClearNavigationController(rootViewController: loginVC)
+            present(loginNav, animated: true, completion: nil)
+            return
+        }
+        
         let myAccountVC = MyProfileViewController()
         let myAccountNav = UINavigationController(rootViewController: myAccountVC)
         myAccountNav.navigationBar.isTranslucent = false

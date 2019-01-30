@@ -49,7 +49,7 @@ class TermsViewController: UIViewController {
         
         textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
         textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
-        textView.topAnchor.constraint(equalTo: view.topAnchor, constant: 30).isActive = true
+        textView.topAnchor.constraint(equalTo: view.topAnchor, constant: 118).isActive = true
         textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30).isActive = true
         
         updateText()
