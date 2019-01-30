@@ -13,8 +13,6 @@ protocol CitySelectViewControllerDelegate {
 }
 
 class CitySelectViewController: UIViewController, SingleSelectListDelegate {
-    private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground"))
-    private let gradientLayer = CAGradientLayer()
     private let selectList = SingleSelectList(frame: CGRect())
     private let saveButton = UIButton()
     private let missingCityButton = UIButton()
@@ -28,7 +26,10 @@ class CitySelectViewController: UIViewController, SingleSelectListDelegate {
         super.viewDidLoad()
         
         title = "Choose Location"
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
+        if let nav = navigationController as? ClearNavigationController {
+            nav.backgroundImageView.image = UIImage(named: "placeholderBackground")
+        }
         
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
         cancelButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
@@ -36,10 +37,6 @@ class CitySelectViewController: UIViewController, SingleSelectListDelegate {
         cancelButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
                                              NSAttributedString.Key.foregroundColor:UIColor.white], for: .highlighted)
         navigationItem.leftBarButtonItem = cancelButton
-        
-        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundImageView.contentMode = .scaleAspectFill
-        view.addSubview(backgroundImageView)
         
         let cities = CityManager.allCities()
         
@@ -49,16 +46,6 @@ class CitySelectViewController: UIViewController, SingleSelectListDelegate {
             selectList.updateSelectedIndex(animated: false, index: cities.firstIndex(of: selectedCity) ?? 0)
         }
         view.addSubview(selectList)
-        
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
-        gradientLayer.colors = [
-            UIColor(red:0.94, green:0.53, blue:1, alpha:0.9).cgColor,
-            UIColor(red:0.47, green:0.77, blue:1, alpha:0.9).cgColor
-        ]
-        gradientLayer.locations = [0, 1]
-        gradientLayer.startPoint = CGPoint.zero
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        backgroundImageView.layer.addSublayer(gradientLayer)
         
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.setTitle("SAVE", for: .normal)
@@ -75,11 +62,6 @@ class CitySelectViewController: UIViewController, SingleSelectListDelegate {
         missingCityButton.addTarget(self, action: #selector(missingCityButtonTouched), for: .touchUpInside)
         view.addSubview(missingCityButton)
         
-        backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
         selectList.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         selectList.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         selectList.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -92,12 +74,6 @@ class CitySelectViewController: UIViewController, SingleSelectListDelegate {
         saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         saveButton.bottomAnchor.constraint(equalTo: missingCityButton.topAnchor, constant: -20).isActive = true
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        gradientLayer.frame = view.bounds
     }
     
     //MARK: Actions

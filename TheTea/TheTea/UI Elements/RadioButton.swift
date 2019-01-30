@@ -9,15 +9,15 @@
 import UIKit
 
 class RadioButton: UIButton {
-    static let preferedSize: CGFloat = 16
+    static let preferedSize: CGFloat = 24
     override var isSelected: Bool {
         didSet {
             UIView.animate(withDuration: 0.3) {
-                self.selectedDot.alpha = self.isSelected ? 1 : 0
+                self.checkMark.alpha = self.isSelected ? 1 : 0
             }
         }
     }
-    private let selectedDot = UIView()
+    private let checkMark = UIImageView(image: UIImage(named: "checkMark"))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,18 +25,15 @@ class RadioButton: UIButton {
         backgroundColor = .white
         layer.cornerRadius = 4
         
-        selectedDot.translatesAutoresizingMaskIntoConstraints = false
-        selectedDot.layer.cornerRadius = 4
-        selectedDot.backgroundColor = UIColor.primaryCTA()
-        selectedDot.alpha = 0
-        selectedDot.isUserInteractionEnabled = false
-        addSubview(selectedDot)
+        checkMark.translatesAutoresizingMaskIntoConstraints = false
+        checkMark.alpha = 0
+        checkMark.isUserInteractionEnabled = false
+        addSubview(checkMark)
         
-        selectedDot.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2).isActive = true
-        selectedDot.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
-        selectedDot.topAnchor.constraint(equalTo: topAnchor, constant: 2).isActive = true
-        selectedDot.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
-        
+        checkMark.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4).isActive = true
+        checkMark.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
+        checkMark.topAnchor.constraint(equalTo: topAnchor, constant: 6).isActive = true
+        checkMark.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6).isActive = true
         addTarget(self, action: #selector(toggle), for: .touchUpInside)
     }
     

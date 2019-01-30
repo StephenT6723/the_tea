@@ -13,9 +13,6 @@ import Kingfisher
 class EventEditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, LocationPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var event: Event?
     
-    private let backgroundImageView = UIImageView(image: UIImage(named: "placeholderBackground3"))
-    private let gradientLayer = CAGradientLayer()
-    
     private let scrollView = UIScrollView()
     private var scrollViewBottomConstraint = NSLayoutConstraint()
     
@@ -67,23 +64,15 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        navigationController?.delegate = self
+        
+        view.backgroundColor = .clear
         updateTitle()
         updateNavButtons()
         
-        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundImageView.contentMode = .scaleAspectFill
-        view.addSubview(backgroundImageView)
-        
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
-        gradientLayer.colors = [
-            UIColor(red:0.94, green:0.53, blue:1, alpha:0.9).cgColor,
-            UIColor(red:0.47, green:0.77, blue:1, alpha:0.9).cgColor
-        ]
-        gradientLayer.locations = [0, 1]
-        gradientLayer.startPoint = CGPoint.zero
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        backgroundImageView.layer.addSublayer(gradientLayer)
+        if let nav = navigationController as? ClearNavigationController {
+            nav.backgroundImageView.image = UIImage(named: "placeholderBackground3")
+        }
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.alwaysBounceVertical = true
@@ -262,11 +251,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         requiredFieldLabel.text = "* Required Field"
         scrollView.addSubview(requiredFieldLabel)
         
-        backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -434,10 +418,10 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         repeatsInputView.textField.text = selectedRepeats.rules(abreviated: true)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        gradientLayer.frame = view.bounds
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let animator = CustomAnimator()
+        animator.presenting = fromVC == self
+        return animator
     }
     
     //MARK: Display Update

@@ -17,7 +17,7 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
         
         title = "Repeats"
         
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
         
         //table view
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -26,6 +26,8 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
         tableView.reloadData()
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
         view.addSubview(tableView)
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -45,7 +47,15 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,13 +69,7 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
         if indexPath.row == DaysOfTheWeek.allCases.count {
             cell.titleLabel.text = "NEVER"
             
-            if repeatingDays.count == 0 {
-                cell.titleLabel.textColor = UIColor.primaryCopy()
-            } else {
-                cell.titleLabel.textColor = UIColor.lightCopy()
-            }
-            
-            cell.accessoryType = .none
+            cell.radioButton.isSelected = repeatingDays.count == 0
             
             return cell
         }
@@ -73,13 +77,8 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
         let day = allDays[indexPath.row]
         
         cell.titleLabel.text = day.plural().uppercased()
-        if repeatingDays.contains(day) {
-            cell.titleLabel.textColor = UIColor.primaryCopy()
-            cell.accessoryType = .checkmark
-        } else {
-            cell.titleLabel.textColor = UIColor.lightCopy()
-            cell.accessoryType = .none
-        }
+        
+        cell.radioButton.isSelected = repeatingDays.contains(day)
         
         return cell
     }
@@ -99,21 +98,34 @@ class RepeatEditViewController: UIViewController, UITableViewDelegate, UITableVi
 
 class RepeatTableViewCell: UITableViewCell {
     let titleLabel = UILabel()
+    let radioButton = RadioButton(frame: CGRect())
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         selectionStyle = .none
         
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        
+        radioButton.translatesAutoresizingMaskIntoConstraints = false
+        radioButton.isUserInteractionEnabled = false
+        contentView.addSubview(radioButton)
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.cta()
-        titleLabel.textColor = UIColor.primaryCopy()
+        titleLabel.textColor = .white
         titleLabel.numberOfLines = 0
         contentView.addSubview(titleLabel)
         
-        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        radioButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 36).isActive = true
+        radioButton.heightAnchor.constraint(equalToConstant: RadioButton.preferedSize).isActive = true
+        radioButton.widthAnchor.constraint(equalToConstant: RadioButton.preferedSize).isActive = true
+        radioButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        
+        titleLabel.leadingAnchor.constraint(equalTo: radioButton.trailingAnchor, constant: 10).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14).isActive = true
+        titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

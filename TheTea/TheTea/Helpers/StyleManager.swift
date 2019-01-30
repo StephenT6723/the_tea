@@ -27,4 +27,17 @@ class StyleManager {
         barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
                                                    NSAttributedString.Key.foregroundColor:UIColor.lightCopy()], for: .disabled)
     }
+    
+    class func setWhiteNavBarStyling() {
+        let barButtonAppearace = UIBarButtonItem.appearance()
+        barButtonAppearace.tintColor = .white
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.white], for: .normal)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.white], for: .selected)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.white], for: .focused)
+        barButtonAppearace.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.white], for: .highlighted)
+    }
 }
