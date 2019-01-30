@@ -19,51 +19,71 @@ class LocationPickerViewController: UIViewController {
     var searchCompleter = MKLocalSearchCompleter()
     var searchResults = [MKLocalSearchCompletion]()
     let tableView = UITableView()
-    let searchBar = UISearchBar()
+    
+    let topDivider = UIView()
+    let searchTextField = UITextField()
     var delegate: LocationPickerViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Add Location"
-        edgesForExtendedLayout = UIRectEdge()
+        
+        edgesForExtendedLayout = []
+        
+        view.backgroundColor = .clear
+        
         searchCompleter.delegate = self
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTouched))
         navigationItem.leftBarButtonItem = cancelButton
         
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.delegate = self
-        view.addSubview(searchBar)
+        searchTextField.translatesAutoresizingMaskIntoConstraints = false
+        searchTextField.font = UIFont(name: "Montserrat-SemiBold", size: 20)
+        searchTextField.textColor = .white
+        searchTextField.tintColor = .white
+        searchTextField.addTarget(self, action: #selector(searchTextUpdated), for: .editingChanged)
+        view.addSubview(searchTextField)
+        
+        topDivider.translatesAutoresizingMaskIntoConstraints = false
+        topDivider.backgroundColor = .white
+        view.addSubview(topDivider)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .clear
         tableView.register(LocationTableViewCell.self, forCellReuseIdentifier: String(describing: LocationTableViewCell.self))
+        tableView.separatorStyle = .none
         view.addSubview(tableView)
         
-        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        searchTextField.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 80).isActive = true
+        
+        topDivider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
+        topDivider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+        topDivider.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        topDivider.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 8).isActive = true
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: 10).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        searchBar.becomeFirstResponder()
+        searchTextField.becomeFirstResponder()
     }
     
     @objc func cancelButtonTouched() {
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
-}
-
-extension LocationPickerViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchCompleter.queryFragment = searchText
+    
+    @objc func searchTextUpdated() {
+        if let searchText = searchTextField.text {
+            searchCompleter.queryFragment = searchText
+        }
     }
 }
 
@@ -87,11 +107,15 @@ extension LocationPickerViewController: UITableViewDataSource {
         return searchResults.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 66
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let searchResult = searchResults[indexPath.row]
         if let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: LocationTableViewCell.self)) as? LocationTableViewCell {
-            cell.textLabel?.text = searchResult.title
-            cell.detailTextLabel?.text = searchResult.subtitle
+            cell.customTitleLabel.text = searchResult.title
+            cell.customSubtitleLabel.text = searchResult.subtitle
             return cell
         }
         return UITableViewCell(style: .subtitle, reuseIdentifier: nil)
@@ -118,21 +142,45 @@ extension LocationPickerViewController: UITableViewDelegate {
                         let longitude = coordinate.longitude
                         let eventLocation = EventLocation(locationName: locationName, address: address, latitude: latitude, longitude: longitude)
                         delegate.locationPicker(sender: self, selected: eventLocation)
-                        self.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     }
                 }
             } else {
                 let eventLocation = EventLocation(locationName: locationName, address: "", latitude: 0, longitude: 0)
                 delegate.locationPicker(sender: self, selected: eventLocation)
-                self.dismiss(animated: true, completion: nil)
+                navigationController?.popViewController(animated: true)
             }
         }
     }
 }
 
 class LocationTableViewCell: UITableViewCell {
+    let customTitleLabel = UILabel()
+    let customSubtitleLabel = UILabel()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        
+        customTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        customTitleLabel.font = UIFont(name: "Montserrat-SemiBold", size: 18)
+        customTitleLabel.textColor = .white
+        contentView.addSubview(customTitleLabel)
+        
+        customSubtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        customSubtitleLabel.font = UIFont(name: "Montserrat-SemiBold", size: 14)
+        customSubtitleLabel.textColor = .white
+        contentView.addSubview(customSubtitleLabel)
+        
+        customTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40).isActive = true
+        customTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40).isActive = true
+        customTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 12).isActive = true
+        
+        customSubtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40).isActive = true
+        customSubtitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40).isActive = true
+        customSubtitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

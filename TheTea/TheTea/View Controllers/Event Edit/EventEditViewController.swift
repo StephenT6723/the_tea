@@ -21,7 +21,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let nameTextField = InputField()
     private let hostTextField = InputField()
     private var hostHeightConstraint = NSLayoutConstraint()
-    private let loginView = EventEditLoginView(frame: CGRect())
     
     private let dateTextField = InputField()
     private let datePicker = UIDatePicker()
@@ -37,6 +36,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     private let repeatsLabel = UILabel()
     
     private let locationLabel = InputField()
+    private let locationBottomBar = UIView()
     private let aboutTextView = InputField()
     private let deleteButton = UIButton()
     
@@ -104,15 +104,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         hostTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24).isActive = true
         hostHeightConstraint = hostTextField.heightAnchor.constraint(equalToConstant: textFieldHeight)
         hostHeightConstraint.isActive = true
-        
-        loginView.translatesAutoresizingMaskIntoConstraints = false
-        loginView.button.addTarget(self, action: #selector(loginButtonTouched), for: .touchUpInside)
-        scrollView.addSubview(loginView)
-        
-        loginView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        loginView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        loginView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-        loginView.bottomAnchor.constraint(equalTo: hostTextField.bottomAnchor).isActive = true
         
         dateTextField.translatesAutoresizingMaskIntoConstraints = false
         dateTextField.title = "DATE"
@@ -253,7 +244,8 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        scrollViewBottomConstraint.isActive = true
         
         imageSelectButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: sidePadding).isActive = true
         imageSelectButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -1 * sidePadding).isActive = true
@@ -332,8 +324,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             createButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
             
             createButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -40).isActive = true
-            scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            scrollViewBottomConstraint.isActive = true
             
             updateEndTime()
         } else {
@@ -390,8 +380,6 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 } else {
                     requiredFieldLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
                 }
-                scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-                scrollViewBottomConstraint.isActive = true
             }
         }
         
@@ -406,19 +394,16 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !MemberDataManager.isLoggedIn() {
-            loginView.alpha = 1
-            hostHeightConstraint.constant = 74
-        } else {
-            loginView.alpha = 0
-            hostHeightConstraint.constant = textFieldHeight
-            hostTextField.textField.text = MemberDataManager.loggedInMember()?.name
-        }
-        
         repeatsInputView.textField.text = selectedRepeats.rules(abreviated: true)
     }
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        
+        if toVC is LocationPickerViewController || fromVC is LocationPickerViewController {
+            let animator = LocationAnimator()
+            animator.presenting = fromVC == self
+            return animator
+        }
         let animator = CustomAnimator()
         animator.presenting = fromVC == self
         return animator
@@ -485,6 +470,38 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         
         createButton.isEnabled = enabled
         navigationItem.rightBarButtonItem?.isEnabled = enabled
+    }
+    
+    func prepareToDisplayLocationView(completion:@escaping () -> Void) {
+        let locationLabelFrame = scrollView.convert(locationLabel.frame, to: view)
+        
+        locationBottomBar.frame = CGRect(x: locationLabelFrame.minX, y: locationLabelFrame.maxY - 2, width: locationLabelFrame.width, height: 2)
+        locationBottomBar.backgroundColor = .white
+        view.addSubview(locationBottomBar)
+        
+        locationLabel.divider.alpha = 0
+        
+        UIView.animate(withDuration: 0.35, animations: {
+            self.scrollView.alpha = 0
+            self.locationBottomBar.frame = CGRect(x: self.locationBottomBar.frame.origin.x, y: 157, width: self.locationBottomBar.frame.width, height: 2)
+            self.view.layoutIfNeeded()
+        }) { (complete) in
+            completion()
+        }
+    }
+    
+    func returnFromLocationView(completion:@escaping () -> Void) {
+        let locationLabelFrame = scrollView.convert(locationLabel.frame, to: view)
+        
+        UIView.animate(withDuration: 0.35, animations: {
+            self.scrollView.alpha = 1
+            self.view.layoutIfNeeded()
+            self.locationBottomBar.frame = CGRect(x: locationLabelFrame.minX, y: locationLabelFrame.maxY - 1, width: locationLabelFrame.width, height: 1)
+        }) { (complete) in
+            self.locationBottomBar.removeFromSuperview()
+            self.locationLabel.divider.alpha = 1
+            completion()
+        }
     }
     
     //MARK: Helpers
@@ -728,17 +745,13 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     @objc func locationButtonTouched() {
         let locationVC = LocationPickerViewController()
         locationVC.delegate = self
-        let locationNav = UINavigationController(rootViewController: locationVC)
-        locationNav.navigationBar.isTranslucent = false
-        present(locationNav, animated: true, completion: nil)
+        navigationController?.pushViewController(locationVC, animated: true)
     }
     
     @objc func repeatsButtonTouched() {
         let repeatVC = RepeatEditViewController()
         repeatVC.rules = selectedRepeats
-        if let nav = self.navigationController {
-            nav.pushViewController(repeatVC, animated: true)
-        }
+        navigationController?.pushViewController(repeatVC, animated: true)
     }
     
     @objc func deleteButtonTouched() {
@@ -981,5 +994,47 @@ class EventEditImageSelectButton : UIView {
         let imageHeight = width * ratio
         let height = imageHeight > minHeight ? imageHeight : minHeight
         heightConstraint.constant = height
+    }
+}
+
+class LocationAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    var presenting = false
+    
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.35
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let fromView = transitionContext.view(forKey: .from) else { return }
+        guard let toView = transitionContext.view(forKey: .to) else { return }
+        
+        let container = transitionContext.containerView
+        if presenting {
+            container.addSubview(toView)
+        } else {
+            container.insertSubview(toView, belowSubview: fromView)
+        }
+        
+        toView.frame = container.frame
+        toView.layoutIfNeeded()
+        
+        if let fromVC = transitionContext.viewController(forKey: .from) as? EventEditViewController {
+            toView.alpha = 0
+            fromVC.prepareToDisplayLocationView {
+                toView.alpha = 1
+                fromView.alpha = 0
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            }
+        } else {
+            guard let toVC = transitionContext.viewController(forKey: .to) as? EventEditViewController else {
+                return
+            }
+            toView.alpha = 1
+            fromView.alpha = 0
+            toVC.returnFromLocationView {
+                
+            }
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+        }
     }
 }

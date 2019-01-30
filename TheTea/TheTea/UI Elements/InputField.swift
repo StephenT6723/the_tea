@@ -15,7 +15,7 @@ enum InputFieldType {
     case button
 }
 
-class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
+class InputField: UIControl {
     var title = "" {
         didSet {
             titleLabel.text = title
@@ -51,7 +51,7 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
     private let errorIconContainer = UIView()
     private let errorIcon = UIImageView(image: UIImage(named: "errorIcon"))
     private let errorLabel = UILabel()
-    private let divider = UIView()
+    let divider = UIView()
     private var dividerHeightConstraint = NSLayoutConstraint()
     private var priceWidthConstraint = NSLayoutConstraint()
     
@@ -227,9 +227,9 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
             }, completion: nil)
         }
     }
-    
-    //MARK: Text Field Delegate
+}
 
+extension InputField: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         setSelected(true, animated: true)
         if type == .price {
@@ -245,9 +245,9 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
-    //MARK: Text View Delegate
-    
+}
+
+extension InputField: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         self.sendActions(for: .editingChanged)
     }
@@ -259,6 +259,4 @@ class InputField: UIControl, UITextFieldDelegate, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         setSelected(false, animated: true)
     }
-    
-    
 }
