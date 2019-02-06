@@ -27,7 +27,7 @@ class EditProfileView: UIView {
         backgroundColor = .white
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.headerOne()
+        titleLabel.font = UIFont(name: "Montserrat-Bold", size: 20)
         titleLabel.textColor = UIColor(red:0.19, green:0.21, blue:0.27, alpha:1)
         titleLabel.text = "Edit Profile"
         addSubview(titleLabel)

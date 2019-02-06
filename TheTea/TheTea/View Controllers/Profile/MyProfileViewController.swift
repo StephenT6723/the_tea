@@ -9,17 +9,14 @@
 import UIKit
 import CoreData
 
-class MyProfileViewController: UIViewController, LoginViewDelegate {
-
+class MyProfileViewController: UIViewController {
     private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
     var eventsFRC = EventManager.favoritedEvents() ?? NSFetchedResultsController<Event>()
     
     private let timeFormatter = DateFormatter()
     
     private let editView = EditProfileView(frame: CGRect())
-    
-    private let loginVC = LoginViewController()
-    
+    let segmentedControl = SegmentedControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,35 +25,10 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         
         title = "My Profile"
         view.backgroundColor = .white
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logoutButtonTouched))
         
         timeFormatter.dateStyle = .none
         timeFormatter.timeStyle = .short
-        
-        loginVC.delegate = self
-        loginVC.view.alpha = 0
-        self.addChild(loginVC)
-        
-        view.addSubview(loginVC.view)
-        loginVC.view.translatesAutoresizingMaskIntoConstraints = false
-        loginVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        loginVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        loginVC.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        loginVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        loginVC.didMove(toParent: self)
-        
-        if !MemberDataManager.isLoggedIn() {
-            presentLoginView()
-        } else {
-            setLoaderVisible(true, animated: false)
-            
-            MemberDataManager.fetchLoggedInMember(onSuccess: {
-                self.updateContent()
-                self.setLoaderVisible(false, animated: true)
-            }) { (error) in
-                self.setLoaderVisible(false, animated: true)
-                print("ERROR UPDATING LOGGED IN MEMBER: \(error?.localizedDescription ?? "")")
-            }
-        }
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
@@ -75,12 +47,21 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        updateNavButtons()
+        segmentedControl.items = ["Favorites", "Hosting"]
+        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        segmentedControl.addTarget(self, action: #selector(favoritesHostingChanged), for: .valueChanged)
+        view.addSubview(segmentedControl)
+        
+        setLoaderVisible(true, animated: false)
+        
+        MemberDataManager.fetchLoggedInMember(onSuccess: {
+            self.tableView.reloadData()
+            self.setLoaderVisible(false, animated: true)
+        }) { (error) in
+            self.setLoaderVisible(false, animated: true)
+            print("ERROR UPDATING LOGGED IN MEMBER: \(error?.localizedDescription ?? "")")
+        }
     }
 
     //MARK: Actions
@@ -107,30 +88,12 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         present(addNav, animated: true, completion: nil)
     }
     
-    @objc func favoritesButtonTouched() {
-        guard let eventsFRC = EventManager.favoritedEvents() else {
-            return
-        }
-        
-        let eventCollectionVC = EventCollectionViewController()
-        eventCollectionVC.eventsFRC = eventsFRC
-        eventCollectionVC.title = "My Favorites"
-        navigationController?.pushViewController(eventCollectionVC, animated: true)
-    }
-    
-    @objc func hostingButtonTouched() {
-        guard let eventsFRC = EventManager.hostedEvents() else {
-            return
-        }
-        
-        let eventCollectionVC = EventCollectionViewController()
-        eventCollectionVC.eventsFRC = eventsFRC
-        eventCollectionVC.title = "My Hosted Events"
-        navigationController?.pushViewController(eventCollectionVC, animated: true)
-    }
-    
     @objc func saveButtonTouched() {
         guard let name = editView.nameTextField.text, let email = editView.emailTextField.text else {
+            return
+        }
+        
+        if name == MemberDataManager.loggedInMember()?.name && email == MemberDataManager.loggedInMember()?.email {
             return
         }
         
@@ -167,14 +130,6 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         }
     }
     
-    @objc func cancelButtonTouched() {
-        updateContent()
-    }
-    
-    @objc func presentLoginView() {
-        self.loginVC.view.alpha = 1
-    }
-    
     @objc func editProfileButtonTouched() {
         editView.nameTextField.text = MemberDataManager.loggedInMember()?.name
         editView.emailTextField.text = MemberDataManager.loggedInMember()?.email
@@ -187,26 +142,28 @@ class MyProfileViewController: UIViewController, LoginViewDelegate {
         dismissAlertView()
     }
     
-    //MARK: Login View Delegate
-    
-    func loginSucceeded() {
-        updateContent()
-        UIView.animate(withDuration: 0.3, animations: {
-            self.loginVC.view.alpha = 0
-        }) { (_) in
-            self.loginVC.reset()
-        }
-        updateNavButtons()
-    }
-    
-    //MARK: Helpers
-    
-    func updateNavButtons() {
-        navigationItem.rightBarButtonItem = MemberDataManager.isLoggedIn() ? UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logoutButtonTouched)) : nil
-    }
-    
-    func updateContent() {
+    @objc func favoritesHostingChanged(sender: SegmentedControl) {
+        let frc = sender.selectedIndex == 0 ? EventManager.favoritedEvents() : EventManager.hostedEvents()
+        eventsFRC = frc ?? NSFetchedResultsController<Event>()
         tableView.reloadData()
+    }
+    
+    @objc func addProfilePictureButtonTouched() {
+        print("add profile pic")
+    }
+}
+
+extension MyProfileViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let header = tableView.headerView(forSection: 0)
+        
+        let maxPos: CGFloat = 480 - view.safeAreaInsets.top
+        var yPos = maxPos - scrollView.contentOffset.y
+        if yPos < 0 {
+            yPos = 0
+        }
+        yPos = yPos + view.safeAreaInsets.top
+        segmentedControl.frame = CGRect(x: 0, y: yPos, width: view.bounds.width, height: 46)
     }
 }
 
@@ -255,7 +212,7 @@ extension MyProfileViewController: UITableViewDelegate {
         header.customContentView.emailLabel.text = member.email
         header.customContentView.addEventButton.addTarget(self, action: #selector(addEventButtonTouched), for: .touchUpInside)
         header.customContentView.editProfileButton.addTarget(self, action: #selector(editProfileButtonTouched), for: .touchUpInside)
-        
+        header.customContentView.addProfilePictureButton.addTarget(self, action: #selector(addProfilePictureButtonTouched), for: .touchUpInside)
         
         return header
     }
@@ -293,13 +250,19 @@ extension MyProfileViewController: UITableViewDataSource {
 }
 
 class MyProfileHeaderView: UITableViewHeaderFooterView {
-    let imageView = UIImageView(image: UIImage(named: "LosAngelesBackup4"))
+    let imageView = UIImageView()
     let customContentView = MyProfileContentView(frame: CGRect())
-    private let segmentedControl = SegmentedControl()
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
+        guard let cityName = CityManager.selectedCity()?.name else {
+            return
+        }
+        
+        let imageName = "\(cityName.replacingOccurrences(of: " ", with: ""))Backup4"
+        
+        imageView.image = UIImage(named: imageName)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -319,26 +282,16 @@ class MyProfileHeaderView: UITableViewHeaderFooterView {
         customContentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(customContentView)
         
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.items = ["Favorites", "Hosting"]
-        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.9)
-        addSubview(segmentedControl)
-        
         imageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         imageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 170).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -356).isActive = true
         
         customContentView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -50).isActive = true
         customContentView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         customContentView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         customContentView.heightAnchor.constraint(equalToConstant: 340).isActive = true
-        
-        segmentedControl.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 310).isActive = true
-        segmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        segmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        segmentedControl.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        segmentedControl.heightAnchor.constraint(equalToConstant: 46).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -451,9 +404,11 @@ class AddProfilePictureButton: UIButton {
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.backgroundColor = UIColor(red:0.9, green:0.92, blue:0.92, alpha:1)
         backgroundView.layer.cornerRadius = (AddProfilePictureButton.preferedSize - 8) / 2
+        backgroundView.isUserInteractionEnabled = false
         addSubview(backgroundView)
         
         cameraImageView.translatesAutoresizingMaskIntoConstraints = false
+        cameraImageView.isUserInteractionEnabled = false
         addSubview(cameraImageView)
         
         label.translatesAutoresizingMaskIntoConstraints = false
