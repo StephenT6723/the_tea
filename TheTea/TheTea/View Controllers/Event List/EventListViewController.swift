@@ -94,7 +94,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let myAccountVC = MyProfileViewController()
         let myAccountNav = UINavigationController(rootViewController: myAccountVC)
-        myAccountNav.navigationBar.isTranslucent = false
         present(myAccountNav, animated: true, completion: nil)
     }
     

@@ -85,7 +85,7 @@ class SegmentedControl: UIControl {
         addSubview(selector)
         
         selector.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        selector.widthAnchor.constraint(equalTo: firstButton.widthAnchor, constant: -30).isActive = true
+        selector.widthAnchor.constraint(equalTo: firstButton.widthAnchor, constant: -40).isActive = true
         selectorCenterContraint = selector.centerXAnchor.constraint(equalTo: firstButton.centerXAnchor)
         selectorCenterContraint.isActive = true
         selector.bottomAnchor.constraint(equalTo: firstButton.bottomAnchor).isActive = true
