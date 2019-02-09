@@ -66,10 +66,6 @@ class CityManager {
             return nil
         }
         
-        if selectedCity() == nil {
-            city.selected = name == "New York" ? true : false
-        }
-        
         //update city object
         city.update(name: name, quote: quote, state: state)
         return city
@@ -122,6 +118,8 @@ class CityManager {
     
     class func selectCity(city: City) {
         guard let previousCity = selectedCity() else {
+            city.selected = true
+            CoreDataManager.sharedInstance.saveContext()
             return
         }
         if previousCity == city {

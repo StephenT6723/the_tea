@@ -17,6 +17,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let maxEventsPerDay = 3
     private var featuredCollections = EventCollectionManager.featuredEventCollections()
     private let quoteHeader = EventListTableViewHeader(frame: CGRect(x: 0, y: 0, width: 300, height: 208))
+    private var showSplash = true
     var eventsFRC: NSFetchedResultsController<Event>? {
         didSet {
             eventsFRC?.delegate = self
@@ -63,9 +64,25 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        updateCities()
-        updateEvents()
+        
+        updateNavButtons()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if showSplash {
+            let splashVC = SplashViewController()
+            present(splashVC, animated: false, completion: nil)
+        } else {
+            updateQuoteHeader()
+            if eventsFRC == nil {
+                eventsFRC = EventManager.allFutureEvents()
+            }
+            tableView.reloadData()
+        }
+        
+        showSplash = false
     }
     
     //MARK: Actions
@@ -95,43 +112,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let myAccountVC = MyProfileViewController()
         let myAccountNav = UINavigationController(rootViewController: myAccountVC)
         present(myAccountNav, animated: true, completion: nil)
-    }
-    
-    func updateCities() {
-        CityManager.updateAllCities(onSuccess: {
-            self.updateQuoteHeader()
-        }) { (error) in
-            print("Error updating cities")
-            self.updateQuoteHeader()
-        }
-    }
-    
-    func updateEvents() {
-        setLoaderVisible(true, animated: false)
-        navigationItem.rightBarButtonItem = nil
-        EventManager.updateUpcomingEvents(onSuccess: {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.setLoaderVisible(false, animated: true)
-                self.updateNavButtons()
-            })
-            if self.eventsFRC == nil {
-                self.eventsFRC = EventManager.allFutureEvents()
-            }
-            self.tableView.reloadData()
-        }) { (error) in
-            print("Error loading events")
-            let alert = UIAlertController(title: "Error", message: "Unable to load new events", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { action in
-                self.updateEvents()
-            }))
-            if self.eventsFRC?.fetchedObjects?.count != 0 {
-                alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) in
-                    self.setLoaderVisible(false, animated: true)
-                    self.updateNavButtons()
-                }))
-            }
-            self.present(alert, animated: true, completion: nil)
-        }
     }
     
     func updateQuoteHeader() {

@@ -154,9 +154,7 @@ class MyProfileViewController: UIViewController {
 }
 
 extension MyProfileViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let header = tableView.headerView(forSection: 0)
-        
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {        
         let maxPos: CGFloat = 480 - view.safeAreaInsets.top
         var yPos = maxPos - scrollView.contentOffset.y
         if yPos < 0 {

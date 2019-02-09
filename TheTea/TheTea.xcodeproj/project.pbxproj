@@ -13,7 +13,7 @@
 		930E890A21E169230013EC37 /* Montserrat-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 930E890921E169230013EC37 /* Montserrat-Medium.otf */; };
 		930E890E21E3E7C20013EC37 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930E890D21E3E7C20013EC37 /* Carousel.swift */; };
 		932258B721FFE46F00448E50 /* ClearNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932258B621FFE46F00448E50 /* ClearNavigationController.swift */; };
-		932258BA22022C6000448E50 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932258B922022C6000448E50 /* RootViewController.swift */; };
+		932258BA22022C6000448E50 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932258B922022C6000448E50 /* SplashViewController.swift */; };
 		93262AA321ED9F5D00210A9F /* EventListTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93262AA221ED9F5D00210A9F /* EventListTableViewHeader.swift */; };
 		932991332073E295008C7A3B /* EventCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932991322073E295008C7A3B /* EventCollectionManager.swift */; };
 		9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337C7721F4F3BEA00230829 /* StyleManager.swift */; };
@@ -47,6 +47,7 @@
 		938906771F3E86D400BBB88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 938906751F3E86D400BBB88C /* LaunchScreen.storyboard */; };
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
 		93B232F4220B624800797429 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B232F3220B624800797429 /* EditProfileView.swift */; };
+		93B23318220E91BA00797429 /* LogoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B23317220E91BA00797429 /* LogoLoader.swift */; };
 		93CF651921E52C7100090B65 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651721E52C7100090B65 /* EventView.swift */; };
 		93CF651A21E52C7100090B65 /* EventCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651821E52C7100090B65 /* EventCarouselTableViewCell.swift */; };
 		93CF651C21E52CA000090B65 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651B21E52CA000090B65 /* EventTableViewCell.swift */; };
@@ -86,7 +87,7 @@
 		930E890921E169230013EC37 /* Montserrat-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Medium.otf"; path = "Misc/Montserrat/Montserrat-Medium.otf"; sourceTree = "<group>"; };
 		930E890D21E3E7C20013EC37 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Carousel.swift; path = "UI Elements/Carousel.swift"; sourceTree = "<group>"; };
 		932258B621FFE46F00448E50 /* ClearNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClearNavigationController.swift; path = "UI Elements/ClearNavigationController.swift"; sourceTree = "<group>"; };
-		932258B922022C6000448E50 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		932258B922022C6000448E50 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		93262AA221ED9F5D00210A9F /* EventListTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListTableViewHeader.swift; sourceTree = "<group>"; };
 		932991322073E295008C7A3B /* EventCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventCollectionManager.swift; path = "Data/Data Managers/EventCollectionManager.swift"; sourceTree = "<group>"; };
 		9337C7721F4F3BEA00230829 /* StyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleManager.swift; path = Helpers/StyleManager.swift; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 		938906781F3E86D400BBB88C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		93B232F3220B624800797429 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		93B23317220E91BA00797429 /* LogoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogoLoader.swift; path = "UI Elements/LogoLoader.swift"; sourceTree = "<group>"; };
 		93CF651721E52C7100090B65 /* EventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventView.swift; path = "UI Elements/Event Cells/EventView.swift"; sourceTree = "<group>"; };
 		93CF651821E52C7100090B65 /* EventCarouselTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventCarouselTableViewCell.swift; path = "UI Elements/Event Cells/EventCarouselTableViewCell.swift"; sourceTree = "<group>"; };
 		93CF651B21E52CA000090B65 /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventTableViewCell.swift; path = "UI Elements/Event Cells/EventTableViewCell.swift"; sourceTree = "<group>"; };
@@ -185,12 +187,12 @@
 			name = Montserrat;
 			sourceTree = "<group>";
 		};
-		932258B822022C4100448E50 /* Root */ = {
+		932258B822022C4100448E50 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
-				932258B922022C6000448E50 /* RootViewController.swift */,
+				932258B922022C6000448E50 /* SplashViewController.swift */,
 			);
-			path = Root;
+			path = Splash;
 			sourceTree = "<group>";
 		};
 		9337C76F1F4F3A0D00230829 /* Misc */ = {
@@ -277,6 +279,7 @@
 				93CF653B21EB0CF200090B65 /* InputField.swift */,
 				930E890D21E3E7C20013EC37 /* Carousel.swift */,
 				93FCC29521FD0035009BBF8D /* SingleSelectList.swift */,
+				93B23317220E91BA00797429 /* LogoLoader.swift */,
 				93CF651621E52C4700090B65 /* Event Cells */,
 				932258B621FFE46F00448E50 /* ClearNavigationController.swift */,
 			);
@@ -353,7 +356,7 @@
 		D70260D61FE97E5A00D20BB8 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				932258B822022C4100448E50 /* Root */,
+				932258B822022C4100448E50 /* Splash */,
 				D70260D91FE97ECB00D20BB8 /* Event List */,
 				93EAF8EB206D6C15008B213F /* Event Collection */,
 				D70260DA1FE97EDB00D20BB8 /* Event Detail */,
@@ -595,6 +598,7 @@
 				93B232F4220B624800797429 /* EditProfileView.swift in Sources */,
 				935D25C11F93CC1B007D25B8 /* Date+TheTea.swift in Sources */,
 				930E890E21E3E7C20013EC37 /* Carousel.swift in Sources */,
+				93B23318220E91BA00797429 /* LogoLoader.swift in Sources */,
 				9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */,
 				93CF651921E52C7100090B65 /* EventView.swift in Sources */,
 				933956E31F4400EB00F1AEE4 /* EventLocation.swift in Sources */,
@@ -603,7 +607,7 @@
 				93FCC29121FCEFDF009BBF8D /* City+TTMethods.swift in Sources */,
 				93EAF8EA206C3CEE008B213F /* EventCollectionCarouselCell.swift in Sources */,
 				93CF651A21E52C7100090B65 /* EventCarouselTableViewCell.swift in Sources */,
-				932258BA22022C6000448E50 /* RootViewController.swift in Sources */,
+				932258BA22022C6000448E50 /* SplashViewController.swift in Sources */,
 				D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */,
 				93FCC29821FE0669009BBF8D /* TermsViewController.swift in Sources */,
 				933956EB1F440EF600F1AEE4 /* LoginViewController.swift in Sources */,
