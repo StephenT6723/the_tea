@@ -415,7 +415,7 @@ class TGAServer {
         params[apiPriceKey] = "\(price)"
         params[apiTicketURLKey] = ticketURL ?? ""
         params[apiRepeatsKey] = repeats
-        params[apiTimeZoneKey] = "\(TimeZone.current.secondsFromGMT())"
+        params[apiTimeZoneKey] = "\(TimeZone.current.secondsFromGMT()/10)"
         if let imageData = image?.pngData() {
             let dataString = imageData.base64EncodedString()
             var dataDict = [String:String]()
@@ -495,7 +495,7 @@ class TGAServer {
         params[apiPriceKey] = "\(price)"
         params[apiTicketURLKey] = ticketURL ?? ""
         params[apiRepeatsKey] = repeats
-        params[apiTimeZoneKey] = "\(TimeZone.current.secondsFromGMT())"
+        params[apiTimeZoneKey] = "\(TimeZone.current.secondsFromGMT()/10)"
         if let imageData = image?.pngData() {
             let dataString = imageData.base64EncodedString()
             var dataDict = [String:String]()

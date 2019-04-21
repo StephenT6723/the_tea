@@ -21,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let eventsFRC = EventManager.allFutureEvents()
         eventListVC.eventsFRC = eventsFRC
         let rootNav = UINavigationController(rootViewController: eventListVC)
-        rootNav.tabBarItem.image = UIImage(named: "rootViewIcon")
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window!.rootViewController = rootNav

@@ -191,7 +191,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         header.titleLabel.text = title(forHeader: section)
-        header.subTitleLabel.text = subTitle(forHeader: section)
+        header.subTitleLabel.text = subTitle(forHeader: section).uppercased()
         
         header.seeAllButton.tag = section
         header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(sender:)), for: .touchUpInside)
@@ -300,7 +300,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             cellView.image = event.backupImage()
         }
         let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
-        cellView.update(title: event.name, subtitle: event.subtitle(), subtitleColor: subtitleColor)
+        cellView.update(title: event.name, subtitle: event.subtitle()?.uppercased(), subtitleColor: subtitleColor)
         cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
         cellView.placeLabel.text = event.locationName
         let numberFormatter = NumberFormatter()
@@ -351,7 +351,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let dataString = sectionInfo.name
         guard let sectionDate = DateStringHelper.date(from: dataString) else { return "" }
         
-        return dateFormatter.string(from: sectionDate).uppercased()
+        return dateFormatter.string(from: sectionDate).capitalized
     }
 }
 

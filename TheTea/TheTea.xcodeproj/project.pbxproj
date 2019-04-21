@@ -40,7 +40,6 @@
 		935A65921F3EA5B500E979E9 /* Event+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */; };
 		935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65941F3EA7C700E979E9 /* CoreDataManager.swift */; };
 		935A65971F3EAC9400E979E9 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A65961F3EAC9400E979E9 /* EventManager.swift */; };
-		935D25C11F93CC1B007D25B8 /* Date+TheTea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935D25C01F93CC1B007D25B8 /* Date+TheTea.swift */; };
 		9389066A1F3E86D400BBB88C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906691F3E86D400BBB88C /* AppDelegate.swift */; };
 		938906721F3E86D400BBB88C /* TheTea.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 938906701F3E86D400BBB88C /* TheTea.xcdatamodeld */; };
 		938906741F3E86D400BBB88C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 938906731F3E86D400BBB88C /* Assets.xcassets */; };
@@ -48,6 +47,7 @@
 		938906821F3E891900BBB88C /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938906811F3E891900BBB88C /* EventListViewController.swift */; };
 		93B232F4220B624800797429 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B232F3220B624800797429 /* EditProfileView.swift */; };
 		93B23318220E91BA00797429 /* LogoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B23317220E91BA00797429 /* LogoLoader.swift */; };
+		93B2331A220F371D00797429 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B23319220F371D00797429 /* AlertView.swift */; };
 		93CF651921E52C7100090B65 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651721E52C7100090B65 /* EventView.swift */; };
 		93CF651A21E52C7100090B65 /* EventCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651821E52C7100090B65 /* EventCarouselTableViewCell.swift */; };
 		93CF651C21E52CA000090B65 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF651B21E52CA000090B65 /* EventTableViewCell.swift */; };
@@ -73,7 +73,6 @@
 		D70260D01FE97C5500D20BB8 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */; };
 		D70260D21FE97C7200D20BB8 /* TopPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70260D11FE97C7200D20BB8 /* TopPanelView.swift */; };
 		D7103DBA1F85278400399263 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DB91F85278400399263 /* SegmentedControl.swift */; };
-		D7103DC21F85599300399263 /* AlertCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7103DC11F85599300399263 /* AlertCTA.swift */; };
 		D739CD281F704D8800E3779B /* PrimaryCTA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD271F704D8800E3779B /* PrimaryCTA.swift */; };
 		D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = D739CD291F706D6F00E3779B /* Member+TTMethods.swift */; };
 		D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DFB9D01F8BDAEA0053B2C9 /* TGAServer.swift */; };
@@ -114,7 +113,6 @@
 		935A65901F3EA5B500E979E9 /* Event+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+TTMethods.swift"; path = "Data/Event+TTMethods.swift"; sourceTree = "<group>"; };
 		935A65941F3EA7C700E979E9 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = "Data/Data Managers/CoreDataManager.swift"; sourceTree = "<group>"; };
 		935A65961F3EAC9400E979E9 /* EventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventManager.swift; path = "Data/Data Managers/EventManager.swift"; sourceTree = "<group>"; };
-		935D25C01F93CC1B007D25B8 /* Date+TheTea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Date+TheTea.swift"; path = "Helpers/Date+TheTea.swift"; sourceTree = "<group>"; };
 		938906661F3E86D400BBB88C /* TheTea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheTea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		938906691F3E86D400BBB88C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		938906711F3E86D400BBB88C /* TheTea.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheTea.xcdatamodel; sourceTree = "<group>"; };
@@ -124,6 +122,7 @@
 		938906811F3E891900BBB88C /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		93B232F3220B624800797429 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		93B23317220E91BA00797429 /* LogoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogoLoader.swift; path = "UI Elements/LogoLoader.swift"; sourceTree = "<group>"; };
+		93B23319220F371D00797429 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlertView.swift; path = "UI Elements/AlertView.swift"; sourceTree = "<group>"; };
 		93CF651721E52C7100090B65 /* EventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventView.swift; path = "UI Elements/Event Cells/EventView.swift"; sourceTree = "<group>"; };
 		93CF651821E52C7100090B65 /* EventCarouselTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventCarouselTableViewCell.swift; path = "UI Elements/Event Cells/EventCarouselTableViewCell.swift"; sourceTree = "<group>"; };
 		93CF651B21E52CA000090B65 /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventTableViewCell.swift; path = "UI Elements/Event Cells/EventTableViewCell.swift"; sourceTree = "<group>"; };
@@ -148,7 +147,6 @@
 		D70260CE1FE97C5400D20BB8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEditViewController.swift; sourceTree = "<group>"; };
 		D70260D11FE97C7200D20BB8 /* TopPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopPanelView.swift; sourceTree = "<group>"; };
 		D7103DB91F85278400399263 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedControl.swift; path = "UI Elements/SegmentedControl.swift"; sourceTree = "<group>"; };
-		D7103DC11F85599300399263 /* AlertCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertCTA.swift; path = "UI Elements/AlertCTA.swift"; sourceTree = "<group>"; };
 		D739CD271F704D8800E3779B /* PrimaryCTA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimaryCTA.swift; path = "UI Elements/PrimaryCTA.swift"; sourceTree = "<group>"; };
 		D739CD291F706D6F00E3779B /* Member+TTMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Member+TTMethods.swift"; path = "Data/Member+TTMethods.swift"; sourceTree = "<group>"; };
 		D7DFB9D01F8BDAEA0053B2C9 /* TGAServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TGAServer.swift; path = "Data/Data Managers/TGAServer.swift"; sourceTree = "<group>"; };
@@ -235,7 +233,6 @@
 				9337C7721F4F3BEA00230829 /* StyleManager.swift */,
 				9337C7741F4F3CA400230829 /* UIColor+TheTea.swift */,
 				9337C7761F4F3F1400230829 /* UIFont+TheTea.swift */,
-				935D25C01F93CC1B007D25B8 /* Date+TheTea.swift */,
 				93FCC28C21FCD9C1009BBF8D /* UIViewController+TheTea.swift */,
 			);
 			name = Helpers;
@@ -273,13 +270,13 @@
 			children = (
 				93FCC28821FCD956009BBF8D /* ActivityIndicator.swift */,
 				D739CD271F704D8800E3779B /* PrimaryCTA.swift */,
-				D7103DC11F85599300399263 /* AlertCTA.swift */,
 				93CF653D21ED706200090B65 /* RadioButton.swift */,
 				D7103DB91F85278400399263 /* SegmentedControl.swift */,
 				93CF653B21EB0CF200090B65 /* InputField.swift */,
 				930E890D21E3E7C20013EC37 /* Carousel.swift */,
 				93FCC29521FD0035009BBF8D /* SingleSelectList.swift */,
 				93B23317220E91BA00797429 /* LogoLoader.swift */,
+				93B23319220F371D00797429 /* AlertView.swift */,
 				93CF651621E52C4700090B65 /* Event Cells */,
 				932258B621FFE46F00448E50 /* ClearNavigationController.swift */,
 			);
@@ -572,11 +569,11 @@
 				935A65951F3EA7C700E979E9 /* CoreDataManager.swift in Sources */,
 				D70260CF1FE97C5500D20BB8 /* LocationPickerViewController.swift in Sources */,
 				93FCC28F21FCEB5C009BBF8D /* CityManager.swift in Sources */,
+				93B2331A220F371D00797429 /* AlertView.swift in Sources */,
 				93EAF8E8206C39AB008B213F /* EventCollectionCarousel.swift in Sources */,
 				9337C7921F4F459A00230829 /* EventListHeaderView.swift in Sources */,
 				9337C7731F4F3BEA00230829 /* StyleManager.swift in Sources */,
 				D7DFB9D11F8BDAEA0053B2C9 /* TGAServer.swift in Sources */,
-				D7103DC21F85599300399263 /* AlertCTA.swift in Sources */,
 				93E440AB21836DD2001E82E0 /* RepeatEditViewController.swift in Sources */,
 				93FCC28D21FCD9C1009BBF8D /* UIViewController+TheTea.swift in Sources */,
 				93E440AD21837201001E82E0 /* EventRepeatRules.swift in Sources */,
@@ -596,7 +593,6 @@
 				D739CD2A1F706D6F00E3779B /* Member+TTMethods.swift in Sources */,
 				93399AF01F40DC2300ED02E9 /* EventDetailViewController.swift in Sources */,
 				93B232F4220B624800797429 /* EditProfileView.swift in Sources */,
-				935D25C11F93CC1B007D25B8 /* Date+TheTea.swift in Sources */,
 				930E890E21E3E7C20013EC37 /* Carousel.swift in Sources */,
 				93B23318220E91BA00797429 /* LogoLoader.swift in Sources */,
 				9337C7751F4F3CA400230829 /* UIColor+TheTea.swift in Sources */,

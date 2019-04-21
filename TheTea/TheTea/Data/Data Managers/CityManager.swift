@@ -24,8 +24,6 @@ class CityManager {
         } catch {
             fatalError("Failed to fetch City Object: \(error)")
         }
-        
-        return []
     }
     
     class func updateAllCities(onSuccess success:@escaping () -> Void,
