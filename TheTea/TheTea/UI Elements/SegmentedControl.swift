@@ -106,7 +106,7 @@ class SegmentedControl: UIControl {
     }
     
     @objc func buttonTapped(sender: UIButton) {
-        guard let buttonIndex = buttons.index(of: sender) else {
+        guard let buttonIndex = buttons.firstIndex(of: sender) else {
             return
         }
         

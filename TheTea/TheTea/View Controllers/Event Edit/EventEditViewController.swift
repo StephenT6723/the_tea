@@ -331,9 +331,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
             if let event = self.event {
                 if let url = URL(string: event.fullImageURL() ?? "") {
                     KingfisherManager.shared.retrieveImage(with: url) { result in
-                        if let image = result.value?.image {
-                            self.imageSelectButton.image = image
-                            self.selectedImage = image
+                        switch result {
+                        case .success(let value):
+                            self.imageSelectButton.image = value.image
+                            self.selectedImage = value.image
+                        case .failure(let error):
+                            print(error) // The error happens
                         }
                     }
                 }
@@ -719,7 +722,7 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         let collections = EventCollectionManager.userUpdatedEventCollections()
         let tappedCollection = collections[index]
         if selectedCollections.contains(tappedCollection) {
-            if let selectedIndex = selectedCollections.index(of: tappedCollection) {
+            if let selectedIndex = selectedCollections.firstIndex(of: tappedCollection) {
                 selectedCollections.remove(at: selectedIndex)
             }
         } else {
