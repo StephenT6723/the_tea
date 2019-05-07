@@ -238,6 +238,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         priceDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
         priceDoneBar.backgroundColor = .white
         let priceDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        priceDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                  NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .normal)
+        priceDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                  NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .selected)
+        priceDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                  NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .focused)
         priceDoneBar.setItems([priceDoneButton], animated: false)
         priceInputField.textField.inputAccessoryView = priceDoneBar
         scrollView.addSubview(priceInputField)
@@ -853,6 +859,9 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         endTimeTextField.textField.resignFirstResponder()
         aboutTextView.textView.resignFirstResponder()
         priceInputField.textField.resignFirstResponder()
+        if priceInputField.textField.text ?? "" == "" {
+            priceInputField.textField.text = "0"
+        }
     }
     
     //MARK: Location selection

@@ -11,6 +11,7 @@ import MapKit
 
 class EventDetailViewController: UIViewController, MKMapViewDelegate {
     var event : Event
+    let showHosts = false
     
     let contentView = UIView()
     let topPanelView = TopPanelView()
@@ -162,6 +163,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         hostsTitleLabel.textColor = UIColor.lightCopy()
         hostsTitleLabel.text = "HOSTS"
         hostsTitleLabel.alpha = hostsArray.count > 0 ? 1 : 0
+        hostsTitleLabel.isHidden = !showHosts
         contentView.addSubview(hostsTitleLabel)
         
         reportButton.translatesAutoresizingMaskIntoConstraints = false
@@ -171,33 +173,35 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         reportButton.addTarget(self, action: #selector(reportButtonTouched), for: .touchUpInside)
         contentView.addSubview(reportButton)
         
-        var previousHostView: EventDetailHostView?
-        for i in 0..<hostsArray.count {
-            let host = hostsArray[i]
-            
-            let hostView = EventDetailHostView(frame: CGRect())
-            hostView.translatesAutoresizingMaskIntoConstraints = false
-            hostView.label.text = host.name
-            hostView.imageView.image = UIImage(named: "defaultAvatar")
-            hostView.button.tag = i
-            hostView.button.addTarget(self, action: #selector(hostButtonTouched), for: .touchUpInside)
-            contentView.addSubview(hostView)
-            
-            if previousHostView != nil {
-                hostView.topAnchor.constraint(equalTo: previousHostView!.bottomAnchor).isActive = true
-            } else {
-                hostView.topAnchor.constraint(equalTo: hostsTitleLabel.bottomAnchor, constant: 4).isActive = true
+        if showHosts {
+            var previousHostView: EventDetailHostView?
+            for i in 0..<hostsArray.count {
+                let host = hostsArray[i]
+                
+                let hostView = EventDetailHostView(frame: CGRect())
+                hostView.translatesAutoresizingMaskIntoConstraints = false
+                hostView.label.text = host.name
+                hostView.imageView.image = UIImage(named: "defaultAvatar")
+                hostView.button.tag = i
+                hostView.button.addTarget(self, action: #selector(hostButtonTouched), for: .touchUpInside)
+                contentView.addSubview(hostView)
+                
+                if previousHostView != nil {
+                    hostView.topAnchor.constraint(equalTo: previousHostView!.bottomAnchor).isActive = true
+                } else {
+                    hostView.topAnchor.constraint(equalTo: hostsTitleLabel.bottomAnchor, constant: 4).isActive = true
+                }
+                
+                hostView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+                hostView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+                hostView.heightAnchor.constraint(equalToConstant: EventDetailHostView.preferredHeight).isActive = true
+                
+                if i == hostsArray.count - 1 {
+                    hostView.bottomAnchor.constraint(equalTo: reportButton.topAnchor, constant: -10).isActive = true
+                }
+                
+                previousHostView = hostView
             }
-            
-            hostView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-            hostView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-            hostView.heightAnchor.constraint(equalToConstant: EventDetailHostView.preferredHeight).isActive = true
-            
-            if i == hostsArray.count - 1 {
-                hostView.bottomAnchor.constraint(equalTo: reportButton.topAnchor, constant: -10).isActive = true
-            }
-            
-            previousHostView = hostView
         }
         
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -274,7 +278,7 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         hostsTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         hostsTitleLabel.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 30).isActive = true
         
-        if hostsArray.count == 0 {
+        if hostsArray.count == 0 || !showHosts {
             reportButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 20).isActive = true
         }
         reportButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
