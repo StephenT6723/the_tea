@@ -78,14 +78,14 @@ class EventManager {
     }
     
     class func hostedEvents() -> NSFetchedResultsController<Event>? {
-        guard let ids = MemberDataManager.loggedInMember()?.hotHostingIDs() else {
+        guard let ids = MemberDataManager.loggedInMember()?.chronologicalHostingIDs() else {
             return nil
         }
         
         let request = NSFetchRequest<Event>(entityName:"Event")
         let predicate = NSPredicate(format: "gayID IN %@", ids)
         request.predicate = predicate
-        let startTimeSort = NSSortDescriptor(key: "hotness", ascending: false)
+        let startTimeSort = NSSortDescriptor(key: "startTime", ascending: true)
         request.sortDescriptors = [startTimeSort]
         
         let context = CoreDataManager.sharedInstance.viewContext()
@@ -263,7 +263,7 @@ class EventManager {
     class func createEvent(name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
                            onSuccess success:@escaping () -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
-        TGAServer.createEvent(name: name, startTime: startTime, endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, image: image, onSuccess: { () in
+        TGAServer.createEvent(name: name, startTime: updatedStartTime(startTime), endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, image: image, onSuccess: { () in
             success()
         }) { (error) in
             failure(error)
@@ -273,7 +273,7 @@ class EventManager {
     class func updateEvent(event: Event, name: String, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double, ticketURL: String?, repeats: String, image: UIImage?,
                            onSuccess success:@escaping () -> Void,
                            onFailure failure: @escaping (_ error: Error?) -> Void) {
-        TGAServer.updateEvent(event: event, name: name, startTime: startTime, endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, image: image, onSuccess: { () in
+        TGAServer.updateEvent(event: event, name: name, startTime: updatedStartTime(startTime), endTime: endTime, about: about, location: location, price: price, ticketURL: ticketURL, repeats: repeats, image: image, onSuccess: { () in
             success()
         }) { (error) in
             failure(error)
@@ -315,6 +315,17 @@ class EventManager {
                 failure(error)
             }
         }
+    }
+    
+    class func updatedStartTime(_ startTime: Date) -> Date {
+        let hour = Calendar.current.component(.hour, from: startTime)
+        let minute = Calendar.current.component(.minute, from: startTime)
+        
+        if hour == 00 && minute == 00 {
+            return Calendar.current.date(bySettingHour: 23, minute: 59, second: 0, of: startTime) ?? startTime
+        }
+        
+        return startTime
     }
     
     //MARK: Stale

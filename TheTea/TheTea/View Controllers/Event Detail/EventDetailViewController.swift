@@ -351,10 +351,11 @@ class EventDetailViewController: UIViewController, MKMapViewDelegate {
         var timeString = ""
         
         if let startTime = event.startTime {
+            let startTimeString = timeFormatter.string(from: startTime)
             if event.repeatRules().repeatingDays().count == 0 {
-                timeString = DateStringHelper.fullDescription(of: startTime as Date)
+                timeString = DateStringHelper.fullDescription(of: event.startTime ?? Date())
             } else {
-                timeString = "\(event.repeatRules().rules(abreviated: false)) - \(timeFormatter.string(from: startTime))"
+                timeString = "\(event.repeatRules().rules(abreviated: false)) - \(startTimeString == "11:59 PM" ? "Midnight" : startTimeString)"
                
             }
             

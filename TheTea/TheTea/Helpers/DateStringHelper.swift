@@ -38,7 +38,9 @@ class DateStringHelper {
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .short
         
-        return "\(dayDescription(of:date)) - \(dateFormatter.string(from:date))"
+        let timeString = dateFormatter.string(from: date)
+        
+        return "\(dayDescription(of:date)) - \(timeString == "11:59 PM" ? "Midnight" : timeString)"
     }
     
     class func dataString(from date:Date) -> String {

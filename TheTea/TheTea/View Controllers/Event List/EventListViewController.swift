@@ -301,7 +301,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
         cellView.update(title: event.name, subtitle: event.subtitle()?.uppercased(), subtitleColor: subtitleColor)
-        cellView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
+        let timeString = timeFormatter.string(from: event.startTime ?? Date())
+        cellView.timeLabel.text = timeString == "11:59 PM" ? "Midnight" : timeString
         cellView.placeLabel.text = event.locationName
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency

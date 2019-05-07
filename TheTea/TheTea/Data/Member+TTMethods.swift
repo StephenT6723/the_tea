@@ -81,7 +81,7 @@ extension Member {
         return ids
     }
     
-    func hotHosting() -> [Event] {
+    func chronologicalHosting() -> [Event] {
         guard let hosting = self.hosting else {
             return [Event]()
         }
@@ -89,8 +89,8 @@ extension Member {
             return [Event]()
         }
         
-        let timeSortedHosting = hostingArray.sorted(by: { $0.hotness < $1.hotness }) //Sorting by time so that the instance of each event we get is the closest one to now.
-        
+        let timeSortedHosting = hostingArray.sorted(by: { $0.startTime ?? Date() < $1.startTime ?? Date() }) //Sorting by time so that the instance of each event we get is the closest one to now.
+
         var repeatIDs = [String]()
         var uniqueEvents = [Event]()
         for event in timeSortedHosting {
@@ -103,10 +103,10 @@ extension Member {
         return uniqueEvents
     }
     
-    func hotHostingIDs() -> [String] {
+    func chronologicalHostingIDs() -> [String] {
         var ids = [String]()
         
-        let hosting = hotHosting()
+        let hosting = chronologicalHosting()
         
         for event in hosting {
             ids.append(event.gayID ?? "")

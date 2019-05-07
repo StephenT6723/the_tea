@@ -30,6 +30,8 @@ extension Event {
     static let repeatingEventIdKey = "repeatingEventId"
     static let imageURLKey = "imageURL"
     
+    static let earliestRepeatTime = 4
+    
     func update(name: String, hosts: [Member], hotness: Int32?, dateCreated: Date, startTime: Date, endTime: Date?, about: String?, location: EventLocation?, price: Double?, ticketURL: String?, canceled: Bool, published: Bool, repeats: String, repeatingEventId: String, imageURL: String?) {
         self.name = name
         self.removeFromHosts(self.hosts ?? NSSet())
@@ -68,6 +70,8 @@ extension Event {
         self.repeatsSaturdays = rules.repeatsSaturdays
         self.repeatsSundays = rules.repeatsSundays
     }
+    
+    //MARK: Getters
     
     func eventLocation() -> EventLocation? {
         if let locationName = self.locationName, let address = self.address {
@@ -123,6 +127,25 @@ extension Event {
             return "PENDING"
         }
         return nil
+    }
+    
+    //MARK: Helpers
+    
+    static func isValid(startTime: Date, repeatRules: EventRepeatRules) -> Bool {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateStyle = .none
+        timeFormatter.timeStyle = .short
+        
+        let hour = Calendar.current.component(.hour, from: startTime)
+        let minute = Calendar.current.component(.minute, from: startTime)
+        
+        if hour == 0 && minute == 0 {
+            return true
+        }
+        
+        let repeats = repeatRules.repeatingDays().count != 0
+        
+        return hour >= earliestRepeatTime || !repeats
     }
     
     //MARK: Backup Images

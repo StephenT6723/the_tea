@@ -117,6 +117,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         dateDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
         dateDoneBar.backgroundColor = .white
         let dateDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        dateDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .normal)
+        dateDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .selected)
+        dateDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                                   NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .focused)
         dateDoneBar.setItems([dateDoneButton], animated: false)
         dateTextField.textField.inputAccessoryView = dateDoneBar
         datePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
@@ -135,6 +141,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         startTimeDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
         startTimeDoneBar.backgroundColor = .white
         let startTimeDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        startTimeDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                               NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .normal)
+        startTimeDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                               NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .selected)
+        startTimeDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                               NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .focused)
         startTimeDoneBar.setItems([startTimeDoneButton], animated: false)
         startTimeTextField.textField.inputAccessoryView = startTimeDoneBar
         startTimePicker.datePickerMode = .time
@@ -156,6 +168,12 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
         endTimeDoneBar.frame = CGRect(x: 0, y: 0, width: 400, height: 44)
         endTimeDoneBar.backgroundColor = .white
         let endTimeDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(keyboardDoneButtonTouched))
+        endTimeDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                               NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .normal)
+        endTimeDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                               NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .selected)
+        endTimeDoneButton.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.cta() as Any,
+                                               NSAttributedString.Key.foregroundColor:UIColor.primaryCTA()], for: .focused)
         endTimeDoneBar.setItems([endTimeDoneButton], animated: false)
         endTimeTextField.textField.inputAccessoryView = endTimeDoneBar
         endTimePicker.datePickerMode = .time
@@ -342,15 +360,27 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                 }
                 
                 nameTextField.textField.text = event.name
+                
                 if let startTime = event.startTime {
-                    startTimePicker.date = startTime as Date
-                    if let endTime = event.endTime {
-                        endTimePicker.date = endTime as Date
-                        updateEndTime(visible: true, animated: false)
+                    datePicker.date = startTime
+                    
+                    let hour = Calendar.current.component(.hour, from: startTime)
+                    let minute = Calendar.current.component(.minute, from: startTime)
+                    
+                    if hour == 23 && minute == 59 {
+                        startTimePicker.date = Calendar.current.date(bySettingHour: 00, minute: 00, second: 0, of: startTime) ?? Date()
                     } else {
-                        updateEndTime()
+                        startTimePicker.date = startTime as Date
                     }
                 }
+                    
+                if let endTime = event.endTime {
+                    endTimePicker.date = endTime as Date
+                    updateEndTime(visible: true, animated: false)
+                } else {
+                    updateEndTime()
+                }
+                
                 if let about = event.about {
                     if about.count > 0 {
                         aboutTextView.textView.text = about
@@ -525,9 +555,22 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
                     return true
                 }
             }
-            if selectedStartTime() != event.startTime ?? Date() {
-                return true
+            
+            if let startTime = event.startTime {
+                let hour = Calendar.current.component(.hour, from: startTime)
+                let minute = Calendar.current.component(.minute, from: startTime)
+                
+                if hour == 23 && minute == 59 {
+                    if selectedStartTime() != Calendar.current.date(bySettingHour: 00, minute: 00, second: 0, of: startTime) ?? Date() {
+                        return true
+                    }
+                } else {
+                    if selectedStartTime() != event.startTime {
+                        return true
+                    }
+                }
             }
+            
             if selectedEndTime() != event.endTime ?? Date() {
                 return true
             }
@@ -566,6 +609,23 @@ class EventEditViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     func saveEvent() {
+        if !Event.isValid(startTime: selectedStartTime(), repeatRules: selectedRepeats) {
+            let alert = UIAlertController(title: "Error", message: "Events must start after \(Event.earliestRepeatTime):00 AM if they are repeating.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        if selectedRepeats.repeatingDays().count != 0 && !selectedRepeats.repeats(on: selectedStartTime()) {
+            let weekDayFormatter = DateFormatter()
+            weekDayFormatter.dateFormat = "EEEE"
+            
+            let alert = UIAlertController(title: "Error", message: "Your event cannot repeat \(selectedRepeats.rules(abreviated: true)) and start on a \(weekDayFormatter.string(from: selectedStartTime())).", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
         if isCreatingNew() {
             if let name = nameTextField.textField.text {
                 if name.count > 0 {

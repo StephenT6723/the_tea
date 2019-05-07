@@ -13,7 +13,7 @@ class MyProfileViewController: UIViewController {
     private let tableView = UITableView(frame: CGRect(), style: UITableView.Style.grouped)
     var eventsFRC = EventManager.favoritedEvents() ?? NSFetchedResultsController<Event>()
     
-    private let timeFormatter = DateFormatter()
+    private let dateFormatter = DateFormatter()
     
     private let editView = EditProfileView(frame: CGRect())
     let segmentedControl = SegmentedControl()
@@ -27,8 +27,7 @@ class MyProfileViewController: UIViewController {
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logoutButtonTouched))
         
-        timeFormatter.dateStyle = .none
-        timeFormatter.timeStyle = .short
+        dateFormatter.dateFormat = "MMM d"
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
@@ -48,7 +47,7 @@ class MyProfileViewController: UIViewController {
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        segmentedControl.items = ["Favorites", "Hosting"]
+        segmentedControl.items = ["Favorites (\(MemberDataManager.loggedInMember()?.chronologicalFavoritIDs().count ?? 0))", "Hosting (\(MemberDataManager.loggedInMember()?.chronologicalHostingIDs().count ?? 0))"]
         segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.9)
         segmentedControl.addTarget(self, action: #selector(favoritesHostingChanged), for: .valueChanged)
         view.addSubview(segmentedControl)
@@ -228,7 +227,8 @@ extension MyProfileViewController: UITableViewDelegate {
         }
         let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
         cell.eventView.update(title: event.name, subtitle: event.subtitle(), subtitleColor: subtitleColor)
-        cell.eventView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
+        let timeString = dateFormatter.string(from: event.startTime ?? Date())
+        cell.eventView.timeLabel.text = timeString == "11:59 PM" ? "Midnight" : timeString
         cell.eventView.placeLabel.text = event.locationName
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency

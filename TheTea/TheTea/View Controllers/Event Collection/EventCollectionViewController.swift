@@ -141,7 +141,8 @@ class EventCollectionViewController: UIViewController, UITableViewDelegate, UITa
         }
         let subtitleColor = event.canceled ? UIColor(red:0.92, green:0.4, blue:0.4, alpha:1) : UIColor.lightCopy()
         cell.eventView.update(title: event.name, subtitle: event.subtitle(), subtitleColor: subtitleColor)
-        cell.eventView.timeLabel.text = timeFormatter.string(from: event.startTime ?? Date())
+        let timeString = timeFormatter.string(from: event.startTime ?? Date())
+        cell.eventView.timeLabel.text = timeString == "11:59 PM" ? "Midnight" : timeString
         cell.eventView.placeLabel.text = event.locationName
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency
