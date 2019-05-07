@@ -176,7 +176,7 @@ class EventManager {
         }
         
         guard let startTime = dateFormatter.date(from: startTimeString) else {
-            print("UNABLE TO PARSE START TIME: \(startTimeString)")
+            print("UNABLE TO PARSE START TIME: \(startTimeString) FOR: \(name)")
             return
         }
         
@@ -225,6 +225,12 @@ class EventManager {
             }
         } else {
             hostObjects = event.hosts?.allObjects as? [Member] ?? [Member]()
+        }
+        
+        let repeatRulesObject = EventRepeatRules(dataString: repeatRules)
+        if repeatRulesObject.repeatingDays().count != 0 && !repeatRulesObject.repeats(on: startTime) {
+            print("TRIED TO CREATE EVENT THAT REPEATS ON AN INVALID DAY: \(name)")
+            return
         }
         
         //update event object

@@ -158,6 +158,18 @@ class EventRepeatRules {
         return days
     }
     
+    func repeats(on day: Date) -> Bool {
+        let weekDayFormatter = DateFormatter()
+        weekDayFormatter.dateFormat = "EEEE"
+        
+        guard let weekday = DaysOfTheWeek(rawValue: weekDayFormatter.string(from: day)) else {
+            print("INVALID REPEATING DAY")
+            return false
+        }
+        let repeatingDays = self.repeatingDays()
+        return repeatingDays.contains(weekday)
+    }
+    
     func rules(abreviated: Bool) -> String {
         var rules = ""
         let repeatingDays = self.repeatingDays()

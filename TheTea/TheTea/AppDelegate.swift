@@ -26,7 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window!.rootViewController = rootNav
         window!.makeKeyAndVisible()
         
-        return true    }
+        return true
+    }
 
     func applicationWillTerminate(_ application: UIApplication) {
         CoreDataManager.sharedInstance.saveContext()
